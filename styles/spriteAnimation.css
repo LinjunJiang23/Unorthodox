@@ -1,0 +1,36 @@
+[class^="player-icon"] {
+  position: relative;
+  justify-content: center;
+  float: left;
+  overflow: hidden;
+}
+
+.player-icon-fullbody {
+  height: 256px;
+  width: 256px;
+}
+
+[class^="sprite"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.player-icon-head {
+  height: 128px;
+  width: 128px;
+}
+
+.baseBody {
+  width: 256px;
+  height: 256px;
+  background-image: url('../img/baseBody.png');
+  background-position: 0 0;
+}
+
+.eyeShape {
+ width: 256px;
+ height: 256px;
+ background-image: url('../img/eyeShape.png');
+ background-position: 0 0;
+}
