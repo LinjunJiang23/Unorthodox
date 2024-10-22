@@ -1,57 +1,51 @@
+// scripts/mechanisms/dialog/dialog.js
 let currentIndex = 0;
-let dialogs = [];
 
 function showNextDialog() {
-  if ($(".dialog-container").length !== 0) {
-	if($("span.dialog-speaker").length === 0 && 
-	   $(".dialog-box").length === 0) {
-	    $(".dialog-container").append('<span class="dialog-speaker"></span>');
-	    $(".dialog-container").append('<div class="dialog-box"><div class="dialog-text"></div></div>');		
-	  }		   
-	for (let cur_part of dialogs) {
-	    let contents = cur_part.content;
-	    let speaker = cur_part.speaker;
-	    if (speaker) {
-		  $('span.speaker').text(speaker);
-	    }
+  if ($(".dialog-container").length !== 0) {	   
+	let cur_part = nodeManager.getDialog()[nodeManager.current_index] 
+	console.log(cur_part);
+	let contents = cur_part.content;
+	let speaker = cur_part.speaker;
+	if (speaker) {
+	  $('span.dialog-speaker').text(speaker);
+	} else {
+	  $('span.dialog-speaker').text('');
+	}
 	  
-	    if (currentIndex < contents.length) {	
-		  let dialog = contents[currentIndex];
-		  if (!typeWriter.getIsTyping()) {
-            $('.dialog-text').text(''); // Clear previous text before typing
-          }
+	if (currentIndex < contents.length) {	
+	  let dialog = contents[currentIndex];
+	  if (!typeWriter.getIsTyping()) {
+        $('.dialog-text').text(''); // Clear previous text before typing
+      }
 		
-		  if (dialog.effect) {
-			applyEffects(dialog.effect);
-		  } else {
-			resetEffects();
-		  }
-		  if (dialog.type) {
-			applyTypeWriter(dialog.text, dialog.type);
-		  } else {
-			$('.dialog-text').text(dialog.text);
-		  }	
-		  currentIndex++;
-	    } else {
+	  if (dialog.effect) {
+		applyEffects(dialog.effect);
+	  } else {
+		resetEffects();
+	  }
+	  if (dialog.type) {
+	    applyTypeWriter(dialog.text, dialog.type);
+	  } else {
+		$('.dialog-text').text(dialog.text);
+	  }	
+	  currentIndex++;
+	} else {
 		//Reached the end of the dialogs
 		//If choices exist
-		  if (cur_part.choices) {
-		    myPromise
-			.then(() => {
-			  $(".dialog-box").append('<div class="choices-container"></div>');
-			})
-			.then(() => {
-			  showChoices(cur_part.choices);
-			});
-		  } else {
-			//else, simply close the dialog box
-			$('.dialog-box').hide();
-		  }
-		//Reset the dialogs
-		dialogs = [];
-	    }
+	  if (cur_part.choices) {
+	    myPromise
+		.then(() => {
+		  $(".dialog-text").text("");
+		})
+		.then(() => {
+		  showChoices(cur_part.choices);
+		});
 	  }
-	}
+	  nodeManager.current_index++;
+	  currentIndex = 0;
+    }
+  }
 };
 
 function applyEffects(effect) {

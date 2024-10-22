@@ -1,0 +1,28 @@
+.dialog-container {
+	background-image: url("../img/placeholder.png");
+	width: 600px;
+	height: 300px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.dialog-speaker {
+	padding-left: 50px; 
+	height: 25px;
+	width: 100px;
+}
+
+.dialog-box {
+	padding: 10px;
+	height: 200px;
+	width: 500px;
+	display: flex;
+	flex-direction: row;
+}
+
+.dialog-speaker-icon {
+	height: 128px;
+	width: 128px;
+}

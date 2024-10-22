@@ -18,6 +18,7 @@ class NodeManager {
 		this.current_node = null;
 		this.dialog = [];
 		this.current_nodeId = null;
+		this.current_index = 0;
 	}
 	
 	loadNode(nodes) {
@@ -35,7 +36,10 @@ class NodeManager {
 				//IF Dialog exists
 				if (this.current_node.hasOwnProperty('dialogue')) {
 				  this.dialog = this.current_node.dialogue;
+				} else {
+				  this.dialog = null;
 				}
+				this.current_index = 0;
 			}
 		}
 	  } catch (error) {
@@ -43,7 +47,10 @@ class NodeManager {
 	  }
 	}
 	
-	goToNextNode() {
+	goToNextNode(nextnodeId) {
+		if (nextnodeId !== this.current_nodeId) {
+			this.startNode(nextnodeId);
+		}
 	}
 	
 	getCurrentNode() {

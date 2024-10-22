@@ -27,6 +27,29 @@ class Dice {
 };
 
 
+//This should expand later on
+function modifier() {
+	return Math.floor((stat - 10) / 2);
+};
+
+function resolveDice(result) {
+	if ($('.dice-attempt').css('display') !== "none")
+	{
+		if (result) {
+			let content = $('.result-success').text();
+			$('.result-success').text('');
+			$('.result-success').show();
+			typeWriter(content, '.result-success', 100);
+		} else {
+			let content = $('.result-fail').text();
+			$('.result-fail').text('');
+			$('.result-fail').show();
+			typeWriter(content, '.result-fail', 100);
+		}
+	}
+};
+
+
 let d20 = new Dice(20);
 
 document.addEventListener('DiceRollFinished', () => {console.log('triggered');$('.dice-result').show();});

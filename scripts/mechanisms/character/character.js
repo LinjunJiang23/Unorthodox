@@ -1,5 +1,4 @@
 const playerCreated = new CustomEvent('playerInitialized');
-
 /* Player Singleton */
 class Player {
 	constructor() {
@@ -14,23 +13,15 @@ class Player {
 		this.traits = new CharacterTraitManager([new Trait('妹宝', '小妹对你十分爱护', true, 'relationship', 100)]);
     }
 	
-	getModifier(stat) {
-		return Math.floor((stat - 10) / 2);
-	}
-	
 	performCheck(stat, type, numOfDice, difficulty) {
-		if (typeof stat === "number" && this.hasOwnProperty(type) && 
+		if (typeof stat === "number" && typeof this.stats.getCoreStats()[type] === "number" && 
 		    typeof difficulty === "number" && typeof numOfDice === "number") {
-		  const modifier = this.getModifier(stat);
+		  const modifier = getModifier(stat);
 		  const result = d20.rollDice(numOfDice, modifier);
 		  if (difficulty < result) {
-			$('.box-choices').hide();
-			//Replace with dice rolling animation
-			typeWriter(`${this.name}进行了一次判定，结果为:${result},成功!`, '.dice-attempt', 100, () => {document.dispatchEvent(diceRolled);resolveDice(true);}).type();
+			return true;
 		  } else {
-			$('.box-choices').hide();
-			//Replace with dice rolling animation
-			typeWriter(`${this.name}进行了一次判定，结果为:${result},失败!`, '.dice-attempt', 100, () => {document.dispatchEvent(diceRolled);resolveDice(false);}).type();
+			return false;
 		  }
 		} else {
 			console.log('Error occurs, probably because of wrong parameters');
