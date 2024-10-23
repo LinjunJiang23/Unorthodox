@@ -1,3 +1,5 @@
+// scripts/mechanisms/inventory/item.js
+
 let item_id = 0;
 /**
  * Item class

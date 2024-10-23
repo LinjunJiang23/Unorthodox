@@ -131,7 +131,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 }
 
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">//JSON Files
-importScripts(['./json/tutorial-passages.js'])
+importScripts(['./json/passage/tutorial-passages.js', './json/names.js'])
   .then(() => {
   //Utils
   importScripts('./scripts/utils/typewriter.js', './scripts/utils/node.js', './scripts/utils/promise.js');})
@@ -183,9 +183,14 @@ importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/u
 &lt;div class=&quot;container&quot;&gt;\
 &lt;div class=&quot;character-settings&quot;&gt;
 \&lt;h1&gt;角色形象&lt;/h1&gt;
-\&lt;label for=&quot;name&quot;&gt;姓名&lt;/label&gt;
-\&lt;input type=&quot;text&quot; class=&quot;name&quot; maxlength=4 minlength=1 name=&quot;name&quot; value=&quot;左汶&quot; onchange=&quot;if (typeof this.value === &#39;string&#39; &amp;&amp; this.value.length &gt; 0  &amp;&amp; this.value.length &lt; 4) {$(this).prev().text(&#39;姓名&#39;);$(this).css(&#39;border-color&#39;, &#39;grey&#39;); player.name = this.value; $(&#39;div.warning&#39;).text(&#39;&#39;); $(&#39;a.link-internal&#39;).show();} else if (this.value.length &lt; 1) {$(&#39;a.link-internal&#39;).hide();
-$(this).css(&#39;border-color&#39;, &#39;red&#39;); $(this).prev().text(&#39;姓名需至少一字！&#39;); $(&#39;div.warning&#39;).text(&#39;请填写姓名！&#39;);}&quot;/&gt;
+&lt;div class=&quot;name&quot;&gt;\
+\&lt;label for=&quot;lname&quot;&gt;姓&lt;/label&gt;
+\&lt;input type=&quot;text&quot; class=&quot;lname&quot; name=&quot;lname&quot; value=&quot;左&quot; readonly /&gt;&lt;button class=&quot;random-button&quot; onclick=&quot;$(this).prev().val(randomLName[Math.floor(Math.random() * 30)]);&quot;&gt;&lt;/button&gt;
+&lt;button&gt;仅姓无名&lt;/button&gt;
+\&lt;label for=&quot;fname&quot;&gt;名&lt;/label&gt;
+\&lt;input type=&quot;text&quot; class=&quot;fname&quot; name=&quot;fname&quot; value=&quot;汶&quot; readonly /&gt;&lt;button class=&quot;random-button&quot; onclick=&quot;$(this).prev().val(randomFName[Math.floor(Math.random() * 30)]);&quot;&gt;&lt;/button&gt;
+&lt;button&gt;仅名无姓&lt;/button&gt;
+&lt;/div&gt;\
 \&lt;label for=&quot;gender&quot;&gt;性别&lt;/label&gt;
 \&lt;input type=&quot;button&quot; value=&quot;女&quot; onclick=&quot;player.sex = 1; $(this).data(&#39;selected&#39;, true); $(this).next().data(&#39;selected&#39;, &#39;false&#39;); $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); $(this).next().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;true&quot; style=&quot;background-color:  #16659a;&quot; /&gt;
 \&lt;input type=&quot;button&quot; value=&quot;男&quot; onclick=&quot;player.sex = 2; $(this).data(&#39;selected&#39;, true); $(this).prev().data(&#39;selected&#39;, &#39;false&#39;); $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;false&quot; /&gt;

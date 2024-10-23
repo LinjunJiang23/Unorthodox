@@ -1,5 +1,9 @@
-const goldChanged = new CustomEvent('inventoryStateUpdated', { detail: "gold" });
-const inventoryChanged = new CustomEvent('inventoryStateUpdated', { detail: "inventory" });
+// scripts/mechanisms/inventory/inventory.js
+
+const goldChanged = new CustomEvent('inventoryStateUpdated', 
+					{ detail: "gold" });
+const inventoryChanged = new CustomEvent('inventoryStateUpdated', 
+					{ detail: "inventory" });
 
 
 /**
@@ -8,7 +12,7 @@ const inventoryChanged = new CustomEvent('inventoryStateUpdated', { detail: "inv
  */
 class Inventory {
 	constructor() {
-		this.items = new Map();
+		this.slots = new Map();
 		this.size = 36;
 		this.current_weight = 0;
 		this.max_weight = 50;
@@ -18,7 +22,7 @@ class Inventory {
 		if (item instanceof Item) {
 			let total_weight = item.getTotalWeight();
 			if ((total_weight + current_weight) <= max_weight) {
-				this.items.set(item.name, item);
+				this.slots.set(item.name, item);
 				this.current_weight += total_weight;
 			}
 		}
@@ -32,7 +36,7 @@ class Inventory {
 		if (item instanceof Item) {
 			let total_weight = item.getTotalWeight();
 			this.current_weight -= total_weight;
-			this.items.delete(item.name);
+			this.slots.delete(item.name);
 		}
 	}
 };
