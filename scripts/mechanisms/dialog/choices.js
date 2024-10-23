@@ -10,7 +10,8 @@ function showChoices(choices) {
 
     // Add an event listener for the specific choice using closure
     $('.choice').last().on('click', () => {
-        
+      //Save the choice to dialog history
+	  dialogHistory.saveDialog({choice: choice.text});
 	  // Handle dice-related logic inside the event listener
       if (choice.hasOwnProperty("dice")) {
         let choiceDice = choice.dice;
@@ -29,6 +30,7 @@ function showChoices(choices) {
 				let result_success = choiceDice["outcome"].success;
 				$('.dialog-text').empty();
 				typeWriter.type(result_success.text, '.dialog-text', 100);
+				dialogHistory.saveDialog({speaker: player.name, text: result_success.text});
 				if (result_success.hasOwnProperty("relationship")) {
 					console.log("Placeholder for relationship changes");
 				}
@@ -36,6 +38,7 @@ function showChoices(choices) {
 				let result_fail = choiceDice["outcome"].fail;
 				$('.dialog-text').empty();
 				typeWriter.type(result_fail.text, '.dialog-text', 100);
+				dialogHistory.saveDialog({speaker: player.name, text: result_fail.text});
 			  }
           } else {
               console.log('Not implemented... Placeholder for possible companion adaptation.');
@@ -60,7 +63,7 @@ function showChoices(choices) {
 	  $('.dialog-text').toggleClass("choice");
 	}
 	
-        // Additional logic for choices without dice rolls can go here
-      });
-    });
+    // Additional logic for choices without dice rolls can go here
+	});
+  });
 }

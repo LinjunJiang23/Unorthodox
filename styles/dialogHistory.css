@@ -1,0 +1,8 @@
+#dialog-history-container {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+}

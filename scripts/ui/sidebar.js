@@ -2,14 +2,14 @@ let playerExists = false;
 
 $('#story-title').hide();
 
-const createCustomSidebar = () => {
+function createCustomSidebar() {
   if ($('#customSidebar').length === 0) {
 	  $('#ui-bar-body').prepend("<div id='customSidebar'>");
 	  $('#ui-bar-body').append("</div>");
 	}
 };
 
-const createGameUISidebar = () => {
+function createGameUISidebar() {
  if ($('#gameplay').length === 0) {
 	$('#customSidebar').append("<div id='gameplay'>");
 	$('#gameplay').append("<div class='functionality'>");

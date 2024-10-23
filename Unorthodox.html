@@ -139,7 +139,7 @@ importScripts(['./json/tutorial-passages.js'])
   //Mechanism related
   importScripts(['./scripts/mechanisms/navigation/map.js', './scripts/mechanisms/dice/dice.js', './scripts/mechanisms/dice/modifier.js',
   './scripts/mechanisms/attributes/stat.js',
-  './scripts/mechanisms/display.js', './scripts/mechanisms/attributes/traits.js', './scripts/mechanisms/factions/faction.js', './scripts/mechanisms/inventory/inventory.js', './scripts/mechanisms/dialog/dialog.js', './scripts/mechanisms/dialog/choices.js'])
+  './scripts/mechanisms/display.js', './scripts/mechanisms/attributes/traits.js', './scripts/mechanisms/factions/faction.js', './scripts/mechanisms/inventory/inventory.js', './scripts/mechanisms/dialog/dialog.js', './scripts/mechanisms/dialog/choices.js', './scripts/mechanisms/dialog/dialogHistory.js'])
 .then(() => {
   //Character related
   importScripts('./scripts/mechanisms/character/character.js',     './scripts/mechanisms/character/npc.js');
@@ -149,7 +149,7 @@ importScripts(['./json/tutorial-passages.js'])
 importScripts('./scripts/ui/spriteAnimation.js', './scripts/ui/sidebar.js', './scripts/ui/hud.js', './scripts/ui/canvas.js', './scripts/ui/map/miniMap.js', './scripts/ui/map/mapUI.js', './scripts/ui/header.js', './scripts/ui/footer.js', './scripts/ui/overlay.js');
 
 //Styles
-importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/ui.css', './styles/dialog.css');
+importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/ui.css', './styles/dialog.css', './styles/dialogHistory.css');
 </script><tw-tag name="widget" color="red"></tw-tag><tw-passagedata pid="1" name="StoryInit" tags="" position="75,275" size="100,100">&lt;h1&gt;偏门左道&lt;/h1&gt;
 //Title page cg, to be included later
 
@@ -234,28 +234,7 @@ $(this).css(&#39;border-color&#39;, &#39;red&#39;); $(this).prev().text(&#39;姓
 		}
 		$(this).prev().val(val);
 		changeCharacterSprite(val, &#39;player-fullbody&#39;, &#39;eyeShape&#39;);&quot;/&gt;
-&lt;label for=&quot;eyeColor&quot;&gt;瞳色&lt;/label&gt;\
-\&lt;button type=&quot;button&quot; class=&quot;arrow left&quot; onclick=&quot;
-		let val = $(this).next().val();
-		val = parseInt(val);
-		if (val - 1 &lt; 1) {
-			val = 16;
-		} else {
-			val -= 1;
-		}
-		$(this).next().val(val);&quot;/&gt;
-	\&lt;input type=&quot;text&quot; class=&quot;select&quot; readonly value=1&gt;
-	\&lt;button type=&quot;button&quot; class=&quot;arrow right&quot; onclick=&quot;
-		let val = $(this).prev().val();
-		val = parseInt(val);
-		if (val + 1 &gt; 16) {
-			val = 1;
-		} else {
-			val += 1;
-		}
-		$(this).prev().val(val);&quot;/&gt;
 &lt;label for=&quot;hairStyle&quot;&gt;发型&lt;/label&gt;\
-&lt;label for=&quot;hairColor&quot;&gt;发色&lt;/label&gt;\
 &lt;label for=&quot;outfits&quot;&gt;衣饰&lt;/label&gt;\
 &lt;/div&gt;
 &lt;div class=&quot;character-settings&quot;&gt;
@@ -447,11 +426,20 @@ $(this).css(&#39;border-color&#39;, &#39;red&#39;); $(this).prev().text(&#39;姓
            $(&#39;div.warning&#39;).text(&#39;&#39;);
 }&quot;&gt;确认&lt;/a&gt;
 
-</tw-passagedata><tw-passagedata pid="4" name="Faction Initialization" tags="" position="375,275" size="100,100">&lt;div class=&quot;choose-faction&quot;&gt;尘缘堂&lt;/div&gt;
+</tw-passagedata><tw-passagedata pid="4" name="Faction Initialization" tags="" position="375,275" size="100,100">&lt;&lt;script&gt;&gt;
+$(document).one(&#39;:passagestart&#39;, (event) =&gt; { 
+    createPlayerCanvas();
+});
+&lt;&lt;/script&gt;&gt;
+&lt;div class=&quot;choose-faction&quot;&gt;尘缘堂&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;明道门&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;行天清阁&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;昼瞑宗&lt;/div&gt;
-[[确认 |Testing]]</tw-passagedata><tw-passagedata pid="5" name="Preface2" tags="" position="275,400" size="100,100">[[next |Player Initialization]]</tw-passagedata><tw-passagedata pid="6" name="Testing" tags="" position="475,275" size="100,100">&lt;div id=&quot;test&quot;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Tutorial" tags="" position="275,175" size="100,100">&lt;&lt;dialog&gt;&gt;
+[[确认 |Testing]]</tw-passagedata><tw-passagedata pid="5" name="Preface2" tags="" position="275,400" size="100,100">&lt;&lt;script&gt;&gt;
+  createCustomSidebar();
+&lt;&lt;/script&gt;&gt;
+
+[[next |Player Initialization]]</tw-passagedata><tw-passagedata pid="6" name="Testing" tags="" position="475,275" size="100,100">&lt;div id=&quot;test&quot;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Tutorial" tags="" position="275,175" size="100,100">&lt;&lt;dialog&gt;&gt;
 &lt;&lt;script&gt;&gt;
   $(document).on(&#39;:passagestart&#39;, (event) =&gt; {
      createPlayerCanvas();
@@ -464,12 +452,14 @@ $(this).css(&#39;border-color&#39;, &#39;red&#39;); $(this).prev().text(&#39;姓
 \&lt;/div&gt;
 &lt;div class=&quot;link-next&quot;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="Widgets" tags="widget" position="100,600" size="100,100">&lt;&lt;widget &quot;dialog&quot;&gt;&gt;
+  &lt;div id=&quot;dialog-history-container&quot; class=&quot;hidden&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;
   &lt;div class=&quot;dialog-container&quot;&gt;
     &lt;span class=&quot;dialog-speaker&quot;&gt;&lt;/span&gt;\
     &lt;div class=&quot;dialog-box&quot;&gt;\
       &lt;canvas class=&quot;dialog-speaker-icon&quot;&gt;&lt;/canvas&gt;\
       &lt;div class=&quot;dialog-text&quot;&gt;&lt;/div&gt;\
     &lt;/div&gt;\
+    &lt;a id=&quot;dialog-history-btn&quot;&gt;读取回忆&lt;/a&gt;
   &lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;
 

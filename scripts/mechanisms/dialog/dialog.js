@@ -16,6 +16,12 @@ function showNextDialog() {
 	  
 	if (currentIndex < contents.length) {	
 	  let dialog = contents[currentIndex];
+	  if (!(dialog.hasOwnProperty("history"))) {
+	    dialogHistory.saveDialog({
+		  speaker: speaker || '',
+		  text: dialog.text
+	    });
+	  }
 	  if (!typeWriter.getIsTyping()) {
         $('.dialog-text').text(''); // Clear previous text before typing
       }
@@ -48,7 +54,11 @@ function showNextDialog() {
 	  } else {
        //Move on to the next possible dialogue
        let r = nodeManager.incCurrentIndex(); 
-       if (r) {showNextDialog();} else {$('.dialog-container').hide();}
+       if (r) {
+		   showNextDialog();
+	   } else {
+		   $('.dialog-container').hide();
+	   }
      }
 	}
   }
@@ -75,13 +85,13 @@ function applyTypeWriter(str, type) {
 	switch(type) { 
 		case "normal":
 			console.log('Normal typewriter triggered');
-			typeWriter.type(str, '.dialog-text', 100);
+			typeWriter.type(str, '.dialog-text', 60);
 			break;
 		case "slow":
 			typeWriter.type(str, '.dialog-text', 500);
 			break;
 		case "fast":
-			typeWriter.type(str, '.dialog-text', 10);
+			typeWriter.type(str, '.dialog-text', 1);
 			break;
 	}
 };

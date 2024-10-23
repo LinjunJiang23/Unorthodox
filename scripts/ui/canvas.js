@@ -1,4 +1,4 @@
-const getCTX = (target) => {
+function getCTX(target) {
 	if (typeof target === 'string') {
 		const canvas = document.getElementById(`canvas-${target}`);
 		const ctx = canvas.getContext('2d');
@@ -7,12 +7,13 @@ const getCTX = (target) => {
 	return null;
 };
 
-const createPlayerCanvas = async () => {
+async function createPlayerCanvas() {
 	try {
 		const initializeCanvas = () => {
 		$('#customSidebar').prepend('<div class="icon-fullbody">');
 		$('.icon-fullbody').append("<canvas id='canvas-player-fullbody' width='256' height='256'></canvas>");
 		$('#customSidebar').append('</div>')};
+		console.log("triggered");
 		initializeCanvas();
 		const ctx = await new Promise((resolve) => setTimeout(() => resolve(getCTX('player-fullbody')), 0));
 		ctx.clearRect(0, 0, 256, 256);
