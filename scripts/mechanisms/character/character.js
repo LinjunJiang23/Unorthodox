@@ -14,8 +14,10 @@ class Player {
     }
 	
 	performCheck(stat, type, numOfDice, difficulty) {
-		if (typeof stat === "number" && typeof this.stats.getCoreStats()[type] === "number" && 
-		    typeof difficulty === "number" && typeof numOfDice === "number") {
+		if (typeof stat === "number" && 
+		    typeof this.stats.getCoreStats()[type] === "number" && 
+		    typeof difficulty === "number" && 
+			typeof numOfDice === "number") {
 		  const modifier = getModifier(stat);
 		  const result = d20.rollDice(numOfDice, modifier);
 		  if (difficulty < result) {

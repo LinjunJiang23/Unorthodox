@@ -61,6 +61,22 @@ class NodeManager {
 		return this.dialog;
 	}
 	
+	resetCurrentIndex() {
+		this.current_index = 0;
+	}
+	
+	
+	incCurrentIndex() {
+		let index = this.current_index;
+		if (this.dialog[index++]) {
+			this.current_index++;
+			return true;
+		}
+		this.resetCurrentIndex();
+		return false;
+	}
+	
+	
 };
 
 let nodeManager = new NodeManager();

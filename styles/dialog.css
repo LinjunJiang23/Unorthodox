@@ -17,9 +17,14 @@
 .dialog-box {
 	padding: 10px;
 	height: 200px;
-	width: 500px;
+	width: 528px;
 	display: flex;
 	flex-direction: row;
+}
+
+.dialog-text {
+	height: 200px;
+	width: 300px;
 }
 
 .dialog-speaker-icon {

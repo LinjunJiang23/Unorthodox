@@ -27,17 +27,17 @@ class StatManager {
 		};
 	}
 	
-	setCoreStat(changedVal, target) {
-		if (this.core_stats.hasOwnProperty(target)) {
+	setCoreStat(changedVal, type) {
+		if (this.core_stats.hasOwnProperty(type)) {
             // Additional checks can be added depending on the type of stat
-            if (typeof this.core_stats[target] === typeof changedVal) {
-                this.core_stats[target] = changedVal;
-				console.log(`Property ${target} changed.`);
+            if (typeof this.core_stats[type] === typeof changedVal) {
+                this.core_stats[type] = changedVal;
+				console.log(`Property ${type} changed.`);
             } else {
-                console.error(`Invalid type for ${target}. Expected ${typeof this[target]}, got ${typeof changedVal}.`);
+                console.error(`Invalid type for ${type}. Expected ${typeof this[type]}, got ${typeof changedVal}.`);
             }
         } else {
-            console.error(`Property ${target} does not exist on Player.`);
+            console.error(`Property ${type} does not exist on Player.`);
         }
 	}
 	

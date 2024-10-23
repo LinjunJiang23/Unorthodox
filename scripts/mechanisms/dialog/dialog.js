@@ -1,10 +1,11 @@
 // scripts/mechanisms/dialog/dialog.js
-let currentIndex = 0;
+
+let currentIndex = 0; //Dialog Line index
 
 function showNextDialog() {
   if ($(".dialog-container").length !== 0) {	   
-	let cur_part = nodeManager.getDialog()[nodeManager.current_index] 
-	console.log(cur_part);
+	if (!nodeManager.getDialog()[nodeManager.current_index]) {$('.dialog-container').hide();  nodeManager.resetCurrentIndex(); return;};
+	let cur_part = nodeManager.getDialog()[nodeManager.current_index];
 	let contents = cur_part.content;
 	let speaker = cur_part.speaker;
 	if (speaker) {
@@ -31,20 +32,25 @@ function showNextDialog() {
 	  }	
 	  currentIndex++;
 	} else {
-		//Reached the end of the dialogs
-		//If choices exist
+	  //Reached the end of the current dialogue
+	  currentIndex = 0;
+
+	  //If choices exist
 	  if (cur_part.choices) {
 	    myPromise
-		.then(() => {
+	    .then(() => {
 		  $(".dialog-text").text("");
-		})
-		.then(() => {
+	      $(".dialog-text").toggleClass("choice");
+	    })
+	    .then(() => {
 		  showChoices(cur_part.choices);
-		});
-	  }
-	  nodeManager.current_index++;
-	  currentIndex = 0;
-    }
+	    });
+	  } else {
+       //Move on to the next possible dialogue
+       let r = nodeManager.incCurrentIndex(); 
+       if (r) {showNextDialog();} else {$('.dialog-container').hide();}
+     }
+	}
   }
 };
 
@@ -81,7 +87,7 @@ function applyTypeWriter(str, type) {
 };
 
 	
-$(document).on('click', '.dialog-box', function() {
+$(document).on('click', 'div[class="dialog-text"]', function() {
 	//If typewriter isn't done typing, finishing the typing quickly.
 	if (typeWriter.getIsTyping()) {	
 		typeWriter.finishType();
