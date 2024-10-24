@@ -1,3 +1,12 @@
+/** 
+ * TypeWriter class
+ * @param {} interval
+ * @param {boolean} isTyping - whether typewriter is typing or not
+ * @param {number} type_index - the index of current typing character
+ * @param {string} str - given string
+ * @param {string} $element - the element that the type writing will append to
+ * @param {func} finishingEvent - the event that will trigger after typing is done
+ */
 class TypeWriter{
 	
 	constructor() {

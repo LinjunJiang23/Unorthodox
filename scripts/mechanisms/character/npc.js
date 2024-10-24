@@ -10,7 +10,7 @@
  */
 class NPC {
   
-  constructor(name, intro, friendliness, indifference, intent, relationships, attitude, gold) {
+  constructor(name, intro, friendliness, indifference, intent) {
 	if (typeof name === "string") this.name = name;
     if (typeof intro === "string") this.intro = intro;
     
@@ -18,23 +18,19 @@ class NPC {
     if (typeof friendliness === "number") this.friendliness = friendliness;
     if (typeof indifference === "number") this.indifference = indifference;
     if (typeof intent === "number") this.intent = intent; //This checks for?
-    if (typeof relaitonships === 'object') this.relationships = relationships; //Object to store relationships with characters
-    if (typeof attitude === "number") this.attitude = attitude; //Their general attitude toward player
-	if (typeof gold === "number") this.gold = gold;
+    this.relationships = []; //Object to store relationships with characters
+    this.attitude = 0; //Their general attitude toward player
+	this.gold = 0;
 	this.inventory = new Inventory();
   }
   
   casualChat() {
-    if (this.friendliness > 10 && this.indifference < 10) {
-  	  return "有什么需要？";
-    }
   }
   
   cuss() {
-	return "?";
   }
   
-  stats() {
+  getCoreStats() {
 	const stats = {
 		friendliness: this.friendliness,
 		indifference: this.indifference,
@@ -46,18 +42,19 @@ class NPC {
   }
 };
 
+/**
+ * generateRandomName function
+ */
 function generateRandomName() {
 	let name = {lname: "", fname: ""};
 	//Generate a random number from 1 - 20
 	let op = Math.floor(Math.random() * 20) + 1;  
-	if (op === 13) {
-		//Only has first name
+	if (op === 13) { //Only has first name
 		name.lname = null;
 		//Generate a random number from 0 - 29
 		let n = Math.floor(Math.random() * 30);
 		name.fname = randomFName[n];
-	} else if (op === 7){
-		//Only has last name
+	} else if (op === 7) { //Only has last name
 		name.fname = null;
 		//Generate a random number from 0 - 29
 		let n = Math.floor(Math.random() * 30);
@@ -69,6 +66,5 @@ function generateRandomName() {
 		n = Math.floor(Math.random() * 30);
 		name.lname = randomLName[n];
 	}
-	
 	return name;
 };

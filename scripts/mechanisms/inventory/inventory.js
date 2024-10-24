@@ -41,26 +41,6 @@ class Inventory {
 	}
 };
 
-function drag(ev) {
-	ev.dataTransfer.setData('text', ev.target.id);
-};
-
-function allowDrop(ev) {
-	ev.preventDefault();
-};
-
-function drop(ev) {
-	ev.preventDefault();
-	var data = ev.dataTransfer.getData('text');
-	var draggedItem = document.getElementById(data);
-	
-	if (ev.target.tagName === 'DIV') {
-		ev.target.appendChild(draggedItem);
-	} else if (ev.target.parentElement.tagName === "DIV") {
-		ev.target.appendChild(draggedItem);
-	}
-};
-
 const miniInventoryUI = () => {
 	$('#inventory-horizontal').append(
 	    `<div ondrop="drop(event)" ondragover="allowDrop(event)" id="inventory-minislot1">

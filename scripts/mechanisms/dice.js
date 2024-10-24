@@ -1,5 +1,3 @@
-const diceRolled = new CustomEvent('DiceRollFinished');
-
 class Dice {
 	constructor(dnum, modifier) {
 		if (typeof dnum === "number") this.dnum = dnum;
@@ -28,5 +26,3 @@ class Dice {
 
 
 let d20 = new Dice(20);
-
-document.addEventListener('DiceRollFinished', () => {console.log('triggered');$('.dice-result').show();});

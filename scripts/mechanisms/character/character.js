@@ -6,7 +6,8 @@ class Player {
             return Player.instance;
         }
         Player.instance = this;
-		this.name = "左汶";
+		this.lname = "左";
+		this.fname = "汶";
 		this.sex = 1;
 		this.stats = new StatManager();
 		this.inventory = new Inventory([]);

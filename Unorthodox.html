@@ -139,7 +139,7 @@ importScripts(['./json/passage/tutorial-passages.js', './json/names.js'])
   //Mechanism related
   importScripts(['./scripts/mechanisms/navigation/map.js', './scripts/mechanisms/dice/dice.js', './scripts/mechanisms/dice/modifier.js',
   './scripts/mechanisms/attributes/stat.js',
-  './scripts/mechanisms/display.js', './scripts/mechanisms/attributes/traits.js', './scripts/mechanisms/factions/faction.js', './scripts/mechanisms/inventory/inventory.js', './scripts/mechanisms/dialog/dialog.js', './scripts/mechanisms/dialog/choices.js', './scripts/mechanisms/dialog/dialogHistory.js'])
+  './scripts/mechanisms/display.js', './scripts/mechanisms/attributes/traits.js', './scripts/mechanisms/factions/faction.js'], ['./scripts/mechanisms/item/item.js', './scripts/mechanisms/item/itemTag.js', './scripts/mechanisms/inventory/inventory.js', './scripts/mechanisms/dropDrag/dragDrop.js', './scripts/mechanisms/dialog/dialog.js', './scripts/mechanisms/dialog/choices.js', './scripts/mechanisms/dialog/dialogHistory.js'])
 .then(() => {
   //Character related
   importScripts('./scripts/mechanisms/character/character.js',     './scripts/mechanisms/character/npc.js');
@@ -155,7 +155,7 @@ importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/u
 
 
 [[开始游戏 |Preface]]
-</tw-passagedata><tw-passagedata pid="2" name="Preface" tags="" position="150,275" size="100,100">&lt;&lt;type 40ms skipkey &quot;Enter&quot;&gt;&gt;慰天祭将至，天地灵气稀薄，妖魔即将暴动，正与邪在生与死的抉择前显得无关紧要，各大宗门齐心协力方能逆转乾坤。
+</tw-passagedata><tw-passagedata pid="2" name="Preface" tags="" position="225,300" size="100,100">&lt;&lt;type 40ms skipkey &quot;Enter&quot;&gt;&gt;慰天祭将至，天地灵气稀薄，妖魔即将暴动，正与邪在生与死的抉择前显得无关紧要，各大宗门齐心协力方能逆转乾坤。
 &lt;&lt;/type&gt;&gt;
 &lt;&lt;type 40ms skipkey &quot;Enter&quot;&gt;&gt;
 然而作为籍籍无名的小角色，论逆转乾坤，你排不上号；论拯救世界，你无能为力。
@@ -183,17 +183,69 @@ importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/u
 &lt;div class=&quot;container&quot;&gt;\
 &lt;div class=&quot;character-settings&quot;&gt;
 \&lt;h1&gt;角色形象&lt;/h1&gt;
-&lt;div class=&quot;name&quot;&gt;\
+&lt;div class=&quot;name&quot; style=&quot;display: flex; flex-direction: column; &quot;&gt;\
+&lt;div style=&quot;display: flex; flex-direction: row; align-items: center;&quot;&gt;
 \&lt;label for=&quot;lname&quot;&gt;姓&lt;/label&gt;
-\&lt;input type=&quot;text&quot; class=&quot;lname&quot; name=&quot;lname&quot; value=&quot;左&quot; readonly /&gt;&lt;button class=&quot;random-button&quot; onclick=&quot;$(this).prev().val(randomLName[Math.floor(Math.random() * 30)]);&quot;&gt;&lt;/button&gt;
-&lt;button&gt;仅姓无名&lt;/button&gt;
+\&lt;input type=&quot;text&quot; class=&quot;lname&quot; name=&quot;lname&quot; value=&quot;左&quot; readonly style=&quot;width: 50px; margin: 10px;&quot;/&gt;&lt;input type=&quot;button&quot; style=&quot;background-image: url(&#39;./img/ui.png&#39;); width: 32px; height: 32px;&quot; onclick=&quot;$(this).prev().val(randomLName[Math.floor(Math.random() * 30)]);&quot; /&gt;
+&lt;/div&gt;
+&lt;div style=&quot;display: flex; flex-direction: row; align-items: center;&quot;&gt;
 \&lt;label for=&quot;fname&quot;&gt;名&lt;/label&gt;
-\&lt;input type=&quot;text&quot; class=&quot;fname&quot; name=&quot;fname&quot; value=&quot;汶&quot; readonly /&gt;&lt;button class=&quot;random-button&quot; onclick=&quot;$(this).prev().val(randomFName[Math.floor(Math.random() * 30)]);&quot;&gt;&lt;/button&gt;
-&lt;button&gt;仅名无姓&lt;/button&gt;
+\&lt;input type=&quot;text&quot; class=&quot;fname&quot; name=&quot;fname&quot; value=&quot;汶&quot; readonly style=&quot;width: 50px; margin: 10px;&quot; /&gt;&lt;input type=&quot;button&quot; style=&quot;background-image: url(&#39;./img/ui.png&#39;); width: 32px; height: 32px;&quot; onclick=&quot;$(this).prev().val(randomFName[Math.floor(Math.random() * 30)]);&quot; /&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;input type=&quot;button&quot; onclick=&quot;
+if ($(this).data(&#39;selected&#39;)) { 
+	$(this).data(&#39;selected&#39;, false); 
+	$(this).css(&#39;background-color&#39;, &#39;black&#39;);
+} else { 
+	$(this).data(&#39;selected&#39;, true); 
+	$(this).next().data(&#39;selected&#39;, false);
+    $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); 
+	$(this).next().css(&#39;background-color&#39;, &#39;black&#39;);
+} 
+if ($(&#39;.lname&#39;).prop(&#39;disabled&#39;)) { 
+	$(&#39;.lname&#39;).prop(&#39;disabled&#39;, false); 
+    $(&#39;.lname&#39;).next().prop(&#39;disabled&#39;, false); 
+    $(&#39;.fname&#39;).prop(&#39;disabled&#39;, true); 
+    $(&#39;.fname&#39;).next().prop(&#39;disabled&#39;, true);
+} else { 
+	$(&#39;.fname&#39;).prop(&#39;disabled&#39;, !$(&#39;.fname&#39;).prop(&#39;disabled&#39;));
+	$(&#39;.fname&#39;).next().prop(&#39;disabled&#39;, !$(&#39;.fname&#39;).next().prop(&#39;disabled&#39;));
+}&quot; value=&quot;仅姓无名&quot; data-selected=&quot;false&quot;/&gt;\
+&lt;input type=&quot;button&quot; onclick=&quot;if ($(this).data(&#39;selected&#39;)) { 
+$(this).data(&#39;selected&#39;, false); 
+$(this).css(&#39;background-color&#39;, &#39;black&#39;);
+} else { 
+	$(this).data(&#39;selected&#39;, true); 
+	$(this).prev().data(&#39;selected&#39;, false);
+    $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); 
+	$(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);
+} 
+
+if ($(&#39;.fname&#39;).prop(&#39;disabled&#39;)) { 
+	$(&#39;.fname&#39;).prop(&#39;disabled&#39;, false);
+	$(&#39;.fname&#39;).next().prop(&#39;disabled&#39;, false); 
+	$(&#39;.lname&#39;).prop(&#39;disabled&#39;, true); 
+	$(&#39;.lname&#39;).next().prop(&#39;disabled&#39;, true); 
+} else { 
+	$(&#39;.lname&#39;).prop(&#39;disabled&#39;, !$(&#39;.lname&#39;).prop(&#39;disabled&#39;));
+    $(&#39;.lname&#39;).next().prop(&#39;disabled&#39;, !$(&#39;.lname&#39;).next().prop(&#39;disabled&#39;));
+}&quot; value=&quot;仅名无姓&quot; data-selected=&quot;false&quot;/&gt;\
+&lt;/div&gt;
 &lt;/div&gt;\
 \&lt;label for=&quot;gender&quot;&gt;性别&lt;/label&gt;
-\&lt;input type=&quot;button&quot; value=&quot;女&quot; onclick=&quot;player.sex = 1; $(this).data(&#39;selected&#39;, true); $(this).next().data(&#39;selected&#39;, &#39;false&#39;); $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); $(this).next().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;true&quot; style=&quot;background-color:  #16659a;&quot; /&gt;
-\&lt;input type=&quot;button&quot; value=&quot;男&quot; onclick=&quot;player.sex = 2; $(this).data(&#39;selected&#39;, true); $(this).prev().data(&#39;selected&#39;, &#39;false&#39;); $(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;false&quot; /&gt;
+\&lt;input type=&quot;button&quot; value=&quot;女&quot; onclick=&quot;
+player.sex = 1; 
+$(this).data(&#39;selected&#39;, true); 
+$(this).next().data(&#39;selected&#39;, &#39;false&#39;); 
+$(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); 
+$(this).next().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;true&quot; style=&quot;background-color:  #16659a;&quot; /&gt;
+\&lt;input type=&quot;button&quot; value=&quot;男&quot; onclick=&quot;
+player.sex = 2; 
+$(this).data(&#39;selected&#39;, true); 
+$(this).prev().data(&#39;selected&#39;, &#39;false&#39;); 
+$(this).css(&#39;background-color&#39;, &#39;#16659a&#39;); 
+$(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-selected=&quot;false&quot; /&gt;
 &lt;label for=&quot;selection&quot;&gt;肤色&lt;/label&gt;\
 \&lt;button type=&quot;button&quot; class=&quot;arrow left&quot; onclick=&quot;
 		let val = $(this).next().val();
@@ -243,8 +295,8 @@ importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/u
 &lt;label for=&quot;outfits&quot;&gt;衣饰&lt;/label&gt;\
 &lt;/div&gt;
 &lt;div class=&quot;character-settings&quot;&gt;
-	\&lt;h1&gt;技能加点&lt;/h1&gt;
-     &lt;label&gt;技能点：&lt;/label&gt;&lt;span class=&quot;stat-point&quot;&gt;15&lt;/span&gt;
+	\&lt;h1&gt;属性加点&lt;/h1&gt;
+     &lt;label&gt;属性点：&lt;/label&gt;&lt;span class=&quot;stat-point&quot;&gt;15&lt;/span&gt;
     &lt;label&gt;慧根&lt;/label&gt;
     \&lt;button type=&quot;button&quot; class=&quot;arrow left&quot; onclick=&quot;
 		let val = $(this).next().val();
@@ -431,20 +483,29 @@ importStyles('./styles/overlay.css', './styles/spriteAnimation.css', './styles/u
            $(&#39;div.warning&#39;).text(&#39;&#39;);
 }&quot;&gt;确认&lt;/a&gt;
 
-</tw-passagedata><tw-passagedata pid="4" name="Faction Initialization" tags="" position="375,275" size="100,100">&lt;&lt;script&gt;&gt;
-$(document).one(&#39;:passagestart&#39;, (event) =&gt; { 
-    createPlayerCanvas();
-});
-&lt;&lt;/script&gt;&gt;
-&lt;div class=&quot;choose-faction&quot;&gt;尘缘堂&lt;/div&gt;
+</tw-passagedata><tw-passagedata pid="4" name="Faction Initialization" tags="" position="525,275" size="100,100">&lt;div class=&quot;choose-faction&quot;&gt;尘缘堂&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;明道门&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;行天清阁&lt;/div&gt;
 &lt;div class=&quot;choose-faction&quot;&gt;昼瞑宗&lt;/div&gt;
-[[确认 |Testing]]</tw-passagedata><tw-passagedata pid="5" name="Preface2" tags="" position="275,400" size="100,100">&lt;&lt;script&gt;&gt;
+[[确认 |Testing]]</tw-passagedata><tw-passagedata pid="5" name="Preface2" tags="" position="350,400" size="100,100">&lt;&lt;script&gt;&gt;
   createCustomSidebar();
+  $(document).one(&#39;:passagestart&#39;, (event) =&gt; { 
+    createPlayerCanvas();
+});
 &lt;&lt;/script&gt;&gt;
 
-[[next |Player Initialization]]</tw-passagedata><tw-passagedata pid="6" name="Testing" tags="" position="475,275" size="100,100">&lt;div id=&quot;test&quot;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Tutorial" tags="" position="275,175" size="100,100">&lt;&lt;dialog&gt;&gt;
+[[next |Player Initialization]]</tw-passagedata><tw-passagedata pid="6" name="Testing" tags="" position="625,275" size="100,100">&lt;div class=&quot;game-container&quot;&gt;
+    &lt;!-- Inventory Section --&gt;
+    &lt;div class=&quot;inventory&quot;&gt;
+      &lt;h3&gt;Inventory&lt;/h3&gt;
+      &lt;div class=&quot;item&quot; id=&quot;sword&quot; draggable=&quot;true&quot;&gt;🗡 Ancient Sword&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;npc&quot; id=&quot;blacksmith&quot;&gt;
+      &lt;h3&gt;Blacksmith&lt;/h3&gt;
+      &lt;div class=&quot;npc-image&quot;&gt;👨‍🏭&lt;/div&gt;
+      &lt;div id=&quot;interaction-message&quot; style=&quot;width: 100%;&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Tutorial" tags="" position="275,175" size="100,100">&lt;&lt;dialog&gt;&gt;
 &lt;&lt;script&gt;&gt;
   $(document).on(&#39;:passagestart&#39;, (event) =&gt; {
      createPlayerCanvas();
