@@ -14,13 +14,19 @@ let item_id = 0;
  */
 class Item {
 	constructor(name, description, weight, quantity, 
-				itemTags, stackable = true) {
+				itemTags, img_src, stackable = true) {
+		
 		if (typeof name === "string") this.name = name;
+		
 		if (typeof description === "string") this.description = description;
+		
 		if (typeof weight === "number" && weight > 0) this.weight = weight;
+		
 		if (typeof quantity === "number" && 
 			quantity < 100 && quantity > 1) this.quantity = quantity;
+		
 		if (typeof stackable === "boolean") this.stackable = stackable;
+		
 		if (typeof itemTags === "object") { 
 			let validTag = true;
 			itemTags.forEach(tag => {
@@ -32,17 +38,26 @@ class Item {
 			});
 			if (validTag) this.itemTags = itemTags;
 		}
+		
+		if (typeof img_src === "string") {
+			this.img_src = img_src;
+		}
+		
 		this.item_id = item_id;
 		item_id++;
+		
 		this.total_weight = (this.weight * this.quantity);
 	}
 	
+	/* Start of SETTERs */
 	setQuantity(quantity) {
 		if (typeof quantity === "number" && 
 			quantity < 100 && quantity > 1) this.quantity = quantity;
 		this.total_weight = (this.weight * this.quantity);
 	}
-	
+	/* End of SETTERs*/
+
+	/* Start of GETTERs */
 	getQuantity() {
 		return this.quantity;
 	}
@@ -58,4 +73,6 @@ class Item {
 	getItemWeight() {
 		return this.weight;
 	}
+	/* End of GETTERs*/
+	
 };

@@ -1,4 +1,16 @@
+// scripts/mechanisms/item/itemTag.js
+
+
+/**
+ * used to filter item
+ */
 class ItemTag {
+	/**
+	 * construct a item tag
+	 * @param {string} name
+	 * @param {string} description 
+	 * @param {string} tag_color - format: #FFFFFF
+	 */
 	constructor(name, description, tag_color) {
 		if (typeof name === "string") this.name = name;
 		if (typeof description === "string") this.description = description;
@@ -21,6 +33,17 @@ class ItemTag {
 		}
 	}
 	
+	// Start of SETTERs
+	setName(name) {
+		if (typeof name === "string") this.name = name;
+	}
+	
+	setDescription(description) {
+		if (typeof description === "string") this.description = description;
+	}
+	// End of SETTERs
+	
+	// Start of GETTERs
 	getDescription() {
 		return this.description;
 	}
@@ -28,7 +51,9 @@ class ItemTag {
 	getTagColor() {
 		return this.tag_color;
 	}
+	// End of GETTERs
 };
+
 
 const tag_consumable = new ItemTag('可食用', "能被普罗大众享用", '#FFFFFF');
 const tag_quest = new ItemTag('任务道具', '完成委托所需的重要物', '#F0D00F');

@@ -22,6 +22,8 @@ class NPC {
     this.attitude = 0; //Their general attitude toward player
 	this.gold = 0;
 	this.inventory = new Inventory();
+	this.pathfinding = null;
+	this.schedule = null;
   }
   
   casualChat() {
