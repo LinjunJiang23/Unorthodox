@@ -151,7 +151,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
       font-size: 25px;
       position: absolute;
     }</style><script role="script" id="twine-user-script" type="text/twine-javascript">//JSON Files
-importScripts(['./json/passage/tutorial-passages.js', './json/names.js'])
+importScripts(['./json/passage/tutorial-passages.js', './json/staticSources.js'])
   .then(() => {
   //Utils
   importScripts('./scripts/utils/typewriter.js', './scripts/utils/node.js', './scripts/utils/promise.js');
@@ -168,7 +168,15 @@ importScripts(['./json/passage/tutorial-passages.js', './json/names.js'])
 });
 
 //UI related
-importScripts('./scripts/ui/sidebar.js', './scripts/ui/hud.js', './scripts/ui/canvas.js', './scripts/ui/map/miniMap.js', './scripts/ui/map/mapUI.js', './scripts/ui/header.js', './scripts/ui/footer.js', './scripts/ui/overlay.js', './scripts/ui/sprite/spriteSheets.js');
+importScripts('./scripts/ui/sprite/spriteLoader.js', './scripts/ui/sprite/drawSprite.js')
+  .then(() => {
+  importScripts('./scripts/ui/canvas.js')
+    .then(()=> {
+  	importScripts('./scripts/ui/sprite/changeSprite.js');
+    });})
+  .then(() => {
+  importScripts('./scripts/ui/sidebar.js', './scripts/ui/hud.js', './scripts/ui/map/miniMap.js', './scripts/ui/map/mapUI.js', './scripts/ui/header.js', './scripts/ui/footer.js', './scripts/ui/overlay.js', './scripts/ui/dialogBox.js');
+});
 
 //Styles
 importStyles('./styles/overlay.css', './styles/spriteSheets.css', './styles/ui.css', './styles/dialog.css', './styles/dialogHistory.css');
@@ -563,7 +571,7 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
   &lt;div class=&quot;dialog-container&quot;&gt;
     &lt;span class=&quot;dialog-speaker&quot;&gt;&lt;/span&gt;\
     &lt;div class=&quot;dialog-box&quot;&gt;\
-      &lt;canvas class=&quot;dialog-speaker-icon&quot;&gt;&lt;/canvas&gt;\
+      &lt;img class=&quot;dialog-speaker-icon&quot; /&gt;\
       &lt;div class=&quot;dialog-text&quot;&gt;&lt;/div&gt;\
     &lt;/div&gt;\
     &lt;a id=&quot;dialog-history-btn&quot;&gt;读取回忆&lt;/a&gt;

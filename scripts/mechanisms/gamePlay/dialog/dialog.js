@@ -8,8 +8,11 @@ function showNextDialog() {
 	let cur_part = nodeManager.getDialog()[nodeManager.current_index];
 	let contents = cur_part.content;
 	let speaker = cur_part.speaker;
+	
+	//Handle speaker
 	if (speaker) {
-	  $('span.dialog-speaker').text(speaker);
+	  $('span.dialog-speaker').text(speaker.name); //Append speaker name
+	  renderSpeakerIcon(speaker);
 	} else {
 	  $('span.dialog-speaker').text('');
 	}
@@ -18,7 +21,7 @@ function showNextDialog() {
 	  let dialog = contents[currentIndex];
 	  if (!(dialog.hasOwnProperty("history"))) {
 	    dialogHistory.saveDialog({
-		  speaker: speaker || '',
+		  speaker: (speaker ? speaker.name : ''),
 		  text: dialog.text
 	    });
 	  }
@@ -84,7 +87,6 @@ function resetEffects() {
 function applyTypeWriter(str, type) {
 	switch(type) { 
 		case "normal":
-			console.log('Normal typewriter triggered');
 			typeWriter.type(str, '.dialog-text', 60);
 			break;
 		case "slow":

@@ -1,7 +1,7 @@
 .dialog-container {
 	background-image: url("../img/placeholder.png");
-	width: 600px;
-	height: 300px;
+	width: 700px;
+	height: 500px;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
@@ -16,10 +16,11 @@
 
 .dialog-box {
 	padding: 10px;
-	height: 200px;
-	width: 528px;
+	height: 400px;
+	width: 400px;
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 }
 
 .dialog-text {
@@ -28,6 +29,6 @@
 }
 
 .dialog-speaker-icon {
-	height: 128px;
-	width: 128px;
+	height: 362px;
+	width: 256px;
 }

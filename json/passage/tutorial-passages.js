@@ -80,19 +80,19 @@ const tutorial_nodes = [
 	  "condition": null,
 	  "dialogue": [
 	    {
-		  "speaker": '陈汝',
+		  "speaker": {"name": '陈汝', "state": "neutral", "outfit": "normal"},
 	      "content": [
 		    {"text": '“这小子，本帮老大。”', "type": 'normal', "effect": null}
 		  ]
 		},
 		{
-		  "speaker": null,
+		  "speaker": {"name": '陈汝', "state": "neutral", "outfit": "normal"},
 	      "content": [
 			{"text": "“圆月高悬，金佛像笑看陈汝拍拍刚绑来的‘老大’。”", "type": "normal", "effect": null},
 		  ]
 	    },
 		{
-		  "speaker": '陈汝',
+		  "speaker": {"target": '陈汝', "state": "neutral", "outfit": "normal"},
 	      "content": [
 			{"text": '“‘你，我亲人，保真。’”', "type": 'normal', "effect": null}
 		  ]

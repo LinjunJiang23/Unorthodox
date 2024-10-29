@@ -1,72 +1,6 @@
-const characterImageSources = {
-	baseBody: './img/baseBody.png',
-	eyeShape: './img/eyeShape.png',
-	hairStyle: './img/hairStyle.png'
-};
+// scrips/ui/sprite/changeSprite.js
 
-let currentPlayerSprite = {
-	baseBody: {x: 0, y: 0},
-	eyeShape: {x: 0, y: 0},
-	hairStyle: {x: 0, y: 0}
-};
-
-/* Sprite Singleton */
-class CharacterSpriteLoader {
-    constructor() {
-        if (CharacterSpriteLoader.instance) {
-            return CharacterSpriteLoader.instance;
-        }
-        this.characterSpriteSheets = {};
-        CharacterSpriteLoader.instance = this;
-    }
-
-    loadImages(imageSources) {
-        const promises = Object.entries(imageSources).map(([key, src]) => {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.src = src;
-                img.onload = () => {
-                    this.characterSpriteSheets[key] = img;
-                    resolve();
-                };
-                img.onerror = () => {
-                    reject(new Error(`Failed to load image: ${src}`));
-                };
-            });
-        });
-
-        return Promise.all(promises);
-    }
-
-    getSpriteSheets() {
-        return this.characterSpriteSheets;
-    }
-};
-
-const spriteLoader = new CharacterSpriteLoader();
-
-// Load the images
-spriteLoader.loadImages(characterImageSources)
-    .then(() => {
-		console.log('load sucessfully:', characterImageSources);
-    })
-    .catch(error => {
-        console.error(error);
-});
-
-const drawSprite = (ctx, spriteSheet, spriteX, spriteY, spriteWidth, spriteHeight, posX, posY) => {
-	ctx.drawImage(spriteSheet, spriteX, spriteY, spriteWidth, spriteHeight, posX, posY, spriteWidth, spriteHeight);
-};
-
-const drawCharacter = (ctx, spriteSheet, intendedSpritePos) => {
-    // Clear the entire canvas
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-	drawSprite(ctx, spriteSheet.baseBody, intendedSpritePos.baseBody.x, intendedSpritePos.baseBody.y, 512, 512, 0, 0);
-	drawSprite(ctx, spriteSheet.eyeShape, intendedSpritePos.eyeShape.x, intendedSpritePos.eyeShape.y, 512, 512, 0, 0);
-	drawSprite(ctx, spriteSheet.hairStyle, intendedSpritePos.hairStyle.x, intendedSpritePos.hairStyle.y, 512, 512, 0, 0);
-};
-
-const changePlayerSpritePosition = (type, newX, newY) => {
+function changePlayerSpritePosition(type, newX, newY) {
     if (currentPlayerSprite[type]) {
         currentPlayerSprite[type].x = newX;
         currentPlayerSprite[type].y = newY;
@@ -75,7 +9,7 @@ const changePlayerSpritePosition = (type, newX, newY) => {
     }
 };
 	
-const changeCharacterSprite = async (val, target, type) => {
+async function changeCharacterSprite(val, target, type) {
 	val = parseInt(val) - 1;
 	if (typeof target === 'string' && typeof type === "string") {
 		const ctx = await getCTX(target);
@@ -91,7 +25,9 @@ const changeCharacterSprite = async (val, target, type) => {
 	}
 };
 
-const isGray = (r, g, b) => {
+
+
+function isGray (r, g, b) {
 	const threshold = 30;
 	return Math.abs(r - g) < threshold && Math.abs(g - b) < threshold && 
 		   Math.abs(b - r) < threshold;
@@ -99,7 +35,7 @@ const isGray = (r, g, b) => {
 
 
 /* This currently doesn't work, will finish it later. */
-const changeCharacterSpriteColor = (val, target, type) => {
+function changeCharacterSpriteColor(val, target, type) {
     // Select the canvas element (make sure it is actually a canvas)
     val = parseInt(val);
 	if (typeof target === 'string' && typeof type === "string" && val) {
