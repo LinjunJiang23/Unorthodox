@@ -151,14 +151,14 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
       font-size: 25px;
       position: absolute;
     }</style><script role="script" id="twine-user-script" type="text/twine-javascript">//JSON Files
-importScripts(['./json/passage/tutorial-passages.js', './json/staticSources.js'])
+importScripts('./scripts/utils/promise.js', './scripts/utils/typewriter.js', './scripts/utils/node.js', './scripts/utils/tilemap.js')
   .then(() => {
   //Utils
-  importScripts('./scripts/utils/typewriter.js', './scripts/utils/node.js', './scripts/utils/promise.js');
+  importScripts('./misc/passage/tutorial-passages.js', './misc/staticSources.js', './misc/env/testLayer.js');
   })
   .then(() => {
   //Mechanism related
-  importScripts(['./scripts/mechanisms/worldSetUp/map.js', './scripts/mechanisms/physics/navigation/environment.js', './scripts/mechanisms/physics/action/move.js', './scripts/mechanisms/worldSetUp/factions/faction.js', './scripts/mechanisms/gamePlay/dice/dice.js', './scripts/mechanisms/gamePlay/dice/modifier.js',
+  importScripts(['./scripts/mechanisms/worldSetUp/map.js', './scripts/mechanisms/physics/world/environment.js', './scripts/mechanisms/physics/action/move.js', './scripts/mechanisms/worldSetUp/factions/faction.js', './scripts/mechanisms/gamePlay/dice/dice.js', './scripts/mechanisms/gamePlay/dice/modifier.js', './scripts/mechanisms/gamePlay/camera/camera.js',
   './scripts/mechanisms/character/attributes/stat.js',
 './scripts/mechanisms/gamePlay/display.js', './scripts/mechanisms/character/attributes/traits.js'], ['./scripts/mechanisms/resources/item/item.js', './scripts/mechanisms/resources/item/itemTag.js', './scripts/mechanisms/resources/inventory/inventory.js', './scripts/mechanisms/gamePlay/dragDrop/drag.js', './scripts/mechanisms/gamePlay/dragDrop/drop.js', './scripts/mechanisms/gamePlay/dialog/dialog.js', './scripts/mechanisms/gamePlay/dialog/choices.js', './scripts/mechanisms/gamePlay/dialog/dialogHistory.js', './scripts/mechanisms/animation/movementAnimation.js'])
   .then(() => {
@@ -578,7 +578,11 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
   &lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;
 
-</tw-passagedata><tw-passagedata pid="9" name="Test2" tags="" position="625,400" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
+&lt;&lt;widget &quot;gameEnv&quot;&gt;&gt;
+&lt;div id=&quot;game-environment&quot;&gt;
+	&lt;canvas id=&quot;canvas-environment&quot; width=&quot;800&quot; height=&quot;800&quot;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="Test2" tags="" position="625,400" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
 
 &lt;&lt;script&gt;&gt;
     setTimeout(() =&gt; { const canvas = document.getElementById(&#39;gameCanvas&#39;);
@@ -685,12 +689,10 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
     // Initial draw call
     draw();
     }, 40);
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="TownMechanism" tags="" position="525,525" size="100,100">&lt;h1&gt;This is the town.&lt;/h1&gt;
-  &lt;h2&gt;Move the Player with Arrow Keys&lt;/h2&gt;
-  &lt;div id=&quot;environment&quot; class=&quot;grid&quot;&gt;&lt;/div&gt;
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="TownMechanism" tags="" position="525,525" size="100,100">&lt;&lt;gameEnv&gt;&gt;
   &lt;&lt;script&gt;&gt;
     // Initial Render
-    $(document).ready(renderEnvironment);
+    $(document).ready(envManager.renderEnvironment(&#39;testLayer&#39;));
   &lt;&lt;/script&gt;&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

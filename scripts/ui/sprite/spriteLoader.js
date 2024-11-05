@@ -10,6 +10,10 @@ let currentPlayerSprite = {
 	hairStyle: {x: 0, y: 0}
 };
 
+let mapSources = {
+	testLayer: './img/maps/testMap.png'
+};
+
 /* Sprite Singleton */
 class SpriteLoader {
     constructor() {
@@ -39,7 +43,7 @@ class SpriteLoader {
     }
 };
 
-const customSpriteLoader = new SpriteLoader();
+let customSpriteLoader = new SpriteLoader();
 
 // Load the custom images
 customSpriteLoader.loadImages(characterCustomSources)
@@ -50,3 +54,13 @@ customSpriteLoader.loadImages(characterCustomSources)
         console.error(error);
 });
 
+let mapLoader = new SpriteLoader();
+
+// Load maps
+mapLoader.loadImages(mapSources)
+	.then(() => {
+		console.log('load maps sucessfully:', mapSources);
+    })
+    .catch(error => {
+        console.error(error);
+});

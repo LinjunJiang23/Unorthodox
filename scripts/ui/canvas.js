@@ -26,18 +26,5 @@ async function createPlayerCanvas() {
 	}
 };
 
-async function createEnvironmentCanvas() {
-	try {
-		const initializeCanvas = () => {
-			$(document).ready(function() {
-				$('.passage').append('<div id="environment"></div>');
-				$('#environment').append('<canvas id="canvas-environment" height="800px" width="800px"></canvas>');
-		})};
-			initializeCanvas();
-			const ctx = await new Promise((resolve) => setTimeout(() => resolve(getCTX('environment')), 0));
-			ctx.clearRect(0, 0, 800, 800);
-	} catch (err) {
-		throw new Error(err);
-	}
-};
+
 

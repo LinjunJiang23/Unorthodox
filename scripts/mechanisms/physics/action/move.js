@@ -1,49 +1,43 @@
 // scripts/mechanisms/physics/action/move.js
+let playerPosition = { x: 0, y: 0 };
 
-function movePlayer(direction) {
+
+function movePlayer(direction, speed) {
       let newX = playerPosition.x;
       let newY = playerPosition.y;
+	  
+	  let cameraPos = camera.getPosition();
 
-      if (direction === 'up') newY -= 1;
-      if (direction === 'down') newY += 1;
-      if (direction === 'left') newX -= 1;
-      if (direction === 'right') newX += 1;
-
-      // Check if new position is within bounds and walkable
-      if (newY >= 0 && newY < map.length && newX >= 0 && newX < map[0].length && map[newY][newX] === 1) {
-        playerPosition = { x: newX, y: newY };
-        console.log(`Player moved to (${newX}, ${newY})`);
-      } else {
-        console.log('Blocked!');
-      }
-
-      renderEnvironment(); // Update map after move
-}
+      if (direction === 'up') {
+		  camera.moveCameraTo(0, 16);
+		  newY -= 1;
+	  } else if (direction === 'down') {
+		  camera.moveCameraTo(0, -16);
+		  newY += 1;
+	  } else if (direction === 'left') {
+		  camera.moveCameraTo(-16, 0);
+		  newX -= 1;
+	  } else if (direction === 'right') {
+		  camera.moveCameraTo(16, 0);
+		  newX += 1;
+	  }
+	  
+	  envManager.renderEnvironment('testLayer');
+};
 
 // Keyboard Event Listener
 document.addEventListener('keydown', (event) => {
-      switch (event.key) {
-        case 'ArrowUp':
-              event.preventDefault();
-
+      if (event.key === "W" || event.key === "w") {
+          event.preventDefault();
           movePlayer('up');
-          break;
-        case 'ArrowDown':
-              event.preventDefault();
-
+      } else if (event.key === "S" || event.key === "s") {
+          event.preventDefault();
           movePlayer('down');
-          break;
-        case 'ArrowLeft':
-              event.preventDefault();
-
+      } else if (event.key === "A" || event.key === "a") {
+          event.preventDefault();
           movePlayer('left');
-          break;
-        case 'ArrowRight':
-              event.preventDefault();
-
+      } else if (event.key === 'd' || event.key === "D") {
+          event.preventDefault();
           movePlayer('right');
-          break;
-        default:
-          break;
       }
-  });
+});

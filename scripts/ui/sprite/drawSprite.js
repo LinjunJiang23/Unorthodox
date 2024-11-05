@@ -1,7 +1,10 @@
 // scripts/ui/sprite/drawSprite.js
 
-function drawSprite(ctx, spriteSheet, spriteX, spriteY, spriteWidth, spriteHeight, posX, posY) {
-	ctx.drawImage(spriteSheet, spriteX, spriteY, spriteWidth, spriteHeight, posX, posY, spriteWidth, spriteHeight);
+function drawSprite(ctx, spriteSheet, spriteX, spriteY, spriteWidth, spriteHeight, posX, posY, sizeCanvasX, sizeCanvasY) {
+	ctx.drawImage(spriteSheet, spriteX, spriteY, 
+	spriteWidth, spriteHeight, 
+	posX, posY, 
+	sizeCanvasX, sizeCanvasY);
 };
 
 function drawCharacter(ctx, spriteSheet, intendedSpritePos) {
