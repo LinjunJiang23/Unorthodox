@@ -19,7 +19,7 @@ async function changeCharacterSprite(val, target, type) {
         }
 		let y = Math.trunc(val / 4) * 514;
 		let x = (val % 4) * 516;
-		let sheets = spriteLoader.getSpriteSheets();
+		let sheets = customSpriteLoader.getSpriteSheets();
 		changePlayerSpritePosition(type, x, y);
 		await drawCharacter(ctx, sheets, currentPlayerSprite);
 	}

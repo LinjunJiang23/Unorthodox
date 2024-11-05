@@ -41,9 +41,11 @@ class Camera {
 		this.y = Math.max(minY, Math.min(this.y, maxY));
 	}
 
-	moveCameraTo(targetX, targetY, speed = 0.1) {
-		this.x += targetX * speed;
-		this.y += targetY * speed;
+	moveCameraTo(targetX, targetY, speed = 1) {
+		let newX = this.x + targetX * speed;
+		let newY = this.y + targetY * speed;
+		newX <= 128 ? this.x = 128 : this.x = newX;
+		newY <= 128 ? this.y = 128 : this.y = newY;
 	}
 	
 	resetCamera() {
