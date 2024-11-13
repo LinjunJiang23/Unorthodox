@@ -26,9 +26,9 @@ class EnvironmentManager {
 				const startX = (cameraPos.x - viewportSize / 2);
 				const startY = (cameraPos.y - viewportSize / 2);
 
-				ctx.clearRect(0, 0, 1000, 800);
+				ctx.clearRect(0, 0, 1024, 1024);
 
-				drawSprite(ctx, sheets[mapName], startX, startY, viewportSize, viewportSize, 0, 0, 1000, 800);
+				drawSprite(ctx, sheets[mapName], startX, startY, viewportSize, viewportSize, 0, 0, 1024, 1024);
 			}
 		}
 	}

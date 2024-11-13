@@ -1,26 +1,23 @@
-let characterCustomSources = {
+let characterPortraitSources = {
 	baseBody: './img/customs/baseBody.png',
 	eyeShape: './img/customs/eyeShape.png',
 	hairStyle: './img/customs/hairStyle.png'
-};
-
-let currentPlayerSprite = {
-	baseBody: {x: 0, y: 0},
-	eyeShape: {x: 0, y: 0},
-	hairStyle: {x: 0, y: 0}
 };
 
 let mapSources = {
 	testLayer: './img/maps/testMap.png'
 };
 
-/* Sprite Singleton */
+/**
+ * SpriteLoader class 
+ */
 class SpriteLoader {
     constructor() {
         this.spriteSheets = {};
     }
 
     loadImages(imageSources) {
+		this.spriteSheets = {}; //clear all sprite sheets before loading new ones
         const promises = Object.entries(imageSources).map(([key, src]) => {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -46,9 +43,9 @@ class SpriteLoader {
 let customSpriteLoader = new SpriteLoader();
 
 // Load the custom images
-customSpriteLoader.loadImages(characterCustomSources)
+customSpriteLoader.loadImages(characterPortraitSources)
     .then(() => {
-		console.log('load customs sucessfully:', characterCustomSources);
+		console.log('load customs sucessfully:', characterPortraitSources);
     })
     .catch(error => {
         console.error(error);
@@ -64,3 +61,4 @@ mapLoader.loadImages(mapSources)
     .catch(error => {
         console.error(error);
 });
+

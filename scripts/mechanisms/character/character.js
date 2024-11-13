@@ -6,7 +6,6 @@ const playerCreated = new CustomEvent('playerInitialized');
  * Player Singleton 
  */
 class Player {
-	
 	/**
 	 *
 	 */

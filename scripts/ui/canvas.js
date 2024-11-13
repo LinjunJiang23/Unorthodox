@@ -18,7 +18,7 @@ async function createPlayerCanvas() {
 		const ctx = await new Promise((resolve) => setTimeout(() => resolve(getCTX('player-fullbody')), 0));
 		ctx.clearRect(0, 0, 512, 512);
 		let sheets = customSpriteLoader.getSpriteSheets();
-		drawCharacter(ctx, sheets, currentPlayerSprite);
+		drawCharacter(ctx, sheets, currentPlayerPortraitSprite, 512, 512);
 	} catch (err) {
 		throw new Error(err);
 	}
