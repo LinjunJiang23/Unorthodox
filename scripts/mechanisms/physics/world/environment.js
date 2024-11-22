@@ -1,7 +1,7 @@
 // scripts/mechanisms/physics/navigation/environment.js
 
 /** 
- * EnvironmentManager - 
+ * EnvironmentManager - singleton class
  */ 
 class EnvironmentManager {
 	constructor() {
@@ -12,6 +12,9 @@ class EnvironmentManager {
 		this.env;
 	}
 	
+	/**
+	 * renderEnvironment
+	 */
 	renderEnvironment(mapName) {
 		//If canvas exists, starts rendering
 		if ($('#canvas-environment').length !== 0) {
@@ -20,15 +23,13 @@ class EnvironmentManager {
 				this.env = mapName;
 				const ctx = getCTX('environment');
 				let sheets = mapLoader.getSpriteSheets();
-				let cameraPos = camera.getPosition();
-				const viewportSize = 256;
-
-				const startX = (cameraPos.x - viewportSize / 2);
-				const startY = (cameraPos.y - viewportSize / 2);
+				let pos = camera.screenToMap(playerPosition);
+				console.log("environment source position:", pos);
+				let viewportSize = 256;
 
 				ctx.clearRect(0, 0, 1024, 1024);
 
-				drawSprite(ctx, sheets[mapName], startX, startY, viewportSize, viewportSize, 0, 0, 1024, 1024);
+				drawSprite(ctx, sheets[mapName], pos.x, pos.y, viewportSize, viewportSize, 0, 0, 1024, 1024);
 			}
 		}
 	}

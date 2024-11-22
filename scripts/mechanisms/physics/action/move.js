@@ -2,6 +2,12 @@
 
 let playerPosition = {x: 0, y: 0};
 
+
+/**
+ * movePlayer -
+ * @param {string} direction
+ * @param {number} speed - determines the speed of the player movement 
+ */
 function movePlayer(direction, speed = 1) {
       let newX = playerPosition.x;
       let newY = playerPosition.y;
@@ -14,40 +20,44 @@ function movePlayer(direction, speed = 1) {
 	  playerAnimation.animationSpeed = 140;
 	  playerAnimation.currentState= "walk";
 
+
+	  // IF within the 256x256 initial camera position, 
+	  // DONOT update the camera position but update player position
       if (direction === 'up') {
-		  if (cameraPos.y > playerPosition.y) {
-			  
-		  } 
-		  else {
-		    camera.moveCameraTo(0, -16);
-		    playerPosition.y >= 1 ? newY -= 16 : newY = playerPosition.y;
-		  }
+			playerPosition.y >= 8 ? newY -= 8 : newY = playerPosition.y;
 	  } else if (direction === 'down') {
-		  if (cameraPos.y > playerPosition.y) {
-			  playerPosition.y >= 0 ? newY += 16 : newY = playerPosition.y;
-		  } else {
-			camera.moveCameraTo(0, 16);
-			playerPosition.y >= 0 ? newY += 16 : newY = playerPosition.y;
-		  }
+			  playerPosition.y >= 0 ? newY += 8 : newY = playerPosition.y;
 	  } else if (direction === 'left') {
-		  camera.moveCameraTo(-16, 0);
-		  playerPosition.x >= 1 ? newX -= 16 : newX = playerPosition.x;
+			playerPosition.x >= 8 ? newX -= 8 : newX = playerPosition.x;
 	  } else if (direction === 'right') {
-		  camera.moveCameraTo(16, 0);
-		  playerPosition.x >= 0 ? newX += 16 : newX = playerPosition.x;
+		    playerPosition.x >= 0 ? newX += 8 : newX = playerPosition.x;
 	  }
 	  
 	  playerPosition.x = newX;
 	  playerPosition.y = newY;
 	  
+	  camera.centerCameraOn(playerPosition);
+
+	  
+	  console.log("camera position:", cameraPos);
+	  console.log("player position:", playerPosition);
+	  
 	  envManager.renderEnvironment('testLayer');
 };
 
-// Keyboard Event Listener
+/* Keyboard Event Listener */
+
+/**
+ * keydown:
+ * Character Movement, Camera Movement 
+ */
 document.addEventListener('keydown', (event) => {
       let speed = 1;
 	  if (event.shiftKey) console.log('Shift key was holding! Should implement running and other functionality later.');
 	  
+	  
+	  /* Character Control */
+	  // Character Movement:
 	  if (event.key === "W" || event.key === "w") {
           event.preventDefault();
           movePlayer('up');
@@ -61,8 +71,23 @@ document.addEventListener('keydown', (event) => {
           event.preventDefault();
           movePlayer('right');
       }
+	  
+	  //Camera Movement:
+	  if (event.key === "ArrowLeft") {
+		  event.preventDefault();
+	  } else if (event.key === "ArrowRight") {
+		event.preventDefault();
+	  } else if (event.key === "ArrowUp") {
+		event.preventDefault();
+	  } else if (event.key === "ArrowDown") {
+		event.preventDefault();
+	  }
 });
 
+/**
+ * keyup:
+ * Character Idle Animation
+ */
 document.addEventListener('keyup', (event) => {
 	if (event.key === "W" || event.key === "w" || 
 		event.key === "S" || event.key === "s" || event.key === "A" || 
