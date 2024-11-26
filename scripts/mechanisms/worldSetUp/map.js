@@ -1,3 +1,5 @@
+// scripts/mechanisms/worldSetUp/map.js
+
 class MapElement {
     constructor(name, description, type, is_unlocked = false) {
         if (typeof name === "string") this.name = name;

@@ -36,8 +36,6 @@ function movePlayer(direction, speed) {
 	  camera.centerCameraOn(playerPosition);
 
 	  
-	  console.log("camera position:", cameraPos);
-	  console.log("player position:", playerPosition);
 	  
 	  envManager.renderEnvironment('testLayer');
 };

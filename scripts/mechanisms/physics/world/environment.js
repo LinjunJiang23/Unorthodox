@@ -24,7 +24,6 @@ class EnvironmentManager {
 				const ctx = getCTX('environment');
 				let sheets = mapLoader.getSpriteSheets();
 				let pos = camera.screenToMap(playerPosition);
-				console.log("environment source position:", pos);
 				let viewportSize = 256;
 
 				ctx.clearRect(0, 0, 1024, 1024);

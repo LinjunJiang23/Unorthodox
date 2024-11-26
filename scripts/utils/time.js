@@ -1,4 +1,4 @@
-// scripts/mechanisms/physics/world/time.js
+// scripts/utils/time.js
 
 let lastUpdate = 0;
 

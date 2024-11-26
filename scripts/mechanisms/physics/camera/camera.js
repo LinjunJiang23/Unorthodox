@@ -39,7 +39,6 @@ class Camera {
 	centerCameraOn(pos) {
 		this.x = (pos.x * this.zoomFactor) - 512;
 		this.y = (pos.y * this.zoomFactor) - 512;
-		console.log(this.x, this.y);
 		this.setCameraBounds();
 	}
 

@@ -15,6 +15,7 @@ class TileMap {
 			this.tilelayers = data.layers;
 			this.collision = new Set();
 			this.events = new Set();
+			this.interactives = new Set();
 			this.width = data.width;
 			this.height = data.height;
 			this.tilelayers.forEach(_layer => {
@@ -30,22 +31,7 @@ class TileMap {
 						this.collision.add(index);
 					}
 				});
-			  }
-			  
-			 //Add main events
-			 if (_layer.name === "MainEvents") {
-			 
-			 }
-			 
-			 //Add side events
-			 if (_layer.name === "SideEvents") {
-				 
-			 }
-			 
-			 //Add interactive zones
-			 if (_layer.name === "Interactives") {
-			 
-			 }
+			  }			 
 		    }
 		  });  	
 		}
@@ -76,16 +62,27 @@ class TileMap {
 	}
 	
 	getCollision() {
-		return this.collision;
+		let collision = [];
+		this.collision.forEach((index) => {
+			collision.push(getCoordinateFromIndex(index));
+		});
+		return collision;
 	}
 	/* End of GETTERs */
 };
+
+function getCoordinateFromIndex(index, width = 32) {
+	const x = index % width;
+	const y = Math.floor(index / width);
+	return {x: x, y: y};
+}
 
 
 /**
  * TileMapManager - singleton class that centralizes storage for all current TileMaps
  */
 class TileMapManager {
+	static instance = null;
 	constructor() {
 		if (TileMapManager.instance) {
 			return TileMapManager.instance;
