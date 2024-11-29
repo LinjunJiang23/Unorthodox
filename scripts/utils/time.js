@@ -1,6 +1,5 @@
 // scripts/utils/time.js
 
-let lastUpdate = 0;
 
 let gameTime = {
 	hour: 6,

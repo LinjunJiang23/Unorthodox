@@ -4,12 +4,18 @@
  * Camera - singleton class serves as viewport
  * Allows camera that centers around player
  * MAY IMPLEMENT PROPS THAT ALLOW PLAYER TO MOVE CAMERA IN THE FUTURE
+ * @var x
+ * @var y
+ * @var minX
+ * @var minY
+ * @var maxX
+ * @var maxY
+ * @var zoomFactor - scaling a 64x64, 128x128, 256x256 viewport size to a 1024x1024 screen size
  */
 class Camera {
 	
 	/**
-	 * 
-	 * Camera's initial set up is always the top left corner of 256x256 tiles
+	 * Camera's initial set up is always the top left corner of viewport
 	 */
 	constructor() {
 		if (Camera.instance) {
@@ -20,25 +26,31 @@ class Camera {
 		this.y = 0;
 		this.minX = 0;
 		this.minY = 0;
-		this.maxX = 1024;
-		this.maxY = 1024;
+		this.maxX = 256;
+		this.maxY = 256;
 		this.zoomFactor = 4;
 	}
 	
 	// Converts map coordinates to screen coordinates
 	mapToScreen(mapPos) {
-		return { x: (mapPos.x * this.zoomFactor) - this.x, y: (mapPos.y * this.zoomFactor) - this.y };
+		return { 
+			x: ((mapPos.x - this.x) * this.zoomFactor), 
+			y: ((mapPos.y - this.y) * this.zoomFactor) 
+		};
 	}
 
 	// Converts screen coordinates to map coordinates
 	screenToMap(screenPos) {
-		return { x: (screenPos.x + this.x) / this.zoomFactor, y: (screenPos.y + this.y) / this.zoomFactor };
+		return { 
+		  x: (screenPos.x + this.x) / this.zoomFactor, 
+		  y: (screenPos.y + this.y) / this.zoomFactor 
+		};
 	}
 
 	//Centers the camera on a specific point
 	centerCameraOn(pos) {
-		this.x = (pos.x * this.zoomFactor) - 512;
-		this.y = (pos.y * this.zoomFactor) - 512;
+		this.x = pos.x - 128;
+		this.y = pos.y - 128;
 		this.setCameraBounds();
 	}
 

@@ -8,16 +8,21 @@ class TileMap {
 	 * @param {string} name - name of the map
 	 * @param {Object} data - map data
 	 */
-	constructor(name, data) {
+	constructor(name, data, sectionWidth = 4, sectionHeight = 4) {
 		if (typeof name === "string" && typeof data === "object") {
 			this.name = name;
 			this.tiles = {};
 			this.tilelayers = data.layers;
-			this.collision = new Set();
-			this.events = new Set();
-			this.interactives = new Set();
 			this.width = data.width;
 			this.height = data.height;
+			(typeof sectionWidth === "number" && sectionWidth >= 0) ? 
+				this.sectionWidth = sectionWidth : 
+				this.sectionWidth = 4;
+			(typeof sectionHeight === "number" && sectionHeight >= 0) ? 
+				this.sectionHeight = sectionHeight : 
+				this.sectionWidth = 4;
+			this.sections = new Map();
+			this.staticCollision = new Set();
 			this.tilelayers.forEach(_layer => {
 		    if (_layer.type === "tilelayer") {
 			  
@@ -26,32 +31,49 @@ class TileMap {
 				_layer.data.forEach((tile, i) => {
 					if (tile !== 0) {
 						const x = i % this.width;
-						const y = Math.floor(i / this.width);
-						const index = y * this.width + x;
-						this.collision.add(index);
+						const y = Math.floor(i / this.height);
+						this.staticCollision.add(`${x},${y}`);
 					}
 				});
 			  }			 
 		    }
-		  });  	
+		  });
+		  this.divideIntoSections();
 		}
 	}
 	
-	isCollision(x, y) {
+	isStaticCollision(x, y) {
+		return this.staticCollision.has(`${x},${y}`);
+	}
+	
+	addStaticCollision(x, y) {
 		if (typeof x === "number" && typeof y === "number") {
-			const index = y * this.width + x;
-			return this.collision.has(index);
+			this.staticCollision.add(`${x},${y}`);
 		}
 	}
 	
-	addCollision(x, y) {
-		if (typeof x === "number" && typeof y === "number") {
-			const index = y * this.width + x;
-			this.collision.add(index);
+	divideIntoSections() {
+		for (let y = 0; y < this.height; y++) {
+			for (let x = 0; x < this.width; x++) {				
+				if (this.staticCollision.has(`${x},${y}`)) {
+					const sectionX = Math.floor(x / this.sectionWidth);
+					const sectionY = Math.floor(y / this.sectionHeight);
+					const sectionKey = `${sectionX},${sectionY}`;
+					
+					if (!this.sections.has(sectionKey)) {
+						this.sections.set(sectionKey, { staticCollision: [] });
+					}
+					
+					const section = this.sections.get(sectionKey);
+					section.staticCollision.push(`${x},${y}`);
+				}
+			}
 		}
 	}
 	
-	//function addTileEvent(x, y, eventType) {};
+	getSection(sectionX, sectionY) {
+		return this.sections.get(`${sectionX},${sectionY}`) || null;
+	}
 	
 	/* Start of SETTERs */
 	/* End of SETTERs */
@@ -61,21 +83,16 @@ class TileMap {
 		return this.name;
 	}
 	
-	getCollision() {
-		let collision = [];
-		this.collision.forEach((index) => {
-			collision.push(getCoordinateFromIndex(index));
-		});
-		return collision;
+	getSections() {
+		return this.sections;
+	}
+		
+	getStaticCollision() {
+		return this.staticCollision;
 	}
 	/* End of GETTERs */
 };
 
-function getCoordinateFromIndex(index, width = 32) {
-	const x = index % width;
-	const y = Math.floor(index / width);
-	return {x: x, y: y};
-}
 
 
 /**

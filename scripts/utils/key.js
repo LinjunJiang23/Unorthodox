@@ -23,30 +23,33 @@ document.addEventListener('keyup', (event) => {
 /**
  * handleKeydown -  
  */
-function handleKeyboardControl(deltaTime) {
-	let speed = ((pressedKeys.has('ShiftLeft') || pressedKeys.has('ShiftRight')) ? 30 : 10) * deltaTime;
+function handleKeyboardControl(timestamp) {
+	let speed = (pressedKeys.has('ShiftLeft') || pressedKeys.has('ShiftRight')) ? 40 : 10;
 	let validKeys = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD']);
 
 	  /* Character Control */
 	  // Character Movement:
 	  if (pressedKeys.has("KeyW") && !pressedKeys.has('KeyS')) {
-		movePlayer('up', speed);
+		movePlayer('up', speed, timestamp);
       } else if (pressedKeys.has('KeyS') && !pressedKeys.has('KeyW')) {
-		movePlayer('down', speed);
+		movePlayer('down', speed, timestamp);
 	  } else if (pressedKeys.has('KeyS') && pressedKeys.has('KeyW')) {
-		playerAnimation.stop();
+		playerAnimation.idle();
+		playerAnimation.updateAnimation(timestamp);
 	  }
 	  
 	  if (pressedKeys.has("KeyA") && !pressedKeys.has('KeyD')) {
-		movePlayer('left', speed);
+		movePlayer('left', speed, timestamp);
 	  } else if (pressedKeys.has('KeyD') && !pressedKeys.has('KeyA')) {
-		movePlayer('right', speed);
+		movePlayer('right', speed, timestamp);
       } else if (pressedKeys.has('KeyA') && pressedKeys.has('KeyD')) {
-		playerAnimation.stop();	  
+		playerAnimation.idle();
+		playerAnimation.updateAnimation(timestamp);
 	  }
 	  
-	  if (pressedKeys.isDisjointFrom(validKeys)) {
-		playerAnimation.stop();
+	  if (![...pressedKeys].some(key => validKeys.has(key))) {
+		playerAnimation.idle();
+		playerAnimation.updateAnimation(timestamp);
 	  } 	  
 	  	  /* Camera Movement */
 	  if (pressedKeys.has("ArrowLeft")) {

@@ -1,41 +1,72 @@
 // scripts/mechanisms/physics/action/move.js
 
-let playerPosition = {x: 0, y: 0};
-
-
 /**
- * movePlayer -
- * @param {string} direction
+ * movePlayer - Handles player movement with collision detection
+ * @param {string} direction - The direction of movement ('up', 'down', 'left', 'right')
  * @param {number} speed - determines the speed of the player movement 
  */
-function movePlayer(direction, speed) {
-      let newX = playerPosition.x;
+function movePlayer(direction, speed, timestamp) {
+      const division = 1/1000;
+	  const MIN_DELTA = 0.001;
+	  let deltaTime = (timestamp - lastUpdate) * division;
+	  if (deltaTime < MIN_DELTA) deltaTime = MIN_DELTA;
+	  let moveSpeed = speed * deltaTime;
+	  let newX = playerPosition.x;
       let newY = playerPosition.y;
 	  
 	  let cameraPos = camera.getPosition();
 
-	  playerAnimation.direction = direction;
-	  playerAnimation.isMoving = true;
-	  playerAnimation.isIdle = false;
-	  playerAnimation.animationSpeed = 140;
-	  playerAnimation.currentState= "walk";
-
       if (direction === 'up') {
-			playerPosition.y >= (2 * speed) ? newY -= (2 * speed) : newY = playerPosition.y;
+			playerPosition.y >= moveSpeed ? newY -= moveSpeed : newY = playerPosition.y;
 	  } else if (direction === 'down') {
-			  playerPosition.y >= 0 ? newY += (2 * speed) : newY = playerPosition.y;
+			  playerPosition.y >= 0 ? newY += moveSpeed : newY = playerPosition.y;
 	  } else if (direction === 'left') {
-			playerPosition.x >= (2 * speed) ? newX -= (2 * speed) : newX = playerPosition.x;
+			playerPosition.x >= moveSpeed ? newX -= moveSpeed : newX = playerPosition.x;
 	  } else if (direction === 'right') {
-		    playerPosition.x >= 0 ? newX += (2 * speed) : newX = playerPosition.x;
+		    playerPosition.x >= 0 ? newX += moveSpeed : newX = playerPosition.x;
 	  }
 	  
-	  playerPosition.x = newX;
-	  playerPosition.y = newY;
+	  let activeSections = envManager.getActiveSections(newX, newY);
+	  let isBlocked = false;
 	  
-	  camera.centerCameraOn(playerPosition);
-
+	  for (let activeSection of activeSections) {
+		if (activeSection.staticCollision) {
+			for (let staticC of activeSection.staticCollision) { 
+			  let [staticX, staticY] = staticC.split(',').map(Number);
+			  let obj2 = {
+				  x: staticX * 16, 
+				  y: staticY * 16, 
+				  maxX: staticX * 16 + 16, 
+				  maxY: staticY * 16 + 16
+			  };
+			  
+			  const pWidth = playerPosition.width / 2;
+			  const pHeight = playerPosition.height / 2;
+			  
+			  let newPos = {
+				  x: newX - pWidth,
+				  y: newY - pHeight,
+				  maxX: newX + pWidth,
+				  maxY: newY + pHeight
+			  };
+			  			  
+			  if (checkCollision(newPos, obj2)) {
+				isBlocked = true;
+				break;
+			  }
+			}
+		}
+	  }
+	  playerAnimation.changeState('walk', direction);
+	  playerAnimation.updateAnimation(timestamp);
 	  
-	  
+	  if (!isBlocked) {
+		playerPosition.x = newX;
+		playerPosition.y = newY;
+		envManager.reportTileIndex(playerPosition.x, playerPosition.y);
+		camera.centerCameraOn(playerPosition);
+	  } else {
+		console.log("collision detected!");
+	  }
 	  envManager.renderEnvironment('testLayer');
 };

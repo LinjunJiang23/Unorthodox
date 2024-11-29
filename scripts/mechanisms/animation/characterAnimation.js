@@ -34,7 +34,23 @@ class PlayerAnimation {
 		this.animationSpeed = 440;
 		this.lastUpdateTime = 0;
 		this.spriteSheets = animationSpriteLoader.getSpriteSheets();
-	}       
+	}
+	
+	changeState(state, direction) {
+		const validStates = ['walk'];
+		const validDirections = ['left', 'up', 'right', 'down'];
+		if (validStates.includes(state) && validDirections.includes(direction)) {
+			switch (state) {
+				case 'walk':
+					if (this.direction !== direction) this.direction = direction;
+					if (!this.isMoving) this.isMoving = true;
+					if (this.isIdle) this.isIdle = false;
+					if (this.animationSpeed !== 140) this.animationSpeed = 140;
+					if (this.currentState !== 'walk') this.currentState = "walk";
+					break;
+			}
+		}
+	}
 	
 	updateAnimation(timestamp) {
 		if (this.isMoving) {
@@ -62,11 +78,12 @@ class PlayerAnimation {
 		drawFrame(ctx, this.spriteSheets, intendedSpritePos, camera.mapToScreen(playerPosition));
 	}
 	
-	stop() {
-		this.isMoving = false;
-		this.currentState = 'idle';
-		this.isIdle = true;
-		this.animationSpeed = 540;
+	idle() {
+		if (this.isMoving) this.isMoving = false;
+		if (this.currentState !== 'idle') this.currentState = 'idle';
+		if (!this.isIdle) this.isIdle = true;
+		if (this.animationSpeed !== 540) this.animationSpeed = 540;
+		this.render();
 	}
 };
 
