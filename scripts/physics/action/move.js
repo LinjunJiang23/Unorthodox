@@ -63,10 +63,7 @@ function movePlayer(direction, speed, timestamp) {
 	  if (!isBlocked) {
 		playerPosition.x = newX;
 		playerPosition.y = newY;
-		envManager.reportTileIndex(playerPosition.x, playerPosition.y);
 		camera.centerCameraOn(playerPosition);
-	  } else {
-		console.log("collision detected!");
 	  }
 	  envManager.renderEnvironment('testLayer');
 };

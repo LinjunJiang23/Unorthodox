@@ -2,7 +2,6 @@
 
 const pressedKeys = new Set();
 
-
 /**
  * keydown -
  */
@@ -48,9 +47,12 @@ function handleKeyboardControl(timestamp) {
 	  }
 	  
 	  if (![...pressedKeys].some(key => validKeys.has(key))) {
+		idleTime += (timestamp - lastUpdate);
 		playerAnimation.idle();
 		playerAnimation.updateAnimation(timestamp);
-	  } 	  
+	  } else {
+		idleTime = 0;
+	  }
 	  	  /* Camera Movement */
 	  if (pressedKeys.has("ArrowLeft")) {
 		event.preventDefault();

@@ -31,13 +31,12 @@ class EnvironmentManager {
 				drawSprite(ctx, sheets[mapName], pos.x, pos.y, viewportSize, viewportSize, 0, 0, 1024, 1024);
 				ctx.fillStyle = "white";
 				ctx.font = "12px Arial";
-				ctx.fillText(`Camera position: (${camera.x.toFixed(2)}, ${camera.y.toFixed(2)})`, 10, 90);
+				ctx.fillText(`Camera position: (${camera.x.toFixed(2)}, ${camera.y.toFixed(2)})`, 10, 70);
+				let tempX = Math.floor(playerPosition.x / 16);
+				let tempY = Math.floor(playerPosition.y / 16);
+				ctx.fillText(`Tile index currently at: (${tempX}, ${tempY})`, 10, 90);
 			}
 		}
-	}
-	
-	reportTileIndex(x, y) {
-		console.log(Math.floor(x / 16), Math.floor(y / 16));
 	}
 	
 	getActiveSections(viewportX, viewportY, viewportWidth = 16, viewportHeight = 16) {

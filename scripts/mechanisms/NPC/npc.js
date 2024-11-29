@@ -1,4 +1,4 @@
-// scripts/mechanisms/character/npc.js
+// scripts/mechanisms/NPC/npc.js
 
 /** 
  * NPC base class

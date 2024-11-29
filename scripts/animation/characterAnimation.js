@@ -61,7 +61,7 @@ class PlayerAnimation {
 		} else if (this.isIdle) {
 			if (timestamp - this.lastUpdateTime > this.animationSpeed) {
 				if (idleTime > 300000) {
-					//Idle action animations should trigger after player being idle for 5 min
+					console.log('Idle action animations should trigger after player being idle for 5 min');
 				} else {
 					this.currentFrame = (this.currentFrame + 1) % animationSpriteSheets[this.direction]['idle']['baseBody'].length;
 					this.lastUpdateTime = timestamp;
@@ -83,7 +83,6 @@ class PlayerAnimation {
 		if (this.currentState !== 'idle') this.currentState = 'idle';
 		if (!this.isIdle) this.isIdle = true;
 		if (this.animationSpeed !== 540) this.animationSpeed = 540;
-		this.render();
 	}
 };
 

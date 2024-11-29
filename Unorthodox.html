@@ -176,9 +176,9 @@ importScripts('./scripts/utils/promise.js',
                   './scripts/mechanisms/gamePlay/dialog/dialog.js',
                   './scripts/mechanisms/gamePlay/dialog/choices.js', 
                   './scripts/mechanisms/gamePlay/dialog/dialogHistory.js', 
-                  ['./scripts/mechanisms/animation/characterAnimation.js', 
-                  './scripts/mechanisms/animation/npcAnimation.js',  
-                  './scripts/mechanisms/animation/frames.js'])
+                  ['./scripts/animation/characterAnimation.js', 
+                  './scripts/animation/npcAnimation.js',  
+                  './scripts/animation/frames.js'])
     .then(() => {
       //Stat & resources
   	  importScripts('./scripts/mechanisms/attributes/stat.js',
@@ -189,7 +189,7 @@ importScripts('./scripts/utils/promise.js',
       .then(() => {
         //Character & AI
     	importScripts('./scripts/mechanisms/character/character.js',     
-                      './scripts/mechanisms/character/npc.js');
+                      './scripts/mechanisms/NPC/npc.js');
       }).then(() => {
       	importScripts('./scripts/debug/debugOverlay.js');
       });
