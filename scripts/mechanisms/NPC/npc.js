@@ -2,14 +2,25 @@
 
 /** 
  * NPC base class
- * @param {string} name - names of characters
- * @param {string} intro - short intro of characters when examined
- * @param {number} friendliness - checks how casual they will act
- * @param {number} indifference - checks their moral stands & how they react to player's violating behaviors
+ * @property {Function} chat
+ * 
  */
 class NPC {
+  /**
+   * @static
+   */
+  static validTypes = [
+	'indifferent', 'aggresive', 'coward', 'gentle', 'provocative'
+  ];
   
-  constructor(name = "?", intro = "Unknown.", friendliness = 0, indifference = 0, intent = 0) {
+  /**
+   * @class
+   * @param {string} intro - short intro of characters when examined
+   * @param {number} friendliness - attitude check
+   * @param {number} indifference - how they react to player's behaviors
+   * @param {number} intent - interest in you know what
+   */
+  constructor(name = "?", intro = "An unknown, hopefully living, being", friendliness = 0, indifference = 0, intent = 0) {
 	if (typeof name === "string") this.name = name;
     if (typeof intro === "string") this.intro = intro;
     
@@ -37,7 +48,22 @@ class NPC {
   assault() {
   }
   
-  getCoreStats() {
+  psychAccess() {
+  }
+  
+  /**
+	 * @property collideWithObjects
+     */
+	collideWithObjects() {
+	}
+	
+	/**
+	 * @property collideWithPlayer
+	 */
+	collideWithPlayer() {
+	}
+	
+	getCoreStats() {
 	const stats = {
 		friendliness: this.friendliness,
 		indifference: this.indifference,

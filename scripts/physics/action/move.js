@@ -65,5 +65,5 @@ function movePlayer(direction, speed, timestamp) {
 		playerPosition.y = newY;
 		camera.centerCameraOn(playerPosition);
 	  }
-	  envManager.renderEnvironment('testLayer');
+	  envManager.renderEnvironment();
 };

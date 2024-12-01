@@ -4,6 +4,7 @@
  * PhysicsObject - A template class that defines the basic physics in objects
  * @var {number} x
  * @var {number} y
+ * @var {number} z
  * @var {number} width
  * @var {number} height
  * @var {number} maxX - x + width
@@ -13,12 +14,15 @@
  * @var {object} acceleration
  */
 class PhysicsObject {
-	constructor(x, y, width, height, isStatic = false) {
+	static validTypes = ['rect', 'circle', 'polygon'];
+	constructor(x, y, width, height, isStatic = false, type = "rect") {
 		(typeof x === "number" && x >= 0) ? this.x = x : this.x = 0;
 		(typeof y === "number" && y >= 0) ? this.y = y : this.y = 0;
+		this.z = 0;
 		(typeof width === "number" && width >= 0) ? this.width = width : this.width = 0;
 		(typeof height === "number" && height >= 0) ? this.height = height : this.height = 0;
 		this.isStatic = isStatic;
+		(PhysicsObject.validTypes.includes(type)) ? this.type = type : this.type = 'rect';
 		this.velocity = {x: 0, y: 0};
 		this.acceleration = {x: 0, y: 0};
 	}
@@ -44,7 +48,6 @@ class PhysicsObject {
 };
 
 function checkCollision(obj1, obj2) {
-
 	return (
 		obj1.x <= obj2.maxX &&
 		obj1.maxX >= obj2.x && 

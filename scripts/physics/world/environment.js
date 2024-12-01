@@ -1,4 +1,4 @@
-// scripts/mechanisms/physics/navigation/environment.js
+// scripts/mechanisms/physics/world/environment.js
 
 /** 
  * EnvironmentManager - singleton class
@@ -9,26 +9,57 @@ class EnvironmentManager {
 			return EnvironmentManager.instance;
 		}
 		EnvironmentManager.instance = this;
+		this.loc;
 		this.env;
+		this.x = 0;
+		this.y = 0;
+	}
+	
+	init(loc) {
+		if ($('#canvas-environment').length !== 0) {
+			const ctx = getCTX('environment');
+			//If map, renders the map relative to the camera point			
+			if (tileMapManager.tileMapExists(loc)) {
+				if (this.loc !== loc) this.loc = loc;
+				if (this.env !== tileMapManager.getTileMap(this.loc)) 
+					this.env = tileMapManager.getTileMap(this.loc);
+			
+				let pos = camera.getPosition();
+				this.x = pos.x;
+				this.y = pos.y;
+				let viewportSize = 256;
+				let sheets = mapLoader.getSpriteSheets();
+				ctx.clearRect(0, 0, 1024, 1024);
+				drawSprite(ctx, sheets[loc], pos.x, pos.y, 
+				viewportSize, viewportSize, 0, 0, 1024, 1024);
+			}
+		}
 	}
 	
 	/**
 	 * renderEnvironment
+	 * @param {string} - mapName
 	 */
-	renderEnvironment(mapName) {
+	renderEnvironment() {
 		//If canvas exists, starts rendering
 		if ($('#canvas-environment').length !== 0) {
-			//If map, renders the map relative to the camera point
-			if (tileMapManager.tileMapExists(mapName)) {
-				this.env = tileMapManager.getTileMap(mapName);
-				const ctx = getCTX('environment');
-				let sheets = mapLoader.getSpriteSheets();
+			const ctx = getCTX('environment');
+			//If map, renders the map relative to the camera point			
+			if (tileMapManager.tileMapExists(this.loc)) {
+				if (this.env !== tileMapManager.getTileMap(this.loc)) 
+					this.env = tileMapManager.getTileMap(this.loc);
+			
 				let pos = camera.getPosition();
-				let viewportSize = 256;
-
-				ctx.clearRect(0, 0, 1024, 1024);
-
-				drawSprite(ctx, sheets[mapName], pos.x, pos.y, viewportSize, viewportSize, 0, 0, 1024, 1024);
+				if (this.x !== pos.x || this.y !== pos.y) {
+				  this.x = pos.x;
+				  this.y = pos.y;
+				  let viewportSize = 256;
+				  let sheets = mapLoader.getSpriteSheets();
+				  ctx.clearRect(0, 0, 1024, 1024);
+				  drawSprite(ctx, sheets[this.loc], pos.x, pos.y, 
+				  viewportSize, viewportSize, 0, 0, 1024, 1024);
+				}
+				
 				ctx.fillStyle = "white";
 				ctx.font = "12px Arial";
 				ctx.fillText(`Camera position: (${camera.x.toFixed(2)}, ${camera.y.toFixed(2)})`, 10, 70);
