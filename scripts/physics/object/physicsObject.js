@@ -2,16 +2,16 @@
 
 /**
  * PhysicsObject - A template class that defines the basic physics in objects
- * @var {number} x
- * @var {number} y
- * @var {number} z
- * @var {number} width
- * @var {number} height
- * @var {number} maxX - x + width
- * @var {number} maxY - y + height
- * @var {boolean} isStatic
- * @var {object} velocity
- * @var {object} acceleration
+ * @property {number} x
+ * @property {number} y
+ * @property {number} z
+ * @property {number} width
+ * @property {number} height
+ * @property {number} maxX - x + width
+ * @property {number} maxY - y + height
+ * @property {boolean} isStatic
+ * @property {object} velocity
+ * @property {object} acceleration
  */
 class PhysicsObject {
 	static validTypes = ['rect', 'circle', 'polygon'];

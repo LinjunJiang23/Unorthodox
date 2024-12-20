@@ -2,14 +2,13 @@
 
 /** 
  * NPC base class
- * @property {Function} chat
- * 
+ * @class
  */
 class NPC {
   /**
    * @static
    */
-  static validTypes = [
+  static validPersonality = [
 	'indifferent', 'aggresive', 'coward', 'gentle', 'provocative'
   ];
   
@@ -20,7 +19,7 @@ class NPC {
    * @param {number} indifference - how they react to player's behaviors
    * @param {number} intent - interest in you know what
    */
-  constructor(name = "?", intro = "An unknown, hopefully living, being", friendliness = 0, indifference = 0, intent = 0) {
+  constructor(name = "?", intro = "Unknown", friendliness = 0, indifference = 0, intent = 0) {
 	if (typeof name === "string") this.name = name;
     if (typeof intro === "string") this.intro = intro;
     
@@ -32,11 +31,12 @@ class NPC {
     this.relationships = []; //Object to store relationships within characters
 	this.gold = 0;
 	this.inventory = new Inventory();
-	this.pathfinding = null;
+	this.path = [];
 	this.schedule = null;
+	this.position = {x: 0, y: 0};
   }
   
-  chat() {
+/*   chat() {
   }
   
   cuss() {
@@ -49,21 +49,29 @@ class NPC {
   }
   
   psychAccess() {
+  } */
+  
+  moveToNextGrid() {
+	if (this.path.length > 0) {
+		const nextPoint = this.path.shift();
+		this.x = nextPoint.x;
+		this.y = nextPoint.y;
+	}
   }
   
   /**
-	 * @property collideWithObjects
-     */
-	collideWithObjects() {
-	}
+   * @property collideWithObjects
+   */
+  collideWithObjects() {
+  }
 	
-	/**
-	 * @property collideWithPlayer
-	 */
-	collideWithPlayer() {
-	}
+  /**
+   * @property collideWithPlayer
+   */
+  collideWithPlayer() {
+  }
 	
-	getCoreStats() {
+  getCoreStats() {
 	const stats = {
 		friendliness: this.friendliness,
 		indifference: this.indifference,
@@ -72,6 +80,11 @@ class NPC {
 	};
 	return stats;
   }
+  
+  getPosition() {
+	return this.position;
+  }
+  
 };
 
 /**
@@ -100,3 +113,24 @@ function generateRandomName() {
 	}
 	return name;
 };
+
+const aStarPathFinder = new AStarPathFinding();
+
+const npc = new NPC('Guard');
+
+// Define destination
+const destination = { x: 100, y: 100 };
+
+// Calculate path
+npc.path = aStarPathFinder.aStar(npc.position, destination);
+
+//Move NPC along the path
+ // setInterval(() => {
+    // if (npc.path.length > 0) {
+        // npc.moveToNextGrid();
+        // console.log(`NPC moved to: (${npc.x}, ${npc.y})`);
+    // } else {
+        // console.log('NPC reached destination!');
+        // clearInterval(this);
+    // }
+// }, 1000); // Move every second
