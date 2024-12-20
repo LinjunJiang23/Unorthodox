@@ -9,23 +9,26 @@ npcAnimationSpriteLoader.loadImages(npcAnimationSources);
 let inFrameTime = 0;
 
 /**
- * npcAnimation - a template class that centralizes all variable related to npc's animation
- * @var currentLocation: location, position: (x, y) 
- * @var currentState {string}
- * @var isMoving {boolean}
- * @var isIdle {boolean} 
- * @var currentFrame {number}
- * @var direction {string}
- * @var animationSpeed {number} 
- * @var lastUpdateTime {number} 
- * @var spriteSheets
+ * Centralizes all aspects related to npc's animation, including current location, current state, 
+ * current action state, is moving, is idle, current frame for animation, direction of animation, 
+ * last update time for frame, and sprite sheets for the npc(s).
+ * @class
+ * @summary Animation for NPCs.
+ *
+ * @property {Object} currentLocation
+ * @property {string} currentState 
+ * @property {boolean} isMoving 
+ * @property {boolean} isIdle 
+ * @property {number} currentFrame 
+ * @property {string} direction 
+ * @property {number} animationSpeed 
+ * @property {number} lastUpdateTime 
+ * @property spriteSheets
  */
 class npcAnimation {
-	constructor(npc) {
-		this.currentLocation = { 
-			location: null, 
-			position: {x: 0, y: 100} 
-		},
+	constructor() {
+		this.x = 0;
+		this.y = 0;
 		this.currentState = 'idle',
 		this.direction = 'down',
 		this.isMoving = false;

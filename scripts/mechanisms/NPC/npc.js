@@ -3,6 +3,15 @@
 /** 
  * NPC base class
  * @class
+ * @property {Object} currentLocation
+ * @property {string} currentState 
+ * @property {boolean} isMoving 
+ * @property {boolean} isIdle 
+ * @property {number} currentFrame 
+ * @property {string} direction 
+ * @property {number} animationSpeed 
+ * @property {number} lastUpdateTime 
+ * @property spriteSheets
  */
 class NPC {
   /**
@@ -33,7 +42,7 @@ class NPC {
 	this.inventory = new Inventory();
 	this.path = [];
 	this.schedule = null;
-	this.position = {x: 0, y: 0};
+	this.animation = new npcAnimation();
   }
   
 /*   chat() {
@@ -51,13 +60,42 @@ class NPC {
   psychAccess() {
   } */
   
-  moveToNextGrid() {
+  moveToNextGrid(timestamp, speed = 2) {
 	if (this.path.length > 0) {
-		const nextPoint = this.path.shift();
-		this.x = nextPoint.x;
-		this.y = nextPoint.y;
+		const nextPoint = this.path[0]; //Peek at the next point
+		let dx = nextPoint.x - this.animation.x;
+		let dy = nextPoint.y - this.animation.y;
+		let distance = Math.sqrt(dx * dx + dy * dy);
+
+		if (dx > 0 && dy == 0) {
+			this.animation.direction = 'right';
+		} else if (dx == 0 && dy < 0) {
+			this.animation.direction = 'up';
+		} else if (dx == 0 && dy > 0) {
+			this.animation.direction = 'down';
+		} else if (dx < 0 && dy == 0) {
+			this.animation.direction = 'left';
+		} else if (dx > 0 && dy < 0) {
+			this.animation.direction = 'upright';
+		} else if (dx > 0 && dy > 0) {
+			this.animation.direction = 'downright';
+		} else if (dx < 0 && dy < 0) {
+			this.animation.direction = 'upleft';
+		} else if (dx < 0 && dy > 0) {
+			this.animation.direction = 'downleft';
+		}
+		
+		if (distance > 0) {
+			let step = speed * timestamp;
+			this.animation.updateAnimation(timestamp);
+		} else {
+			this.animation.x = nextPoint.x;
+			this.animation.y = nextPoint.y;
+		}
 	}
   }
+
+	
   
   /**
    * @property collideWithObjects
@@ -119,18 +157,18 @@ const aStarPathFinder = new AStarPathFinding();
 const npc = new NPC('Guard');
 
 // Define destination
-const destination = { x: 100, y: 100 };
+const destination = { x: 10, y: 10 };
 
 // Calculate path
-npc.path = aStarPathFinder.aStar(npc.position, destination);
+npc.path = aStarPathFinder.aStar({x: npc.animation.x, y: npc.animation.y}, destination);
 
 //Move NPC along the path
- // setInterval(() => {
-    // if (npc.path.length > 0) {
-        // npc.moveToNextGrid();
-        // console.log(`NPC moved to: (${npc.x}, ${npc.y})`);
-    // } else {
-        // console.log('NPC reached destination!');
-        // clearInterval(this);
-    // }
-// }, 1000); // Move every second
+  setInterval(() => {
+    if (npc.path.length > 0) {
+        npc.moveToNextGrid();
+        console.log(`NPC moved to: (${npc.animation.x}, ${npc.animation.y})`);
+    } else {
+        console.log('NPC reached destination!');
+        clearInterval(this);
+    }
+}, 1000); // Move every second

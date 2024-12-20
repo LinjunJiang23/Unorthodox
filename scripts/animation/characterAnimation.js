@@ -1,5 +1,4 @@
-// scripts/mechanisms/animation/caracterChibi.js
-
+// scripts/mechanisms/animation/caracterAnimation.js
 
 let characterAnimationSources = {
 	baseBody: './img/animation/baseBody1.png'
@@ -37,8 +36,9 @@ class PlayerAnimation {
 	}
 	
 	changeState(state, direction) {
-		const validStates = ['walk'];
-		const validDirections = ['left', 'up', 'right', 'down'];
+		const validStates = ['walk', 'run'];
+		const validDirections = 
+			['left', 'up', 'right', 'down', 'upleft', 'upright', 'downleft', 'downright'];
 		if (validStates.includes(state) && validDirections.includes(direction)) {
 			switch (state) {
 				case 'walk':

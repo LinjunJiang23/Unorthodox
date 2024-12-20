@@ -22,10 +22,8 @@ class AStarPathFinding {
 	heuristic(currentP, destinationP) {
 	  let dx = Math.abs(currentP.x - destinationP.x);
 	  let dy = Math.abs(currentP.y - destinationP.y);
-	  
-	  let d = Math.sqrt(2) - 1;
 	
-	  let h = dx + dy + d * Math.min(dx, dy);
+	  let h = Math.sqrt(dx * dx + dy * dy);
 	  return h;
 	}
 	
@@ -36,23 +34,24 @@ class AStarPathFinding {
 		//Avoid out of bound neighbors
 		let negX = (point.x - 1 < 0) ? 0 : point.x - 1;
 		let negY = (point.y - 1 < 0) ? 0 : point.y - 1;
-
+		const diagonalC = Math.sqrt(2);
 		const neighbors = [
-			{ x: point.x + 1, y: point.y },	//East
-			{ x: negX, y: point.y }, //West
-			{ x: point.x, y: point.y + 1 }, //South
-			{ x: point.x, y: negY }, //North
-			{ x: point.x + 1, y: point.y + 1 }, //Southeast
-			{ x: negX, y: point.y + 1 }, //Southwest
-			{ x: point.x + 1, y: negY }, //Northeast
-			{ x: negX, y: negY } //Northwest
-		];
+			{ x: point.x + 1, y: point.y + 1}, //Southeast
+			{ x: negX, y: point.y + 1}, //Southwest
+			{ x: point.x + 1, y: negY}, //Northeast
+			{ x: negX, y: negY}, //Northwest
+			{ x: point.x + 1, y: point.y},	//East
+			{ x: negX, y: point.y}, //West
+			{ x: point.x, y: point.y + 1}, //South
+			{ x: point.x, y: negY} //North
+			
+		];		
 		/** 
 		@todo filter obstacles in the map, 
 		should implement location system first in order to read specific map information.
 		*/
 		
-		return neighbor;
+		return neighbors;
 	}
 	
 	/**
