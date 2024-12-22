@@ -64,8 +64,11 @@ class AStarPathFinding {
 			path.unshift(current);
 			current = cameFrom[`${current.x},${current.y}`];
 		}
-
-		return path;
+		const pixelPath = path.map(node => ({
+			x: node.x * 16 + 16 / 2,
+			y: node.y * 16 + 16 / 2
+		}));
+		return pixelPath;
 	}
 	
 	/**

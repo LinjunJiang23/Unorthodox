@@ -11,6 +11,7 @@ function gameLoop(timestamp) {
   //Time progresses
   if (!isPaused) {
 	handleKeyboardControl(timestamp);
+	npc.moveToNextGrid(timestamp);
 	updateGameTime(timestamp);
   } 
   requestAnimationFrame(gameLoop);

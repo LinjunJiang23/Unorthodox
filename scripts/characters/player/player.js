@@ -1,4 +1,4 @@
-// scripts/mechanisms/character/character.js
+// scripts/characters/player/player.js
 
 const playerCreated = new CustomEvent('playerInitialized');
 
@@ -14,20 +14,23 @@ class Player {
             return Player.instance;
         }
         Player.instance = this;
+		this.init();
+    }
+	
+	init() {
+		this.type = 'player';
 		this.lname = "左";
 		this.fname = "汶";
-		this.sex = 1;
 		this.stats = new StatManager();
 		this.inventory = new Inventory([]);
 		this.traits = new CharacterTraitManager([
-			new Trait('妹宝', '小妹对你十分爱护', true, 'relationship', 100),
-			new Trait('老大', '陈汝的老大', true, 'relationship', 100)
+			new Trait('老大', '陈桥的老大', true, 'relationship', 100),
+			new Trait('家人', '陈汝的家人', true, 'relationship', 100)
 		]);
-    }
+		this.app = new PlayerAppManager(this);
+		this.model = new CompanionAnimation(this);
+	}
 	
-	/**
-	 *
-	 */
 	performCheck(stat, type, numOfDice, difficulty) {
 		if (typeof stat === "number" && 
 		    typeof this.stats.getCoreStats()[type] === "number" && 
@@ -61,15 +64,6 @@ class Player {
 		}
 	}
 	
-	/** 
-	 * sets player's sex (may delete sex param as specifying it likely ain't crucial...)
-	 * @param sex - 1 stands for female, 2 stands for male
-	 */
-	setSex(sex) {
-		if (sex === 1 || sex === 2) {
-			this.sex = sex;
-		}
-	}
 	// End of SETTERs
 	
 	// Start of GETTERs
@@ -94,5 +88,5 @@ class Player {
 };
 
 /* For Player */
-let player = new Player();
+const player = new Player();
 

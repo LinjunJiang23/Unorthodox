@@ -1,6 +1,6 @@
-// scripts/mechanisms/animation/frames.js
+// scripts/mechanisms/animation/frames/npcFrames.js
 
-let animationSpriteSheets = {
+const npcFrames = {
 	down: {
 		walk: {
 		  baseBody: [
@@ -72,29 +72,8 @@ let animationSpriteSheets = {
 		    {x: 384, y: 512}
 			]
 		}
-	}
-};
-
-let npcAnimationSpriteSheets = {
-	down: {
-		walk: {
-		  baseBody: [
-		    {x: 0, y: 0},
-		    {x: 128, y: 0},
-		    {x: 256, y: 0},
-		    {x: 384, y: 0}
-		  ]
-		},
-		idle: {
-		  baseBody: [
-			{x: 0, y: 512},
-		    {x: 128, y: 512},
-		    {x: 256, y: 512},
-		    {x: 384, y: 512}
-		  ]
-		}
 	},
-	left: {
+	upleft: {
 		walk: {
 			baseBody: [
 				{x: 0, y: 384},
@@ -112,7 +91,7 @@ let npcAnimationSpriteSheets = {
 			]
 		}
 	},
-	right: {
+	upright: {
 		walk: {
 			baseBody: [
 			{x: 0, y: 128},
@@ -130,13 +109,31 @@ let npcAnimationSpriteSheets = {
 			]
 		}
 	},
-	up: {
+	downright: {
 		walk: {
 			baseBody: [
-			{x: 0, y: 256},
-		    {x: 128, y: 256},
-		    {x: 256, y: 256},
-		    {x: 384, y: 256}
+			{x: 0, y: 128},
+		    {x: 128, y: 128},
+		    {x: 256, y: 128},
+		    {x: 384, y: 128}
+			]
+		},
+		idle: {
+			baseBody: [
+			{x: 0, y: 512},
+		    {x: 128, y: 512},
+		    {x: 256, y: 512},
+		    {x: 384, y: 512}
+			]
+		}
+	},
+	downleft: {
+		walk: {
+			baseBody: [
+				{x: 0, y: 384},
+				{x: 128, y: 384},
+				{x: 256, y: 384},
+				{x: 384, y: 384}
 			]
 		},
 		idle: {

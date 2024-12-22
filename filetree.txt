@@ -1,0 +1,53 @@
+/img
+
+/misc
+
+/scripts
+  /animation
+    /companions
+      /companionAnimation.js
+    /frames
+      /npcFrames.js
+      /playerFrames.js
+    /NPC
+      /npcAnimation.js
+    /player
+    /baseAnimation.js
+  /characters
+    /NPC
+      /npc.js
+      /utils.js
+    /companions
+    /player
+      /player.js
+  /debug
+  /mechanisms
+    /appearance
+    /attributes
+    /factions
+    /gameplay
+      /dialog
+      /dice
+      /display.js
+    /resources
+      /inventory
+      /item
+    /map
+      /map.js
+  /physics
+    /action
+    /camera
+    /collision
+    /dragDrop
+    /environment
+    /object
+    /pathFinding
+  /setting
+  /sprite
+  /ui
+  /utils
+
+/styles
+
+
+

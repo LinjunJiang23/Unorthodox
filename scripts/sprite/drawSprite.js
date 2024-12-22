@@ -48,5 +48,5 @@ function drawFrame(ctx, spriteSheet, intendedSpritePos, landedPosition, targetWi
     ctx.fillStyle = "white";
     ctx.font = "12px Arial";
     ctx.fillText(`Player Position on Screen: (${landedPosition.x.toFixed(2)}, ${landedPosition.y.toFixed(2)})`, 10, 20);
-	ctx.fillText(`Player Position on map: (${playerPosition.x.toFixed(2)}, ${playerPosition.y.toFixed(2)})`, 10, 50);
+	ctx.fillText(`Player Position on map: (${player.model.physics.x.toFixed(2)}, ${player.model.physics.y.toFixed(2)})`, 10, 50);
 };

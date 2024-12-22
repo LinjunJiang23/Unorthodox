@@ -15,6 +15,8 @@
  */
 class PhysicsObject {
 	static validTypes = ['rect', 'circle', 'polygon'];
+	
+	
 	constructor(x, y, width, height, isStatic = false, type = "rect") {
 		(typeof x === "number" && x >= 0) ? this.x = x : this.x = 0;
 		(typeof y === "number" && y >= 0) ? this.y = y : this.y = 0;
@@ -47,13 +49,3 @@ class PhysicsObject {
 	}
 };
 
-function checkCollision(obj1, obj2) {
-	return (
-		obj1.x <= obj2.maxX &&
-		obj1.maxX >= obj2.x && 
-		obj1.y <= obj2.maxY &&
-		obj1.maxY >= obj2.y
-	);
-};
-
-let playerPosition = new PhysicsObject(0, 0, 32, 32);

@@ -1,14 +1,14 @@
-// scripts/mechanisms/physics/world/environment.js
+// scripts/mechanisms/physics/environment/envManager.js
 
 /** 
- * EnvironmentManager - singleton class
+ * Singleton that centralizes environment in game viewport
  */ 
-class EnvironmentManager {
+class EnvManager {
 	constructor() {
-		if (EnvironmentManager.instance) {
-			return EnvironmentManager.instance;
+		if (EnvManager.instance) {
+			return EnvManager.instance;
 		}
-		EnvironmentManager.instance = this;
+		EnvManager.instance = this;
 		this.loc;
 		this.env;
 		this.x = 0;
@@ -63,8 +63,8 @@ class EnvironmentManager {
 				ctx.fillStyle = "white";
 				ctx.font = "12px Arial";
 				ctx.fillText(`Camera position: (${camera.x.toFixed(2)}, ${camera.y.toFixed(2)})`, 10, 70);
-				let tempX = Math.floor(playerPosition.x / 16);
-				let tempY = Math.floor(playerPosition.y / 16);
+				let tempX = Math.floor(player.model.physics.x / 16);
+				let tempY = Math.floor(player.model.physics.y / 16);
 				ctx.fillText(`Tile index currently at: (${tempX}, ${tempY})`, 10, 90);
 			}
 		}
@@ -92,4 +92,4 @@ class EnvironmentManager {
 	
 };
 
-let envManager = new EnvironmentManager();
+let envManager = new EnvManager();

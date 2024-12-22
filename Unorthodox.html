@@ -135,7 +135,12 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   	z-index: 1;
 }
 
-#canvas-player {
+#canvas-characters {
+	position: absolute;
+    z-index: 2;
+}
+
+#canvas-interactable {
 	position: absolute;
     z-index: 2;
 }
@@ -143,44 +148,46 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 #debugCanvas {
 	position: absolute;
     z-index: 3;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">//Utils
-importScripts('./scripts/utils/promise.js',
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/utils/promise.js',
               './scripts/utils/typewriter.js', 
               './scripts/utils/node.js', 
               './scripts/utils/tilemap.js', 
               './scripts/utils/time.js', 
               './scripts/utils/key.js', 
               './scripts/utils/gameLoop.js')
-.then(() => {
+.then(() => importScripts('./scripts/setting/viewport.js'))
+.then(() =>
   //JSON files
   importScripts('./misc/passage/tutorial-passages.js',
                 './misc/staticSources.js',
-                './misc/env/testLayer.js');})
-.then(() => {
+                './misc/env/testLayer.js'))
+.then(() =>
   //Physics Engine
   importScripts('./scripts/physics/action/move.js', 
                 './scripts/physics/camera/camera.js', 
                 './scripts/physics/dragDrop/drag.js', 
                 './scripts/physics/dragDrop/drop.js', 
-                './scripts/physics/world/environment.js', './scripts/physics/object/physicsObject.js',
-               './scripts/physics/pathFinding/aStarPathFinding.js');
-  }).then(() => {
+                './scripts/physics/environment/envManager.js', './scripts/physics/object/physicsObject.js',
+                './scripts/physics/collision/collision.js',
+               './scripts/physics/pathFinding/aStarPathFinding.js'))
+.then(() => {
   //Mechanism
-  //worldSetUp
-  importScripts('./scripts/mechanisms/worldSetUp/map.js', 
-                './scripts/mechanisms/worldSetUp/factions/faction.js')
+  importScripts('./scripts/mechanisms/map/map.js', 
+                './scripts/mechanisms/factions/faction.js',
+               './scripts/mechanisms/appearance/appManager.js')
   .then(() => {
-  //gamePlay & animation
-    importScripts('./scripts/mechanisms/gamePlay/dice/dice.js',
-                  './scripts/mechanisms/gamePlay/dice/modifier.js',
-                  './scripts/mechanisms/gamePlay/display.js',
-                  './scripts/mechanisms/gamePlay/dialog/dialog.js',
-                  './scripts/mechanisms/gamePlay/dialog/choices.js', 
-                  './scripts/mechanisms/gamePlay/dialog/dialogHistory.js', 
-                  ['./scripts/animation/characterAnimation.js', 
-                  './scripts/animation/npcAnimation.js',  
-                  './scripts/animation/frames.js'])
-    .then(() => {
+    importScripts('./scripts/mechanisms/gameplay/dice/dice.js',
+                  './scripts/mechanisms/gameplay/dice/modifier.js',
+                  './scripts/mechanisms/gameplay/display.js',
+                  './scripts/mechanisms/gameplay/dialog/dialog.js',
+                  './scripts/mechanisms/gameplay/dialog/choices.js', 
+                  './scripts/mechanisms/gameplay/dialog/dialogHistory.js', 
+                  ['./scripts/animation/baseAnimation.js',
+                    './scripts/animation/companions/companionAnimation.js', 
+                  './scripts/animation/NPC/npcAnimation.js',  
+                  './scripts/animation/frames/playerFrames.js',
+                  './scripts/animation/frames/npcFrames.js']);})
+  .then(() => {
       //Stat & resources
   	  importScripts('./scripts/mechanisms/attributes/stat.js',
                     './scripts/mechanisms/attributes/traits.js', 
@@ -188,13 +195,10 @@ importScripts('./scripts/utils/promise.js',
                      './scripts/mechanisms/resources/item/itemTag.js', 
                      './scripts/mechanisms/resources/inventory/inventory.js'])
       .then(() => {
-        //Character & AI
-    	importScripts('./scripts/mechanisms/character/character.js',     
-                      './scripts/mechanisms/NPC/npc.js');
-      }).then(() => {
-      	importScripts('./scripts/debug/debugOverlay.js');
+        	importScripts('./scripts/characters/player/player.js');
+            importScripts('./scripts/characters/NPC/utils.js')
+            .then(() => importScripts('./scripts/characters/NPC/npc.js'));
       });
-  });
   });
 });
 
@@ -630,7 +634,8 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
 &lt;&lt;widget &quot;gameEnv&quot;&gt;&gt;\
 &lt;div id=&quot;game-environment&quot;&gt;\
 	&lt;canvas id=&quot;canvas-environment&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-player&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-characters&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-interactable&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="9" name="Test2" tags="" position="750,275" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
 

@@ -33,8 +33,8 @@ function handleKeyboardControl(timestamp) {
       } else if (pressedKeys.has('KeyS') && !pressedKeys.has('KeyW')) {
 		movePlayer('down', speed, timestamp);
 	  } else if (pressedKeys.has('KeyS') && pressedKeys.has('KeyW')) {
-		playerAnimation.idle();
-		playerAnimation.updateAnimation(timestamp);
+		player.model.changeState('idle');
+		player.model.updateAnimation(timestamp);
 	  }
 	  
 	  if (pressedKeys.has("KeyA") && !pressedKeys.has('KeyD')) {
@@ -42,16 +42,16 @@ function handleKeyboardControl(timestamp) {
 	  } else if (pressedKeys.has('KeyD') && !pressedKeys.has('KeyA')) {
 		movePlayer('right', speed, timestamp);
       } else if (pressedKeys.has('KeyA') && pressedKeys.has('KeyD')) {
-		playerAnimation.idle();
-		playerAnimation.updateAnimation(timestamp);
+		player.model.changeState('idle');
+		player.model.updateAnimation(timestamp);
 	  }
 	  
 	  if (![...pressedKeys].some(key => validKeys.has(key))) {
-		idleTime += (timestamp - lastUpdate);
-		playerAnimation.idle();
-		playerAnimation.updateAnimation(timestamp);
+		player.model.idleTime += (timestamp - lastUpdate);
+		player.model.changeState('idle');
+		player.model.updateAnimation(timestamp);
 	  } else {
-		idleTime = 0;
+		player.model.idleTime = 0;
 	  }
 	  	  /* Camera Movement */
 	  if (pressedKeys.has("ArrowLeft")) {

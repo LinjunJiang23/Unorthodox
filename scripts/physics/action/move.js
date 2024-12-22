@@ -1,49 +1,46 @@
 // scripts/mechanisms/physics/action/move.js
 
 /**
- * movePlayer - Handles player movement with collision detection
+ * movePlayer - Handles team leader movement with collision detection
  * @param {string} direction - The direction of movement ('up', 'down', 'left', 'right')
  * @param {number} speed - determines the speed of the player movement 
  */
 function movePlayer(direction, speed, timestamp) {
-      const division = 1/1000;
-	  const MIN_DELTA = 0.001;
-	  let deltaTime = (timestamp - lastUpdate) * division;
-	  if (deltaTime < MIN_DELTA) deltaTime = MIN_DELTA;
-	  let moveSpeed = speed * deltaTime;
-	  let newX = playerPosition.x;
-      let newY = playerPosition.y;
+      const deltaTime = Math.max((timestamp - lastUpdate) / 1000, 0.001);
+	  const moveSpeed = speed * deltaTime;
+	  let newX = player.model.physics.x;
+      let newY = player.model.physics.y;
 	  
-	  let cameraPos = camera.getPosition();
+	  const cameraPos = camera.getPosition();
 
       if (direction === 'up') {
-			playerPosition.y >= moveSpeed ? newY -= moveSpeed : newY = playerPosition.y;
+		player.model.physics.y >= moveSpeed ? newY -= moveSpeed : newY = player.model.physics.y;
 	  } else if (direction === 'down') {
-			  playerPosition.y >= 0 ? newY += moveSpeed : newY = playerPosition.y;
+		player.model.physics.y >= 0 ? newY += moveSpeed : newY = player.model.physics.y;
 	  } else if (direction === 'left') {
-			playerPosition.x >= moveSpeed ? newX -= moveSpeed : newX = playerPosition.x;
+		player.model.physics.x >= moveSpeed ? newX -= moveSpeed : newX = player.model.physics.x;
 	  } else if (direction === 'right') {
-		    playerPosition.x >= 0 ? newX += moveSpeed : newX = playerPosition.x;
+		player.model.physics.x >= 0 ? newX += moveSpeed : newX = player.model.physics.x;
 	  }
 	  
-	  let activeSections = envManager.getActiveSections(newX, newY);
+	  const activeSections = envManager.getActiveSections(newX, newY);
 	  let isBlocked = false;
 	  
 	  for (let activeSection of activeSections) {
 		if (activeSection.staticCollision) {
 			for (let staticC of activeSection.staticCollision) { 
 			  let [staticX, staticY] = staticC.split(',').map(Number);
-			  let obj2 = {
+			  const obj2 = {
 				  x: staticX * 16, 
 				  y: staticY * 16, 
 				  maxX: staticX * 16 + 16, 
 				  maxY: staticY * 16 + 16
 			  };
 			  
-			  const pWidth = playerPosition.width / 2;
-			  const pHeight = playerPosition.height / 2;
+			  const pWidth = player.model.physics.width / 2;
+			  const pHeight = player.model.physics.height / 2;
 			  
-			  let newPos = {
+			  const newPos = {
 				  x: newX - pWidth,
 				  y: newY - pHeight,
 				  maxX: newX + pWidth,
@@ -57,13 +54,14 @@ function movePlayer(direction, speed, timestamp) {
 			}
 		}
 	  }
-	  playerAnimation.changeState('walk', direction);
-	  playerAnimation.updateAnimation(timestamp);
+	  player.model.changeDirection(direction);
+	  player.model.changeState('walk');
+	  player.model.updateAnimation(timestamp);
 	  
 	  if (!isBlocked) {
-		playerPosition.x = newX;
-		playerPosition.y = newY;
-		camera.centerCameraOn(playerPosition);
+		player.model.physics.x = newX;
+		player.model.physics.y = newY;
+		camera.centerCameraOn(player.model.physics);
 	  }
 	  envManager.renderEnvironment();
 };
