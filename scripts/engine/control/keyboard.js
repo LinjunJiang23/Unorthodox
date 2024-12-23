@@ -3,7 +3,7 @@
 const pressedKeys = new Set();
 
 /**
- * keydown -
+ * keydown
  */
 document.addEventListener('keydown', (event) => {
 	  if (!pressedKeys.has(event.code)) {
@@ -12,7 +12,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 /**
- * keyup -
+ * keyup
  */
 document.addEventListener('keyup', (event) => {
 	pressedKeys.delete(event.code);
@@ -27,23 +27,28 @@ function handleKeyboardControl(timestamp) {
 	let validKeys = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD']);
 
 	  /* Character Control */
+	  
 	  // Character Movement:
-	  if (pressedKeys.has("KeyW") && !pressedKeys.has('KeyS')) {
+	  if (pressedKeys.has("KeyW") && !pressedKeys.has('KeyS') && !pressedKeys.has('KeyA') && !pressedKeys.has('KeyD')) {
 		movePlayer('up', speed, timestamp);
-      } else if (pressedKeys.has('KeyS') && !pressedKeys.has('KeyW')) {
+      } else if (pressedKeys.has('KeyS') && !pressedKeys.has('KeyW') && !pressedKeys.has('KeyA') && !pressedKeys.has('KeyD')) {
 		movePlayer('down', speed, timestamp);
 	  } else if (pressedKeys.has('KeyS') && pressedKeys.has('KeyW')) {
-		player.model.changeState('idle');
-		player.model.updateAnimation(timestamp);
-	  }
-	  
-	  if (pressedKeys.has("KeyA") && !pressedKeys.has('KeyD')) {
+		movePlayer('idle', speed, timestamp);
+	  } else if (pressedKeys.has("KeyA") && !pressedKeys.has('KeyD') && !pressedKeys.has("KeyW") && !pressedKeys.has('KeyS')) {
 		movePlayer('left', speed, timestamp);
-	  } else if (pressedKeys.has('KeyD') && !pressedKeys.has('KeyA')) {
+	  } else if (pressedKeys.has('KeyD') && !pressedKeys.has('KeyA') && !pressedKeys.has("KeyW") && !pressedKeys.has('KeyS')) {
 		movePlayer('right', speed, timestamp);
       } else if (pressedKeys.has('KeyA') && pressedKeys.has('KeyD')) {
-		player.model.changeState('idle');
-		player.model.updateAnimation(timestamp);
+		movePlayer('idle', speed, timestamp);
+	  } else if (pressedKeys.has('KeyW') && pressedKeys.has("KeyD") && !pressedKeys.has('KeyA') && !pressedKeys.has('KeyS')) {
+		movePlayer('upright', speed, timestamp);
+	  } else if (pressedKeys.has('KeyW') && pressedKeys.has("KeyA") && !pressedKeys.has('KeyD') && !pressedKeys.has('KeyS')) {
+		movePlayer('upleft', speed, timestamp);
+	  } else if (pressedKeys.has('KeyS') && pressedKeys.has("KeyD") && !pressedKeys.has('KeyA') && !pressedKeys.has('KeyW')) {
+		movePlayer('downright', speed, timestamp);
+	  } else if (pressedKeys.has('KeyS') && pressedKeys.has("KeyA") && !pressedKeys.has('KeyD') && !pressedKeys.has('KeyW')) {
+		movePlayer('downleft', speed, timestamp);
 	  }
 	  
 	  if (![...pressedKeys].some(key => validKeys.has(key))) {

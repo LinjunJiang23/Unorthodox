@@ -26,10 +26,16 @@ class CompanionAnimation extends BaseAnimation {
 				baseBody: `./img/animation/baseBody${this.character.app.baseBody}.png`
 			};
 			animationSpriteLoader.loadImages(playerAnimationSources);
+			this.physics = new PhysicsObject(0, 0, 32, 32);
 		} else {
+			const companionAnimationSources = {
+				baseBody: `./img/animation/companions/${type}/baseBody.png`
+			};
+			animationSpriteLoader.loadImages(companionAnimationSources);
+			/** @todo Different companions should have different width and height in physics. */
+			this.physics = new PhysicsObject(0, 0, 32, 32);
 		}
 		this.spriteSheets = animationSpriteLoader.getSpriteSheets();
-		this.physics = new PhysicsObject(0, 0, 32, 32);
 	}
 	
 	changeState(state) {

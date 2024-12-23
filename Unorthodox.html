@@ -148,13 +148,16 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 #debugCanvas {
 	position: absolute;
     z-index: 3;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/utils/promise.js',
-              './scripts/utils/typewriter.js', 
-              './scripts/utils/node.js', 
-              './scripts/utils/tilemap.js', 
-              './scripts/utils/time.js', 
-              './scripts/utils/key.js', 
-              './scripts/utils/gameLoop.js')
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/engine/promise.js',
+              './scripts/engine/typewriter.js', 
+              './scripts/engine/node.js', 
+              './scripts/engine/tilemap.js', 
+              './scripts/engine/time.js', 
+              './scripts/engine/control/keyboard.js', 
+              './scripts/engine/gameloop.js',
+              './scripts/engine/sprite/spriteLoader.js', 
+              './scripts/engine/sprite/drawSprite.js',
+              './scripts/engine/sprite/changeSprite.js')
 .then(() => importScripts('./scripts/setting/viewport.js'))
 .then(() =>
   //JSON files
@@ -165,16 +168,22 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   //Physics Engine
   importScripts('./scripts/physics/action/move.js', 
                 './scripts/physics/camera/camera.js', 
-                './scripts/physics/dragDrop/drag.js', 
-                './scripts/physics/dragDrop/drop.js', 
-                './scripts/physics/environment/envManager.js', './scripts/physics/object/physicsObject.js',
+                './scripts/physics/drag/drag.js', 
+                './scripts/physics/drop/drop.js', 
+                './scripts/physics/environment/envManager.js', 
+                './scripts/physics/object/physicsObject.js',
                 './scripts/physics/collision/collision.js',
-               './scripts/physics/pathFinding/aStarPathFinding.js'))
+               './scripts/physics/pathfinding/aStarPathFinding.js'))
 .then(() => {
   //Mechanism
   importScripts('./scripts/mechanisms/map/map.js', 
-                './scripts/mechanisms/factions/faction.js',
-               './scripts/mechanisms/appearance/appManager.js')
+                './scripts/mechanisms/factions/faction.js')
+  .then(() => {
+    importScripts('./scripts/mechanisms/appearance/baseAppManager.js')
+    .then(() => 
+          importScripts('./scripts/mechanisms/appearance/player/playerAppManager.js', 
+                        './scripts/mechanisms/appearance/companions/companionAppManager.js', 
+                        './scripts/mechanisms/appearance/NPC/npcAppManager.js'));})
   .then(() => {
     importScripts('./scripts/mechanisms/gameplay/dice/dice.js',
                   './scripts/mechanisms/gameplay/dice/modifier.js',
@@ -203,23 +212,15 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 });
 
 //UI
-importScripts('./scripts/sprite/spriteLoader.js', 
-              './scripts/sprite/drawSprite.js')
-.then(() => {
-  importScripts('./scripts/ui/canvas.js')
-  .then(()=> {
-  	importScripts('./scripts/sprite/changeSprite.js');
-    });
-  }).then(() => {
-    importScripts('./scripts/ui/sidebar.js', 
-                  './scripts/ui/hud.js', 
-                  './scripts/ui/map/miniMap.js', 
-                  './scripts/ui/map/mapUI.js', 
-                  './scripts/ui/header.js', 
-                  './scripts/ui/footer.js', 
-                  './scripts/ui/overlay.js', 
-                  './scripts/ui/dialogBox.js');
-  });
+importScripts('./scripts/ui/canvas.js',
+              './scripts/ui/sidebar.js', 
+              './scripts/ui/hud.js', 
+              './scripts/ui/map/miniMap.js', 
+              './scripts/ui/map/mapUI.js', 
+              './scripts/ui/header.js', 
+              './scripts/ui/footer.js', 
+              './scripts/ui/overlay.js', 
+              './scripts/ui/dialogBox.js');
 
 //Styles
 importStyles('./styles/overlay.css', 

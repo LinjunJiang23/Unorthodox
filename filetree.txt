@@ -23,6 +23,13 @@
   /debug
   /mechanisms
     /appearance
+      /player
+        /playerAppManager.js
+      /companions
+        /companionAppManager.js
+      /NPC
+        /npcAppManager.js
+      /baseAppManager.js
     /attributes
     /factions
     /gameplay
@@ -38,14 +45,27 @@
     /action
     /camera
     /collision
-    /dragDrop
+    /drag
+    /drop
     /environment
     /object
-    /pathFinding
+    /pathfinding
   /setting
-  /sprite
+    /viewport.js
   /ui
-  /utils
+  /engine
+    /control
+      /keyboard.js
+    /sprite
+      /changeSprite.js
+      /drawSprite.js
+      /spriteLoader.js
+    /gameloop.js
+    /promise.js
+    /node.js
+    /tilemap.js
+    /time.js
+    /typewriter.js
 
 /styles
 

@@ -12,6 +12,7 @@ function gameLoop(timestamp) {
   if (!isPaused) {
 	handleKeyboardControl(timestamp);
 	npc.moveToNextGrid(timestamp);
+	envManager.renderEnvironment();
 	updateGameTime(timestamp);
   } 
   requestAnimationFrame(gameLoop);
