@@ -1,18 +1,13 @@
-// scripts/mechanisms/animation/caracterAnimation.js
+// scripts/animation/companions/companionAnimation.js
 
 /**
  * Centralizes all variable related to companions' animation
- * @property {string} state 
- * @property {string} action
- * @property {number} currentFrame
- * @property {string} direction
- * @property {number} animationSpeed 
- * @property {number} lastUpdateTime 
- * @property spriteSheets
+ * @static validStates - idle, walk, run, backup, jump
+ * @static validActions - rest, hold, battle, lift, drop, drag
  */
 class CompanionAnimation extends BaseAnimation {
-	static validStates = ['walk', 'run', 'idle', 'backup'];
-	static validActions = ['rest', 'hold', 'battle', 'lift'];
+	static validStates = ['idle', 'walk', 'run', 'backup', 'jump'];
+	static validActions = ['rest', 'hold', 'battle', 'lift', 'drop', 'drag'];
 	
 	constructor(character) {
 		super(character);
@@ -27,6 +22,7 @@ class CompanionAnimation extends BaseAnimation {
 			};
 			animationSpriteLoader.loadImages(playerAnimationSources);
 			this.physics = new PhysicsObject(0, 0, 32, 32);
+			this.frameSheet = playerFrames;
 		} else {
 			const companionAnimationSources = {
 				baseBody: `./img/animation/companions/${type}/baseBody.png`
@@ -34,6 +30,8 @@ class CompanionAnimation extends BaseAnimation {
 			animationSpriteLoader.loadImages(companionAnimationSources);
 			/** @todo Different companions should have different width and height in physics. */
 			this.physics = new PhysicsObject(0, 0, 32, 32);
+			/** @todo Different companions should have different frame sheets. */
+			this.frameSheet = playerFrames;
 		}
 		this.spriteSheets = animationSpriteLoader.getSpriteSheets();
 	}
@@ -45,28 +43,42 @@ class CompanionAnimation extends BaseAnimation {
 					if (this.animationSpeed !== 140) this.animationSpeed = 140;
 					if (this.state !== 'walk') this.state = "walk";
 					break;
-				case 'idle':
+				case 'run':
+					if (this.animationSpeed !== 140) this.animationSpeed = 140;
+					if (this.state !== 'run') this.state = "run";
+					break;
+				case 'backup':
+					if (this.animationSpeed !== 140) this.animationSpeed = 140;
+					if (this.state !== 'backup') this.state = "backup";
+					break;
+				case 'jump':
+					if (this.animationSpeed !== 140) this.animationSpeed = 140;
+					if (this.state !== 'jump') this.state = "jump";
+					break;
+				default:
 					if (this.state !== "idle") this.state = 'idle';
 					if (this.animationSpeed !== 540) this.animationSpeed = 540;
+					break;
+					
 			}
 		}
 	}
 	
-	updateAnimation(timestamp) {
-		if (timestamp - this.lastUpdateTime > this.animationSpeed) {
-			if (this.state === "idle" && this.idleTime > 300000) {
-				console.log('Idle action animations should trigger after player being idle for 5 min');
+	changeAction(action) {
+		if (CompanionAnimation.validActions.includes(action)) {
+			switch(state) {
+				default:
+					if (this.action !== "rest") this.action = 'rest';
+					break;
 			}
-			this.currentFrame = (this.currentFrame + 1) % playerFrames[this.direction][this.state]['baseBody'].length;
-			this.lastUpdateTime = timestamp; 
 		}
-		this.render();
 	}
 	
 	render() {
+		super.render();
 		const ctx = getCTX('characters');
 		const intendedSpritePos = 
-		playerFrames[this.direction][this.state]['baseBody'][this.currentFrame];
+		this.frameSheet[this.direction][this.state]['baseBody'][this.currentFrame];
 		drawFrame(ctx, this.spriteSheets, intendedSpritePos, camera.mapToScreen(this.physics));
 	}
 };

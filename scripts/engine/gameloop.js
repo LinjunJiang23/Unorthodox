@@ -1,4 +1,4 @@
-// scripts/utils/gameLoop.js
+// scripts/utils/gameloop.js
 
 let isPaused = true;
 let lastUpdate = performance.now();

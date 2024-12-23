@@ -20,13 +20,15 @@ class PhysicsObject {
 	constructor(x, y, width, height, isStatic = false, type = "rect") {
 		(typeof x === "number" && x >= 0) ? this.x = x : this.x = 0;
 		(typeof y === "number" && y >= 0) ? this.y = y : this.y = 0;
-		this.z = 0;
+		
 		(typeof width === "number" && width >= 0) ? this.width = width : this.width = 0;
 		(typeof height === "number" && height >= 0) ? this.height = height : this.height = 0;
 		this.isStatic = isStatic;
 		(PhysicsObject.validTypes.includes(type)) ? this.type = type : this.type = 'rect';
+		
 		this.velocity = {x: 0, y: 0};
 		this.acceleration = {x: 0, y: 0};
+		this.z = 0;
 	}
 	
 	applyForce(force) {
@@ -46,6 +48,10 @@ class PhysicsObject {
 			this.acceleration.x = 0;
 			this.acceleration.y = 0;
 		}
+	}
+	
+	move(velocity) {
+	  
 	}
 };
 

@@ -67,4 +67,4 @@ class TypeWriter{
 	}
 };
 
-let typeWriter = new TypeWriter();
+const typeWriter = new TypeWriter();

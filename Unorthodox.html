@@ -155,6 +155,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
               './scripts/engine/time.js', 
               './scripts/engine/control/keyboard.js', 
               './scripts/engine/gameloop.js',
+              './scripts/engine/camera/camera.js', 
               './scripts/engine/sprite/spriteLoader.js', 
               './scripts/engine/sprite/drawSprite.js',
               './scripts/engine/sprite/changeSprite.js')
@@ -166,14 +167,9 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                 './misc/env/testLayer.js'))
 .then(() =>
   //Physics Engine
-  importScripts('./scripts/physics/action/move.js', 
-                './scripts/physics/camera/camera.js', 
-                './scripts/physics/drag/drag.js', 
-                './scripts/physics/drop/drop.js', 
-                './scripts/physics/environment/envManager.js', 
-                './scripts/physics/object/physicsObject.js',
-                './scripts/physics/collision/collision.js',
-               './scripts/physics/pathfinding/aStarPathFinding.js'))
+  importScripts('./scripts/engine/physics/environment/envManager.js', 
+                './scripts/engine/physics/object/physicsObject.js',
+                './scripts/engine/physics/collision/collision.js'))
 .then(() => {
   //Mechanism
   importScripts('./scripts/mechanisms/map/map.js', 
@@ -190,12 +186,17 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                   './scripts/mechanisms/gameplay/display.js',
                   './scripts/mechanisms/gameplay/dialog/dialog.js',
                   './scripts/mechanisms/gameplay/dialog/choices.js', 
-                  './scripts/mechanisms/gameplay/dialog/dialogHistory.js', 
-                  ['./scripts/animation/baseAnimation.js',
-                    './scripts/animation/companions/companionAnimation.js', 
-                  './scripts/animation/NPC/npcAnimation.js',  
+                  './scripts/mechanisms/gameplay/dialog/dialogHistory.js');
+    importScripts('./scripts/mechanisms/pathfinding/aStarPathFinding.js',
+                  ['./scripts/mechanisms/action/move/move.js',
+                   './scripts/mechanisms/action/drag/drag.js', 
+                   './scripts/mechanisms/action/drop/drop.js']);
+    importScripts('./scripts/animation/baseAnimation.js',
                   './scripts/animation/frames/playerFrames.js',
-                  './scripts/animation/frames/npcFrames.js']);})
+                  './scripts/animation/frames/npcFrames.js')
+    .then(() => 
+          importScripts('./scripts/animation/companions/companionAnimation.js', 
+                        './scripts/animation/NPC/npcAnimation.js'));})
   .then(() => {
       //Stat & resources
   	  importScripts('./scripts/mechanisms/attributes/stat.js',

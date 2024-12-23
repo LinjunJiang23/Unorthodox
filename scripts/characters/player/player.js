@@ -3,12 +3,10 @@
 const playerCreated = new CustomEvent('playerInitialized');
 
 /** 
- * Player Singleton 
+ * Singleton 
  */
 class Player {
-	/**
-	 *
-	 */
+	
 	constructor() {
         if (Player.instance) {
             return Player.instance;
@@ -47,8 +45,8 @@ class Player {
 			console.log('Error occurs, probably because of wrong parameters');
 		}	
 	}
-	
-	// Start of SETTERs
+
+
 	/** 
 	 * sets player's first name and last name
 	 * currently allows for the option of no first name or no last name
@@ -64,17 +62,9 @@ class Player {
 		}
 	}
 	
-	// End of SETTERs
-	
-	// Start of GETTERs
-	/**
-	 */
+
 	getName() {
 		return {lname: this.lname, fname: this.fname};
-	}
-	
-	getSex() {
-		return this.sex;
 	}
 	
 	getCoreStats() {
@@ -84,9 +74,7 @@ class Player {
 	getDerivedStats() {
 		return this.stats.getDerivedStats();
 	}
-	// End of GETTERs
 };
 
-/* For Player */
 const player = new Player();
 
