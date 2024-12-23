@@ -51,7 +51,11 @@ class PhysicsObject {
 	}
 	
 	move(velocity) {
-	  
+	}
+	
+	addTriggerCollider(size) {
+		const triggerZoneSize = {maxX: size.maxX, maxY: size.maxY};
+		this.triggerCollider = new BaseTriggerCollider(this, triggerZoneSize);
 	}
 };
 

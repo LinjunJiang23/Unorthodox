@@ -1,4 +1,4 @@
-// scripts/utils/key.js
+// scripts/engine/control/keyboard.js
 
 const pressedKeys = new Set();
 
@@ -18,6 +18,9 @@ document.addEventListener('keyup', (event) => {
 	pressedKeys.delete(event.code);
 });
 
+function isKeyPressed(key) {
+	return (pressedKeys.has(key));
+};
 
 /**
  * handleKeydown -  
@@ -69,3 +72,4 @@ function handleKeyboardControl(timestamp) {
 		event.preventDefault();
 	  }
 };
+

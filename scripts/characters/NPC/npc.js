@@ -28,14 +28,14 @@ class NPC {
 	this.inventory = new Inventory();
 	this.path = [];
 	this.schedule = null;
-	this.animation = new npcAnimation(this);
+	this.model = new npcAnimation(this);
   }
   
   moveToNextGrid(timestamp, speed = 20) {
 	if (this.path.length > 0) {
 		const nextPoint = this.path[0]; //Peek at the next point
-		let dx = nextPoint.x - this.animation.physics.x;
-		let dy = nextPoint.y - this.animation.physics.y;
+		let dx = nextPoint.x - this.model.physics.x;
+		let dy = nextPoint.y - this.model.physics.y;
 		let distance = Math.sqrt(dx * dx + dy * dy);
 
 		const TOLERANCE = 0.01;
@@ -44,19 +44,19 @@ class NPC {
 			const step = speed * deltaTime;
 			
 			if (distance > step) {
-				this.animation.direction = getDirection(dx, dy);
-				(speed === 20) ? this.animation.changeState('walk') : this.animation.changeState('run');
-				this.animation.physics.x += (dx / distance) * step;
-				this.animation.physics.y += (dy / distance) * step;
+				this.model.direction = getDirection(dx, dy);
+				(speed === 20) ? this.model.changeState('walk') : this.model.changeState('run');
+				this.model.physics.x += (dx / distance) * step;
+				this.model.physics.y += (dy / distance) * step;
 			} else {
-				this.animation.physics.x = nextPoint.x;
-				this.animation.physics.y = nextPoint.y;
+				this.model.physics.x = nextPoint.x;
+				this.model.physics.y = nextPoint.y;
 				this.path.shift();
 		    }
 	    } else {
-			this.animation.changeState('idle');
+			this.model.changeState('idle');
 		}
-		this.animation.updateAnimation(timestamp);
+		this.model.updateAnimation(timestamp);
 	}
   }
   
@@ -96,9 +96,16 @@ class NPC {
 const aStarPathFinder = new AStarPathFinding();
 
 const npc = new NPC('Guard');
+npc.model.physics.x = 100;
+npc.model.physics.y = 100;
+
+npc.model.physics.addTriggerCollider({maxX: 10, maxY: 10});
+
+const triggerColliders = [];
+triggerColliders.push(npc.model.physics.triggerCollider);
 
 // Define destination
-const destination = { x: 10, y: 10 };
+// const destination = { x: 100, y: 100 };
 
 // Calculate path
-npc.path = aStarPathFinder.aStar({x: npc.animation.physics.x, y: npc.animation.physics.y}, destination);
+// npc.path = aStarPathFinder.aStar({x: npc.model.physics.x, y: npc.model.physics.y}, destination);

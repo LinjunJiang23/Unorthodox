@@ -148,7 +148,18 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 #debugCanvas {
 	position: absolute;
     z-index: 3;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/engine/promise.js',
+}
+
+#interact-prompt {
+  position: absolute;
+  z-index: 1000;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 5px;
+}
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/engine/promise.js',
               './scripts/engine/typewriter.js', 
               './scripts/engine/node.js', 
               './scripts/engine/tilemap.js', 
@@ -165,11 +176,16 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   importScripts('./misc/passage/tutorial-passages.js',
                 './misc/staticSources.js',
                 './misc/env/testLayer.js'))
-.then(() =>
+.then(() => {
   //Physics Engine
   importScripts('./scripts/engine/physics/environment/envManager.js', 
-                './scripts/engine/physics/object/physicsObject.js',
-                './scripts/engine/physics/collision/collision.js'))
+                './scripts/engine/physics/object/physicsObject.js');
+  
+  importScripts('./scripts/engine/physics/collision/checkCollision/checkPhysicsCollision.js',
+               './scripts/engine/physics/collision/checkCollision/checkTriggerCollision.js')
+  .then(() => 
+        importScripts('./scripts/engine/physics/collision/physicsCollider/physicsCollider.js',
+                './scripts/engine/physics/collision/triggerCollider/triggerCollider.js'));})
 .then(() => {
   //Mechanism
   importScripts('./scripts/mechanisms/map/map.js', 
@@ -187,10 +203,12 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                   './scripts/mechanisms/gameplay/dialog/dialog.js',
                   './scripts/mechanisms/gameplay/dialog/choices.js', 
                   './scripts/mechanisms/gameplay/dialog/dialogHistory.js');
+    
     importScripts('./scripts/mechanisms/pathfinding/aStarPathFinding.js',
                   ['./scripts/mechanisms/action/move/move.js',
                    './scripts/mechanisms/action/drag/drag.js', 
                    './scripts/mechanisms/action/drop/drop.js']);
+    
     importScripts('./scripts/animation/baseAnimation.js',
                   './scripts/animation/frames/playerFrames.js',
                   './scripts/animation/frames/npcFrames.js')
@@ -639,6 +657,7 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
     &lt;canvas id=&quot;canvas-characters&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
     &lt;canvas id=&quot;canvas-interactable&quot; width=&quot;1024&quot; height=&quot;1024&quot;&gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
+&lt;div id=&quot;interact-prompt&quot; style=&quot;display: none&quot;&gt;press E to interact&lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="9" name="Test2" tags="" position="750,275" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
 
 &lt;&lt;script&gt;&gt;

@@ -50,6 +50,7 @@ function movePlayer(direction, speed, timestamp) {
 	  
 	  
 	  const isBlocked = checkCollisionInActiveSections(newX, newY);
+	  checkTriggerCollisions();
 	  
 	  if (!isBlocked) {
 		player.model.changeDirection(direction);
