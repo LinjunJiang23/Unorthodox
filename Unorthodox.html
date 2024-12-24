@@ -159,18 +159,18 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   padding: 5px;
   border-radius: 5px;
 }
-</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./scripts/engine/promise.js',
-              './scripts/engine/typewriter.js', 
-              './scripts/engine/node.js', 
-              './scripts/engine/tilemap.js', 
-              './scripts/engine/time.js', 
-              './scripts/engine/control/keyboard.js', 
-              './scripts/engine/gameloop.js',
-              './scripts/engine/camera/camera.js', 
-              './scripts/engine/sprite/spriteLoader.js', 
-              './scripts/engine/sprite/drawSprite.js',
-              './scripts/engine/sprite/changeSprite.js')
-.then(() => importScripts('./scripts/setting/viewport.js'))
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">importScripts('./src/engine/promise.js',
+              './src/engine/typewriter.js', 
+              './src/engine/node.js', 
+              './src/engine/tilemap.js', 
+              './src/engine/time.js', 
+              './src/engine/control/keyboard.js', 
+              './src/engine/gameloop.js',
+              './src/engine/camera/camera.js', 
+              './src/engine/sprite/spriteLoader.js', 
+              './src/engine/sprite/drawSprite.js',
+              './src/engine/sprite/changeSprite.js')
+.then(() => importScripts('./src/setting/viewport.js'))
 .then(() =>
   //JSON files
   importScripts('./misc/passage/tutorial-passages.js',
@@ -178,68 +178,66 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                 './misc/env/testLayer.js'))
 .then(() => {
   //Physics Engine
-  importScripts('./scripts/engine/physics/environment/envManager.js', 
-                './scripts/engine/physics/object/physicsObject.js');
-  
-  importScripts('./scripts/engine/physics/collision/checkCollision/checkPhysicsCollision.js',
-               './scripts/engine/physics/collision/checkCollision/checkTriggerCollision.js')
+  importScripts('./src/engine/environment/envManager.js');
+  importScripts('./src/engine/physics/collision/checkCollision/checkPhysicsCollision.js',
+               './src/engine/physics/collision/checkCollision/checkTriggerCollision.js')
   .then(() => 
-        importScripts('./scripts/engine/physics/collision/physicsCollider/physicsCollider.js',
-                './scripts/engine/physics/collision/triggerCollider/triggerCollider.js'));})
+        importScripts('./src/engine/physics/collision/physicsCollider/physicsCollider.js',
+                './src/engine/physics/collision/triggerCollider/triggerCollider.js'));})
 .then(() => {
   //Mechanism
-  importScripts('./scripts/mechanisms/map/map.js', 
-                './scripts/mechanisms/factions/faction.js')
+  importScripts('./src/mechanisms/map/map.js', 
+                './src/mechanisms/factions/faction.js')
   .then(() => {
-    importScripts('./scripts/mechanisms/appearance/baseAppManager.js')
+    importScripts('./src/mechanisms/appearance/baseAppManager.js')
     .then(() => 
-          importScripts('./scripts/mechanisms/appearance/player/playerAppManager.js', 
-                        './scripts/mechanisms/appearance/companions/companionAppManager.js', 
-                        './scripts/mechanisms/appearance/NPC/npcAppManager.js'));})
+          importScripts('./src/mechanisms/appearance/player/playerAppManager.js', 
+                        './src/mechanisms/appearance/companions/companionAppManager.js', 
+                        './src/mechanisms/appearance/NPC/npcAppManager.js'));})
   .then(() => {
-    importScripts('./scripts/mechanisms/gameplay/dice/dice.js',
-                  './scripts/mechanisms/gameplay/dice/modifier.js',
-                  './scripts/mechanisms/gameplay/display.js',
-                  './scripts/mechanisms/gameplay/dialog/dialog.js',
-                  './scripts/mechanisms/gameplay/dialog/choices.js', 
-                  './scripts/mechanisms/gameplay/dialog/dialogHistory.js');
+    importScripts('./src/mechanisms/gameplay/dice/dice.js',
+                  './src/mechanisms/gameplay/dice/modifier.js',
+                  './src/mechanisms/gameplay/display.js',
+                  './src/mechanisms/gameplay/dialog/dialog.js',
+                  './src/mechanisms/gameplay/dialog/choices.js', 
+                  './src/mechanisms/gameplay/dialog/dialogHistory.js');
     
-    importScripts('./scripts/mechanisms/pathfinding/aStarPathFinding.js',
-                  ['./scripts/mechanisms/action/move/move.js',
-                   './scripts/mechanisms/action/drag/drag.js', 
-                   './scripts/mechanisms/action/drop/drop.js']);
+    importScripts('./src/mechanisms/pathfinding/aStarPathFinding.js',
+                  ['./src/mechanisms/action/move/move.js',
+                   './src/mechanisms/action/drag/drag.js', 
+                   './src/mechanisms/action/drop/drop.js']);
     
-    importScripts('./scripts/animation/baseAnimation.js',
-                  './scripts/animation/frames/playerFrames.js',
-                  './scripts/animation/frames/npcFrames.js')
+    importScripts('./src/animation/baseAnimation.js',
+                  './src/animation/frames/playerFrames.js',
+                  './src/animation/frames/npcFrames.js')
     .then(() => 
-          importScripts('./scripts/animation/companions/companionAnimation.js', 
-                        './scripts/animation/NPC/npcAnimation.js'));})
+          importScripts('./src/animation/companions/companionAnimation.js', 
+                        './src/animation/NPC/npcAnimation.js'));})
   .then(() => {
       //Stat & resources
-  	  importScripts('./scripts/mechanisms/attributes/stat.js',
-                    './scripts/mechanisms/attributes/traits.js', 
-                    ['./scripts/mechanisms/resources/item/item.js', 
-                     './scripts/mechanisms/resources/item/itemTag.js', 
-                     './scripts/mechanisms/resources/inventory/inventory.js'])
+  	  importScripts('./src/mechanisms/attributes/stat.js',
+                    './src/mechanisms/attributes/traits.js', 
+                    ['./src/mechanisms/resources/item/item.js', 
+                     './src/mechanisms/resources/item/itemTag.js', 
+                     './src/mechanisms/resources/inventory/inventory.js'])
       .then(() => {
-        	importScripts('./scripts/characters/player/player.js');
-            importScripts('./scripts/characters/NPC/utils.js')
-            .then(() => importScripts('./scripts/characters/NPC/npc.js'));
+        	importScripts('./src/characters/player/player.js');
+            importScripts('./src/characters/NPC/utils.js')
+            .then(() => importScripts('./src/characters/NPC/npc.js'));
       });
   });
 });
 
 //UI
-importScripts('./scripts/ui/canvas.js',
-              './scripts/ui/sidebar.js', 
-              './scripts/ui/hud.js', 
-              './scripts/ui/map/miniMap.js', 
-              './scripts/ui/map/mapUI.js', 
-              './scripts/ui/header.js', 
-              './scripts/ui/footer.js', 
-              './scripts/ui/overlay.js', 
-              './scripts/ui/dialogBox.js');
+importScripts('./src/ui/canvas.js',
+              './src/ui/sidebar.js', 
+              './src/ui/hud.js', 
+              './src/ui/map/miniMap.js', 
+              './src/ui/map/mapUI.js', 
+              './src/ui/header.js', 
+              './src/ui/footer.js', 
+              './src/ui/overlay.js', 
+              './src/ui/dialogBox.js');
 
 //Styles
 importStyles('./styles/overlay.css', 

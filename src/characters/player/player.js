@@ -27,6 +27,7 @@ class Player {
 		]);
 		this.app = new PlayerAppManager(this);
 		this.model = new CompanionAnimation(this);
+		this.stabilization = 100;
 	}
 	
 	performCheck(stat, type, numOfDice, difficulty) {

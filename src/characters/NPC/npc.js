@@ -90,10 +90,8 @@ class NPC {
 	
   collideWithPlayer() {
   }
-  
 };
 
-const aStarPathFinder = new AStarPathFinding();
 
 const npc = new NPC('Guard');
 npc.model.physics.x = 100;

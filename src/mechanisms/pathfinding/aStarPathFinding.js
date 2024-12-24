@@ -1,10 +1,10 @@
-// scripts/physics/pathFinding/aStarpathFinding.js
+// scripts/mechanisms/pathfinding/aStarpathFinding.js
 
 /**
  * This pathfinding logic is based on A* algorithm. When NPC is in static environment e.g. town, 
  * they use this pathfinder instead of D* pathfinder
  * @class
- * @summary Pathfinding logic that uses A* algorithm  
+ * @summary Pathfinding that uses A* algorithm  
  */
 class AStarPathFinding {
 	
@@ -17,7 +17,7 @@ class AStarPathFinding {
 	}
 	
 	/**
-	 * Simple Euclidean Distance Formula for heuristic calculation
+	 * Euclidean Distance Formula for heuristic calculation
 	 */
 	heuristic(currentP, destinationP) {
 	  let dx = Math.abs(currentP.x - destinationP.x);
@@ -71,9 +71,6 @@ class AStarPathFinding {
 		return pixelPath;
 	}
 	
-	/**
-	 * @property aStar
-	 */
 	aStar(start, target) {
 		
 		const gScore = {}; //Cost to move from starting point to a node
@@ -118,3 +115,5 @@ class AStarPathFinding {
 		return [];
 	}
 };
+
+const aStarPathFinder = new AStarPathFinding();

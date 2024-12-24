@@ -9,6 +9,7 @@ class BaseTriggerCollider {
 		if (triggerZoneSize.maxX >= 0 && triggerZoneSize.maxY >= 0)
 		  this.triggerZoneSize = triggerZoneSize;
 	    this.objectsInRange = [];
+		this.isTriggered = false;
 	}
 	
 	onTriggerEnter(collider) {

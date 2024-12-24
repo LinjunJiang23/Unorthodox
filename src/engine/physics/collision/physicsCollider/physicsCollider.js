@@ -1,7 +1,7 @@
-// scripts/physics/object/physicsObject.js
+// scripts/physics/object/physicsCollider.js
 
 /**
- * PhysicsObject - A template class that defines the basic physics in objects
+ * Defines the basic physics in colliders
  * @property {number} x
  * @property {number} y
  * @property {number} z
@@ -13,7 +13,7 @@
  * @property {object} velocity
  * @property {object} acceleration
  */
-class PhysicsObject {
+class PhysicsCollider {
 	static validTypes = ['rect', 'circle', 'polygon'];
 	
 	
@@ -24,7 +24,7 @@ class PhysicsObject {
 		(typeof width === "number" && width >= 0) ? this.width = width : this.width = 0;
 		(typeof height === "number" && height >= 0) ? this.height = height : this.height = 0;
 		this.isStatic = isStatic;
-		(PhysicsObject.validTypes.includes(type)) ? this.type = type : this.type = 'rect';
+		(PhysicsCollider.validTypes.includes(type)) ? this.type = type : this.type = 'rect';
 		
 		this.velocity = {x: 0, y: 0};
 		this.acceleration = {x: 0, y: 0};

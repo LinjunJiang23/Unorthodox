@@ -27,7 +27,7 @@ class npcAnimation extends BaseAnimation {
 		npcAnimationSpriteLoader.loadImages(npcAnimationSources);
 		
 		this.spriteSheets = npcAnimationSpriteLoader.getSpriteSheets();
-		this.physics = new PhysicsObject(0, 0, 32, 32);
+		this.physics = new PhysicsCollider(0, 0, 32, 32);
 		this.frameSheet = npcFrames;
 	}
 	

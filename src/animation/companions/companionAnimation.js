@@ -21,7 +21,7 @@ class CompanionAnimation extends BaseAnimation {
 				baseBody: `./img/animation/baseBody${this.character.app.baseBody}.png`
 			};
 			animationSpriteLoader.loadImages(playerAnimationSources);
-			this.physics = new PhysicsObject(0, 0, 32, 32);
+			this.physics = new PhysicsCollider(0, 0, 32, 32);
 			this.frameSheet = playerFrames;
 		} else {
 			const companionAnimationSources = {
@@ -29,7 +29,7 @@ class CompanionAnimation extends BaseAnimation {
 			};
 			animationSpriteLoader.loadImages(companionAnimationSources);
 			/** @todo Different companions should have different width and height in physics. */
-			this.physics = new PhysicsObject(0, 0, 32, 32);
+			this.physics = new PhysicsCollider(0, 0, 32, 32);
 			/** @todo Different companions should have different frame sheets. */
 			this.frameSheet = playerFrames;
 		}

@@ -1,0 +1,1 @@
+// src/engine/visibility/visibilityManager.js

@@ -9,13 +9,13 @@ class EnvManager {
 			return EnvManager.instance;
 		}
 		EnvManager.instance = this;
+	}
+	
+	init(loc) {
 		this.loc;
 		this.env;
 		this.x = 0;
 		this.y = 0;
-	}
-	
-	init(loc) {
 		if ($('#canvas-environment').length !== 0) {
 			const ctx = getCTX('environment');
 			//If map, renders the map relative to the camera point			
@@ -31,14 +31,13 @@ class EnvManager {
 				let sheets = mapLoader.getSpriteSheets();
 				ctx.clearRect(0, 0, 1024, 1024);
 				drawSprite(ctx, sheets[loc], pos.x, pos.y, 
-				viewportSize, viewportSize, 0, 0, 1024, 1024);
+					viewportSize, viewportSize, 0, 0, 1024, 1024);
 			}
 		}
 	}
 	
 	/**
 	 * renderEnvironment
-	 * @param {string} - mapName
 	 */
 	renderEnvironment() {
 		//If canvas exists, starts rendering
@@ -92,4 +91,4 @@ class EnvManager {
 	
 };
 
-let envManager = new EnvManager();
+const envManager = new EnvManager();
