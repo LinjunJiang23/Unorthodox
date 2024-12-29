@@ -15,10 +15,12 @@ class BaseAnimation {
 	static validDirections = 
 	  ['left', 'up', 'right', 'down', 'upleft', 
 	   'upright', 'downleft', 'downright'];
-	
+	static validModes = 
+	  ['normal', 'combat', 'stealth'];
 	constructor(character) {
 		this.character = character;
 		this.idleTime = 0;
+		this.mode = 'normal';
 		this.state = "idle";
 		this.action = "rest";
 		this.currentFrame = 0;
@@ -27,11 +29,19 @@ class BaseAnimation {
 		this.lastUpdateTime = 0;
 		this.spriteSheets;
 		this.frameSheet;
+		this.physics;
 	}
 	
-	changeDirection(direction) {
-		if (CompanionAnimation.validDirections.includes(direction)) {
-			if (this.direction !== direction) this.direction = direction;
+	update_animation(timestamp) {
+		const _check = this.isInViewport();
+		if (_check) {
+		  if ((timestamp - this.lastUpdateTime) > this.animationSpeed) {
+			if (this.state === "idle" && this.idleTime > 300000) 
+				console.log('Idle action animations should trigger after npc being idle for 5 min');
+			this.currentFrame = (this.currentFrame + 1) % this.frameSheet[this.mode][this.direction][this.state]['baseBody'].length;
+			this.lastUpdateTime = timestamp;
+		  }
+		  this.render();
 		}
 	}
 	
@@ -46,18 +56,38 @@ class BaseAnimation {
 		return false;
 	}
 	
-	updateAnimation(timestamp) {
-		const _check = this.isInViewport();
-		if (_check) {
-		  if ((timestamp - this.lastUpdateTime) > this.animationSpeed) {
-			if (this.state === "idle" && this.idleTime > 300000) 
-				console.log('Idle action animations should trigger after npc being idle for 5 min');
-			this.currentFrame = (this.currentFrame + 1) % this.frameSheet[this.direction][this.state]['baseBody'].length;
-			this.lastUpdateTime = timestamp;
-		  }
-		  this.render();
+	set_direction(direction) {
+		if (CompanionAnimation.validDirections.includes(direction)) {
+			if (this.direction !== direction) this.direction = direction;
 		}
 	}
 	
-	render() {}
+	get_state() {
+		return this.state;
+	}
+	
+	get_action() {
+		return this.action;
+	}
+
+	get_direction() {
+		return this.direction;
+	}
+	
+	get_frameSheet() {
+		return this.frameSheet;
+	}
+	
+	get_physics() {
+		return this.physics;
+	}
+	
+	get_idleTime() {
+		return this.idleTime;
+	}
+	
+	get_currentFrame() {
+		return this.currentFrame;
+	}
+	
 };

@@ -36,9 +36,6 @@ class EnvManager {
 		}
 	}
 	
-	/**
-	 * renderEnvironment
-	 */
 	renderEnvironment() {
 		//If canvas exists, starts rendering
 		if ($('#canvas-environment').length !== 0) {
@@ -69,11 +66,11 @@ class EnvManager {
 		}
 	}
 	
-	getActiveSections(viewportX, viewportY, viewportWidth = 16, viewportHeight = 16) {
-		const startSectionX = Math.floor((viewportX / 16) / this.env.sectionWidth) - 1;
-		const startSectionY = Math.floor((viewportY / 16) / this.env.sectionHeight) - 1;
-		const endSectionX = Math.floor(((viewportX / 16) + viewportWidth) / this.env.sectionWidth) - 1;
-		const endSectionY = Math.floor(((viewportY / 16) + viewportHeight) / this.env.sectionHeight) - 1;
+	getActiveSections(point, viewportWidth = 16, viewportHeight = 16) {
+		const startSectionX = Math.floor((point.x / 16) / this.env.sectionWidth) - 1;
+		const startSectionY = Math.floor((point.y / 16) / this.env.sectionHeight) - 1;
+		const endSectionX = Math.floor(((point.x / 16) + viewportWidth) / this.env.sectionWidth) - 1;
+		const endSectionY = Math.floor(((point.y / 16) + viewportHeight) / this.env.sectionHeight) - 1;
 		
 		
 		const activeSections = [];

@@ -21,7 +21,7 @@ class npcAnimation extends BaseAnimation {
 	init() {
 		/** @todo Need to change this to npc sprite sheets*/
 		const npcAnimationSources = { 
-			baseBody: `./img/animation/NPC/${this.character.type}/baseBody1.png`
+			baseBody: `./img/animation/NPC/${this.character.tag}/baseBody1.png`
 		};
 		const npcAnimationSpriteLoader = new SpriteLoader();
 		npcAnimationSpriteLoader.loadImages(npcAnimationSources);

@@ -3,21 +3,21 @@
 /** 
  * NPC base class
  * @class
- * @property {string} intro - short summary of characters
  * @property {number} fl - friendliness
  * @property {number} idf - indifference
  * @property {number} it - intent
  */
-class NPC {
-  /** @static */
+class NPC extends BaseCharacter {
   static validPersonality = [
 	'indifferent', 'aggresive', 'coward', 'gentle', 'provocative'
   ];
   
-  constructor(name = "Unknown", intro = "Unknown", type = "Unknown", fl = 0, idf = 0, it = 0) {
+  constructor(name = "Unknown", intro = "Unknown", tag = "Unknown", fl = 0, idf = 0, it = 0) {
+	super();
 	(typeof name === "string") ? this.name = name : this.name = "Unknown";
     (typeof intro === "string") ? this.intro = intro : this.intro = "Unknown";
-    (typeof type === "string") ? this.type = type : this.type = "Unknown";
+    (typeof tag === "string") ? this.tag = tag : this.tag = "Unknown";
+	
 	//Evals for relationship check
     (typeof fl === "number" && fl >= 0) ? this.fl = fl : this.fl = 0;
     (typeof idf === "number" && idf >= 0) ? this.idf = idf : this.idf = 0;
@@ -25,13 +25,16 @@ class NPC {
 	
     this.relationships = [];
 	this.gold = 0;
-	this.inventory = new Inventory();
 	this.path = [];
-	this.schedule = null;
+	this.schedule;
+  }
+  
+  init() {
+	this.inventory = new Inventory();
 	this.model = new npcAnimation(this);
   }
   
-  moveToNextGrid(timestamp, speed = 20) {
+  move_to_next_grid(timestamp, speed = 20) {
 	if (this.path.length > 0) {
 		const nextPoint = this.path[0]; //Peek at the next point
 		let dx = nextPoint.x - this.model.physics.x;
@@ -44,8 +47,8 @@ class NPC {
 			const step = speed * deltaTime;
 			
 			if (distance > step) {
-				this.model.direction = getDirection(dx, dy);
-				(speed === 20) ? this.model.changeState('walk') : this.model.changeState('run');
+				this.model.set_direction(getDirection(dx, dy));
+				(speed === 20) ? this.model.set_state('walk') : this.model.set_state('run');
 				this.model.physics.x += (dx / distance) * step;
 				this.model.physics.y += (dy / distance) * step;
 			} else {
@@ -54,17 +57,17 @@ class NPC {
 				this.path.shift();
 		    }
 	    } else {
-			this.model.changeState('idle');
+			this.model.set_state('idle');
 		}
-		this.model.updateAnimation(timestamp);
+		this.model.update_animation(timestamp);
 	}
   }
   
-  getCoreStats() {
+  get_core_stats() {
 	const stats = {
-		friendliness: this.friendliness,
-		indifference: this.indifference,
-		intent: this.intent,
+		fl: this.fl,
+		idf: this.idf,
+		it: this.it,
 		relationships: this.relationships,
 	};
 	return stats;
@@ -82,25 +85,24 @@ class NPC {
   assault() {
   }
   
-  psychAccess() {
+  psych_access() {
   }
   
-  collideWithObjects() {
+  collide_with_objects() {
   }
 	
-  collideWithPlayer() {
+  collide_with_player() {
   }
 };
 
 
-const npc = new NPC('Guard');
-npc.model.physics.x = 100;
-npc.model.physics.y = 100;
+// const npc = new NPC('Guard');
+// npc.model.physics.x = 100;
+// npc.model.physics.y = 100;
 
-npc.model.physics.addTriggerCollider({maxX: 10, maxY: 10});
+// npc.model.physics.add_TriggerCollider({maxX: 10, maxY: 10});
 
-const triggerColliders = [];
-triggerColliders.push(npc.model.physics.triggerCollider);
+// triggerColliders.push(npc.model.physics.triggerCollider);
 
 // Define destination
 // const destination = { x: 100, y: 100 };

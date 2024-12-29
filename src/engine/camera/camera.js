@@ -1,16 +1,16 @@
 // scripts/mechanisms/gamePlay/camera/camera.js
 
 /**
- * Camera - singleton class serves as viewport
- * Allows camera that centers around player
+ * Singleton class serves as viewport
+ * Camera centers around leader
  * MAY IMPLEMENT PROPS THAT ALLOW PLAYER TO MOVE CAMERA IN THE FUTURE
- * @var x
- * @var y
- * @var minX
- * @var minY
- * @var maxX
- * @var maxY
- * @var zoomFactor - scaling a 64x64, 128x128, 256x256 viewport size to a 1024x1024 screen size
+ * @property x
+ * @property y
+ * @property minX
+ * @property minY
+ * @property maxX
+ * @property maxY
+ * @property zoomFactor - scaling a 64x64, 128x128, 256x256 viewport size to a 1024x1024 screen size
  */
 class Camera {
 	
@@ -22,6 +22,10 @@ class Camera {
 			return Camera.instance;
 		}
 		Camera.instance = this;
+		this.init();
+	}
+	
+	init() {
 		this.x = 0;
 		this.y = 0;
 		this.minX = 0;
@@ -70,7 +74,7 @@ class Camera {
 	
 	//
 	resetCamera() {
-		this.centerCameraOn(playerPosition);
+		this.centerCameraOn(player.model.physics);
 	}
 	
 	//

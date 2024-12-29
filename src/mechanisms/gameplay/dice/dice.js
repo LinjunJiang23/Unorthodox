@@ -50,6 +50,6 @@ function resolveDice(result) {
 };
 
 
-let d20 = new Dice(20);
+const d20 = new Dice(20);
 
 document.addEventListener('DiceRollFinished', () => {console.log('triggered');$('.dice-result').show();});

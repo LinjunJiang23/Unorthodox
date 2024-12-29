@@ -1,5 +1,3 @@
-// scripts/mechanisms/NPC/utils.js
-
 /**
  * Function to generate random names for NPCs
  */
@@ -25,26 +23,4 @@ function generateRandomName() {
 		name.lname = randomLName[n];
 	}
 	return name;
-};
-
-function getDirection(dx, dy) {
-	
-	if (dx > 0 && dy === 0) {
-		return 'right';
-	} else if (dx === 0 && dy < 0) {
-		return 'up';
-	} else if (dx === 0 && dy > 0) {
-		return 'down';
-	} else if (dx < 0 && dy === 0) {
-		return 'left';
-	} else if (dx > 0 && dy < 0) {
-		return 'upright';
-	} else if (dx > 0 && dy > 0) {
-		return 'downright';
-	} else if (dx < 0 && dy < 0) {
-		return 'upleft';
-	} else if (dx < 0 && dy > 0) {
-		return 'downleft';
-	}
-	return "idle";
 };

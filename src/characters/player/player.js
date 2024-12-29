@@ -3,22 +3,19 @@
 const playerCreated = new CustomEvent('playerInitialized');
 
 /** 
- * Singleton 
+ * Defines player
  */
-class Player {
+class Player extends BaseCharacter {
 	
 	constructor() {
-        if (Player.instance) {
-            return Player.instance;
-        }
-        Player.instance = this;
-		this.init();
-    }
-	
-	init() {
-		this.type = 'player';
+		super();
+		this.tag = 'player';
 		this.lname = "左";
 		this.fname = "汶";
+		this.intro = "";
+    }
+	
+	init() {		
 		this.stats = new StatManager();
 		this.inventory = new Inventory([]);
 		this.traits = new CharacterTraitManager([
@@ -28,23 +25,7 @@ class Player {
 		this.app = new PlayerAppManager(this);
 		this.model = new CompanionAnimation(this);
 		this.stabilization = 100;
-	}
-	
-	performCheck(stat, type, numOfDice, difficulty) {
-		if (typeof stat === "number" && 
-		    typeof this.stats.getCoreStats()[type] === "number" && 
-		    typeof difficulty === "number" && 
-			typeof numOfDice === "number") {
-		  const modifier = getModifier(stat);
-		  const result = d20.rollDice(numOfDice, modifier);
-		  if (difficulty < result) {
-			return true;
-		  } else {
-			return false;
-		  }
-		} else {
-			console.log('Error occurs, probably because of wrong parameters');
-		}	
+		this.actions = new ActionManager(this);
 	}
 
 
@@ -53,7 +34,7 @@ class Player {
 	 * currently allows for the option of no first name or no last name
 	 * @param {object} name - takes the format of {lname: '', fname: ''}
 	 */
-	setName(name) {
+	set_name(name) {
 		if (name.hasOwnProperty('fname') && name.hasOwnProperty('lname')) {
 			this.lname = name.lname;
 			this.fname = name.fname;
@@ -64,18 +45,19 @@ class Player {
 	}
 	
 
-	getName() {
+	get_name() {
 		return {lname: this.lname, fname: this.fname};
 	}
 	
-	getCoreStats() {
+	get_CoreStats() {
 		return this.stats.getCoreStats();
 	}
 	
-	getDerivedStats() {
+	get_DerivedStats() {
 		return this.stats.getDerivedStats();
 	}
+	
+	get_position() {
+		return {x: this.model.physics.x, y: this.model.physics.y};
+	}
 };
-
-const player = new Player();
-
