@@ -10,7 +10,7 @@
  * @property minY
  * @property maxX
  * @property maxY
- * @property zoomFactor - scaling a 64x64, 128x128, 256x256 viewport size to a 1024x1024 screen size
+ * @property zoomFactor - default 7.5 zoomFactor
  */
 class Camera {
 	
@@ -18,25 +18,15 @@ class Camera {
 	 * Camera's initial set up is always the top left corner of viewport
 	 */
 	constructor() {
-		if (Camera.instance) {
-			return Camera.instance;
-		}
-		Camera.instance = this;
-		this.init();
-	}
-	
-	init() {
 		this.x = 0;
 		this.y = 0;
-		this.minX = 0;
-		this.minY = 0;
-		this.maxX = 256;
-		this.maxY = 256;
-		this.zoomFactor = 4;
+		this.width = 256;
+		this.height = 144;
+		this.zoomFactor = 7.5;
 	}
 	
 	// Converts map coordinates to screen coordinates
-	mapToScreen(mapPos) {
+	map_to_screen(mapPos) {
 		return { 
 			x: ((mapPos.x - this.x) * this.zoomFactor), 
 			y: ((mapPos.y - this.y) * this.zoomFactor) 
@@ -44,7 +34,7 @@ class Camera {
 	}
 
 	// Converts screen coordinates to map coordinates
-	screenToMap(screenPos) {
+	screen_to_map(screenPos) {
 		return { 
 		  x: (screenPos.x + this.x) / this.zoomFactor, 
 		  y: (screenPos.y + this.y) / this.zoomFactor 
@@ -52,33 +42,33 @@ class Camera {
 	}
 
 	//Centers the camera on a specific point
-	centerCameraOn(pos) {
-		this.x = pos.x - 128;
-		this.y = pos.y - 128;
+	center_camera_on(pos) {
+		this.x = pos.x - this.width / 2 ;
+		this.y = pos.y - this.height / 2;
 		this.setCameraBounds();
 	}
 
 	//
-	setCameraBounds() {
-		this.x = Math.max(this.minX, Math.min(this.x, this.maxX));
-		this.y = Math.max(this.minY, Math.min(this.y, this.maxY));
+	set_camera_bounds() {
+		this.x = Math.max(this.minX, Math.min(this.x, this.width));
+		this.y = Math.max(this.minY, Math.min(this.y, this.height));
 	}
 
 	//
-	moveCameraTo(pos, speed = 1) {
+	move_camera_to(pos, speed = 1) {
 		let newX = this.x + pos.x * speed;
 		let newY = this.y + pos.y * speed;
-		newX <= -128 ? this.x = -128 : this.x = newX;
-		newY <= -128 ? this.y = -128 : this.y = newY;
+		newX <= -(this.width / 2) ? this.x = -(this.width / 2) : this.x = newX;
+		newY <= -(this.height / 2) ? this.y = -(this.height / 2) : this.y = newY;
 	}
 	
 	//
-	resetCamera() {
-		this.centerCameraOn(player.model.physics);
+	reset_camera() {
+		this.centerCameraOn(getLeader().physics);
 	}
 	
 	//
-	getPosition() {
+	get_position() {
 		return {x: this.x, y: this.y};
 	}
 };

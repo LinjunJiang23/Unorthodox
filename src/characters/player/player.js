@@ -1,9 +1,7 @@
-// scripts/characters/player/player.js
-
-const playerCreated = new CustomEvent('playerInitialized');
+// src/characters/player/player.js
 
 /** 
- * Defines player
+ * 
  */
 class Player extends BaseCharacter {
 	

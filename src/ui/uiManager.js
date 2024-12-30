@@ -1,10 +1,16 @@
 // src/ui/uiManager.js
 
 class UIManager {
-	constructor() {
+	constructor(engine) {
+		this.engine = engine;
 		this.uiElements = uiElements;
 		this.startScreenMenu = new StartScreenMenu(this);
 		//... add other ui panels here
+	}
+	
+	init() {
+		myPromise.then(() => this.uiElements.lazyloadStartscreen())
+		.then(() => this.startScreenMenu.initialize_listeners());
 	}
 	
 	show_UI(...keys) {
@@ -15,7 +21,7 @@ class UIManager {
 			current.style.display = "block";
 		} else if (typeof current === "object") {
 			Object.values(current).forEach(ele => {
-				if (ele instanceof HTMLElment) {
+				if (ele instanceof HTMLElement) {
 					ele.style.transition = 'opacity 0.5s';
 					ele.style.opacity = 1;
 					ele.style.display = "block";
@@ -26,13 +32,13 @@ class UIManager {
 		}
 	}
 	
-	hide_UI(key) {
+	hide_UI(keys) {
 		const current = this.get_UI(keys);
 		if (current instanceof HTMLElement) {
 			current.style.display = "none";
 		} else if (typeof current === "object") {
 			Object.values(current).forEach(ele => {
-				if (ele instanceof HTMLElment) {
+				if (ele instanceof HTMLElement) {
 					ele.style.display = "none";
 				}
 			});

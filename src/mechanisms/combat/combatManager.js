@@ -1,6 +1,6 @@
 // src/combat/combatManager.js
 
-class combatManager() {
+class CombatManager {
 	constructor() {
 		this.activeCombats = [];
 	}

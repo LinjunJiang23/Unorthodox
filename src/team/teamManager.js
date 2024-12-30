@@ -3,14 +3,7 @@
 
 class TeamManager {
 	constructor(campaignManager) {
-		if (TeamManager.instance)
-			return TeamManager.instance;
-		TeamManager.istance = this;
 		this.campaign = campaignManager;
-		this.init();
-	}
-	
-	init() {
 		this.subteams = [];
 		this.members = this.campaign.members;
 		this.leader = this.campaign.members[0];

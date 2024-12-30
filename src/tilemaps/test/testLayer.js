@@ -1,4 +1,4 @@
-tileMapManager.addTileMap( new TileMap("testLayer",
+const tilemap_testLayer = new TileMap("testLayer",
 { "compressionlevel":-1,
  "height":32,
  "infinite":false,
@@ -104,4 +104,4 @@ tileMapManager.addTileMap( new TileMap("testLayer",
  "type":"map",
  "version":"1.10",
  "width":32
-}));
+});

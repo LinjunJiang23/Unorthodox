@@ -20,7 +20,7 @@ class StartScreenMenu {
 	}
 	
 	setup_startgame_listeners() {
-		this.uiElements['startGame'].addEventListener('click', start_game());
+		this.uiElements['startGame'].addEventListener('click', () => this.start_game());
 	}
 	
 	animation() {

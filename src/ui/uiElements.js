@@ -2,32 +2,48 @@
 
 const uiElements = {
 	startscreen: {
-				title: document.getElementById('startscreen-title'),
-				animation: document.getElementById('startscreen-animation'),
-				startGame: document.getElementById('startscreen-startgame'),
-				loadGame: document.getElementById('startscreen-loadgame'),
-				extras: document.getElementById('startscreen-extras'),
-				setting: document.getElementById('startscreen-setting'),
-				credit: document.getElementById('startscreen-credit'),
-				quitGame: document.getElementById('startscreen-quitgame')
+		div: null,
+		title: null,
+		animation: null,
+		startGame: null,
+		loadGame: null,
+		extras: null,
+		setting: null,
+		credit: null,
+		quitGame: null
 				
 	},
+	
 	gameUI: {
-		hud:{},
+		gameEnv: null,
+		hud: null,
 		inventory: {
 			button: null,
 			
 		},
 		miniMap: {}
 	},
+	
 	settingsUI: {
 	},
 	
-	lazyLoadGameUI() {
-		this.gameUI.inventory.button = document.getElementById('inventory-button');
+	lazyloadStartscreen() {
+		this.startscreen.div = document.getElementById('startscreen');
+		this.startscreen.title = document.getElementById('startscreen-title');
+		this.startscreen.animation = document.getElementById('startscreen-animation');
+		this.startscreen.startGame = document.getElementById('startscreen-startgame');
+		this.startscreen.loadGame = document.getElementById('startscreen-loadgame');
+		this.startscreen.extras = document.getElementById('startscreen-extras');
+		this.startscreen.setting = document.getElementById('startscreen-setting');
+		this.startscreen.credit = document.getElementById('startscreen-credit');
+		this.startscreen.quitGame = document.getElementById('startscreen-quitgame');
 	},
 	
-	lazyLoadSettingsUI() {
+	lazyloadGameUI() {
+		this.gameUI.gameEnv = document.getElementById('game-environment')
+	},
+	
+	lazyloadSettingsUI() {
 		
 	}
 };

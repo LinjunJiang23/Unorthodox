@@ -1,14 +1,9 @@
 /**
  * Singleton class that centralizes storage for all current TileMaps
  */
-class TileMapManager {
-	static instance = null;
+class TilemapManager {
 	
 	constructor() {
-		if (TileMapManager.instance) {
-			return TileMapManager.instance;
-		}
-		TileMapManager.instance = this;
 		this.tilemaps = new Map();
 	}
 	
@@ -16,7 +11,7 @@ class TileMapManager {
      * Load maps into the TileMaps variable
 	 * @param {Object} tilemap - TileMap object
 	 */
-	addTileMap(tilemap) {
+	add_tilemap(tilemap) {
 		if (tilemap instanceof TileMap) {
 			
 		  //Check for duplicate map data
@@ -28,20 +23,15 @@ class TileMapManager {
 	    }
 	}
 	
-	tileMapExists(tilemapName) {
+	tilemap_exists(tilemapName) {
 		if (this.tilemaps.has(tilemapName)) {
 			return true;
 		}
 		return false;
 	}
 	
-	getTileMaps() {
-		return this.tilemaps;
-	}
-	
-	getTileMap(tilemapName) {
+	get_tilemap(tilemapName) {
 		return this.tilemaps.get(tilemapName);
 	}
 };
 
-const tileMapManager = new TileMapManager();

@@ -19,31 +19,36 @@ class Engine {
 		this.audioManager;
 		this.inputHandler = new InputHandler(this);
 		this.assetLoader = new AssetLoader();
-		this.renderManager = new RenderManager();
-		this.ui = new UIManager();
+		this.renderManager = new RenderManager(this);
+		this.ui = new UIManager(this);
+		this.settings = new SettingManager();
+		myPromise.then(() => this.ui.init())
+		.then(() => {
+			this.renderManager.init();
+		});
 		//this.saveSystem = new SaveSystem();
 	}
 	
 	initialize_game() {
+		this.combatManager = new CombatManager(this);
+		this.world = new WorldManager(this);
+		this.camera = new Camera();
 		this.player = new Player();
 		this.campaign = new CampaignManager(this);
-		this.world;
-		this.camera = new Camera();
-		this.envManager = new EnvManager(this);
-		this.envManager.init('testLayer');
-		this.combatManager = new CombatManager(this);
+		this.env = new EnvManager(this);
 		
+		this.ui.hide_UI('startscreen');
+		this.ui.show_UI('gameUI', 'gameEnv');
 	}
 	
 	game_loop(timestamp) {
 		if (this.isGameRunning) {
-			this.initialize_game();
 			this.handle_input();
 			// npc.moveToNextGrid(timestamp);
 			this.envManager.renderEnvironment();
 			updateGameTime(timestamp);
 		} 
-		requestAnimationFrame(gameLoop);
+		requestAnimationFrame(this.game_loop.bind(this));
 	}
 	
 	handle_input() {
