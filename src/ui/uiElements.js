@@ -19,7 +19,15 @@ const uiElements = {
 		hud: null,
 		inventory: {
 			button: null,
-			
+		},
+		dialogue: {
+			container: null,
+			dialogueText: null,
+			speakerDisplay: null,
+			dialogueHistory: {
+				historyButton: null,
+				historyLog: null
+			}
 		},
 		miniMap: {}
 	},
@@ -40,7 +48,12 @@ const uiElements = {
 	},
 	
 	lazyloadGameUI() {
-		this.gameUI.gameEnv = document.getElementById('game-environment')
+		this.gameUI.gameEnv = document.getElementById('game-environment');
+		this.gameUI.dialogue.container = document.getElementById('dialogue-container');
+		this.gameUI.dialogue.speakerDisplay = document.getElementById('dialogue-speaker');
+		this.gameUI.dialogue.dialogueHistory.historyButton = document.getElementById('dialogue-historybtn');
+		this.gameUI.dialogue.dialogueHistory.historyLog = document.getElementById('dialogue-history-container');
+		this.gameUI.dialogue.dialogueText = document.getElementById('dialogue-text');
 	},
 	
 	lazyloadSettingsUI() {

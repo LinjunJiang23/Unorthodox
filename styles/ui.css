@@ -26,25 +26,13 @@ input[class*=select] {
  max-width: 25px;
 }
 
-.passage {
-  width: 1000px;
-}
-
 label {
     display: block; /* Ensure labels stack vertically */
     margin-top: 10px; /* Add some space between labels */
 }
 
-#header {
-    position: absolute;
-    top: 0; /* adjust as necessary */
-    width: 100%; /* make sure it spans the full width */
-    z-index: 10; /* ensure it is on top of other elements */
-    height: 50px;
-}
 #passages {
-    position: absolute;
-    top: 100px;
+    position: relative;
     width: 100%; /* make sure it spans the full width */
 }
 

@@ -112,42 +112,8 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   	width: 100%;
 }
 
-.character-settings {
-    padding: 50px;
-    position: relative;
-}
-
-#hud {
-	position: absolute;
-    bottom: 10px;
-    width: 50%;
-  	display: flex;
-  	align-items: center; /* Align items to the top */
-    justify-content: center; /* Space out items */
-}
-
 .inventory {
 	flex: 2;
-}
-
-#canvas-environment {
-	position: absolute;
-  	z-index: 1;
-}
-
-#canvas-characters {
-	position: absolute;
-    z-index: 2;
-}
-
-#canvas-interactable {
-	position: absolute;
-    z-index: 2;
-}
-
-#debugCanvas {
-	position: absolute;
-    z-index: 3;
 }
 
 #interact-prompt {
@@ -159,7 +125,12 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
   padding: 5px;
   border-radius: 5px;
 }
-</style><script role="script" id="twine-user-script" type="text/twine-javascript">async function loadScripts(scripts) {
+
+
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">UIBar.destroy();
+
+
+async function loadScripts(scripts) {
   for (const script of scripts) {
     //console.log("Loading script: ", script);
     await new Promise((resolve, reject) => {
@@ -177,35 +148,57 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 
 (async () => {
   try {
+    
+    await loadScripts(['./src/utils/promise.js',
+                       './src/utils/textProcessor.js',
+                       './misc/staticSources.js']);
+    
     await loadScripts(['./src/setting/settingManager.js',
-      				   './src/utils/promise.js',
-                       './src/utils/typewriter.js',
-                       './src/input/keyboard.js', 
+					   './src/setting/canvas.js']);
+    
+    await loadScripts(['./src/control/leaderController.js',
+                       './src/control/stateController.js',
+                       './src/control/movementController.js']);
+    
+    await loadScripts(['./src/input/keyboardHandler.js', 
+                       './src/input/mouseHandler.js',
                        './src/input/utils/keyboardHelpers.js', 
-                       './src/input/inputHandler.js',
-                       './src/ui/uiElements.js',                     
+                       './src/input/inputHandler.js']);
+    
+    await loadScripts(['./src/ui/uiElements.js',                     
                        './src/ui/uiManager.js',
-                       './src/ui/startScreenMenu.js',
-                       './src/asset/assetLoader.js',
-                       './src/render/canvas.js',
-                       './src/render/ctx.js',
-                       './src/render/renderManager.js',                       				'./src/world/worldManager.js', 
-    ]);
-
-    await loadScripts(['./src/scripts/node.js',
-                       './src/scripts/passage/tutorial-passages.js',
+                       './src/ui/startScreenMenu.js']);
+    
+    //Assets
+    await loadScripts(['./src/asset/assets.js',
+                       './src/asset/assetLoader.js']);
+    
+    //Render
+    await loadScripts(['./src/render/utils/renderHelpers.js',
+                       './src/render/utils/ctx.js',
+                       './src/render/renderManager.js',
+                       './src/render/renderEnv.js',
+                       './src/render/renderTeam.js']);
+    
+    //World
+    await loadScripts(['./src/world/worldManager.js']);
+	
+    //Scripts
+    await loadScripts(['./src/script/scriptManager.js',
+                       './src/script/gameScripts/tutorial-passages.js'
                        ]);
+    //Camera 
+    await loadScripts(['./src/camera/camera.js']);
     
-    await loadScripts(['./misc/staticSources.js']);
-    
-    await loadScripts(['./src/time/time.js',
-                       './src/camera/camera.js']);
-
+    //Time
+    await loadScripts(['./src/time/timeManager.js']);
+	
+    //Tilemap
     await loadScripts(['./src/tilemaps/tilemap.js',
                        './src/tilemaps/tilemapManager.js',
                        './src/tilemaps/test/testLayer.js']);
-
 	
+    //Campaign & Team
     await loadScripts(['./src/visibility/visibilityManager.js',
                        './src/campaign/campaignManager.js',
                        './src/team/subteam.js',
@@ -213,10 +206,11 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                        './src/team/utils/teamHelpers.js',
                        './src/utils/getDirection.js']);
         
-    // Load Physics Engine
+    //Environment
     await loadScripts([
       './src/environment/envManager.js']);
     
+    //Physics
     await loadScripts(['./src/physics/collision/collisionManager.js',
       './src/physics/physicsCollider/physicsCollider.js',
       './src/physics/triggerCollider/triggerCollider.js',
@@ -237,24 +231,22 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 
     await loadScripts(['./src/mechanisms/gameplay/dice/dice.js',
                   './src/mechanisms/gameplay/dice/modifier.js',
-                  './src/mechanisms/gameplay/display.js',
-                  './src/mechanisms/gameplay/dialog/dialog.js',
-                  './src/mechanisms/gameplay/dialog/choices.js', 
-                  './src/mechanisms/gameplay/dialog/dialogHistory.js']);
+                  './src/mechanisms/gameplay/display.js']);
+    
+    await loadScripts(['./src/dialogue/dialogueManager.js']);
     
     await loadScripts(['./src/mechanisms/pathfinding/aStarPathFinding.js',
                './src/mechanisms/action/actionManager.js',
-               './src/mechanisms/action/leader/walk/walkLeader.js',
-                './src/mechanisms/action/leader/run/runLeader.js',
                './src/mechanisms/action/drag/drag.js', 
                './src/mechanisms/action/drop/drop.js']);
     
-    await loadScripts(['./src/animation/baseAnimation.js',
-                  	   './src/animation/frames/playerFrames.js',
-                  	   './src/animation/frames/npcFrames.js',
-                  	   './src/animation/utils/getModel.js',
-                  	   './src/animation/companions/companionAnimation.js', 
-                  	   './src/animation/NPC/npcAnimation.js' ]);
+    await loadScripts(['./src/model/baseModel.js',
+                  	   './src/model/frames/playerFrames.js',
+                  	   './src/model/frames/npcFrames.js',
+                  	   './src/model/utils/getModel.js',
+                  	   './src/model/companions/companionModel.js', 
+                  	   './src/model/NPC/npcModel.js',
+                       './src/model/player/playerModel.js']);
     
     await  loadScripts(['./src/mechanisms/attributes/stat.js',
                     './src/mechanisms/attributes/traits.js']);
@@ -276,6 +268,8 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
                        './src/ui/overlay.js',
                        './src/ui/dialogBox.js']);
     
+    await loadScripts(['./src/logic/logicManager.js']);
+    
     await loadScripts(['./src/engine/engine.js']);
     
     console.log('All scripts & styles loaded successfully!');
@@ -290,11 +284,15 @@ importStyles('./styles/overlay.css',
              './styles/spriteSheets.css', 
              './styles/ui.css', 
              './styles/dialog.css', 
-             './styles/dialogHistory.css');
+             './styles/dialogHistory.css',
+             './styles/gameEnv.css',
+             './styles/canvas.css');
 
 
-</script><tw-tag name="widget" color="red"></tw-tag><tw-passagedata pid="1" name="StoryInit" tags="" position="75,275" size="100,100">&lt;&lt;dialog&gt;&gt;\
+</script><tw-tag name="widget" color="red"></tw-tag><tw-passagedata pid="1" name="Unorthodox" tags="" position="75,275" size="100,100">&lt;&lt;dialogue&gt;&gt;\
+\
 &lt;&lt;gameEnv&gt;&gt;\
+\
 &lt;&lt;startscreen&gt;&gt;\</tw-passagedata><tw-passagedata pid="2" name="Player Initialization" tags="" position="425,275" size="100,100">&lt;&lt;script&gt;&gt;
   setTimeout(appendRandomTraits, 100);
   $(document).one(&#39;:passagestart&#39;, (event) =&gt; {
@@ -660,16 +658,20 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
 \&lt;div class=&quot;dice-attempt&quot;&gt;
 \&lt;/div&gt;
 &lt;div class=&quot;link-next&quot;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="dialog" tags="widget" position="100,500" size="100,100">&lt;&lt;widget &quot;dialog&quot;&gt;&gt;\
-  &lt;div id=&quot;dialog-history-container&quot; class=&quot;hidden&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;\
-  &lt;div class=&quot;dialog-container&quot; style=&quot;display:none;&quot;&gt;\
-    &lt;span class=&quot;dialog-speaker&quot;&gt;&lt;/span&gt;\
-    &lt;div class=&quot;dialog-box&quot;&gt;\
-      &lt;img class=&quot;dialog-speaker-icon&quot; /&gt;\
-      &lt;div class=&quot;dialog-text&quot;&gt;&lt;/div&gt;\
-    &lt;/div&gt;\
-    &lt;a id=&quot;dialog-history-btn&quot;&gt;读取回忆&lt;/a&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="dialogue" tags="widget" position="100,500" size="100,100">&lt;&lt;widget &quot;dialogue&quot;&gt;&gt;\
+  &lt;div class=&quot;dialogue-container&quot; style=&quot;display:none;&quot; role=&quot;dialog&quot;&gt;\
+  &lt;span id=&quot;dialogue-speaker&quot; aria-label=&quot;Speaker Name&quot;&gt;&lt;/span&gt;\
+  &lt;img id=&quot;dialogue-box-background&quot; alt=&quot;Dialogue Background&quot;/&gt;\
+  &lt;div id=&quot;dialogue-canvas-speaker&quot;&gt;\
+    &lt;canvas id=&quot;canvas-portrait&quot; aria-label=&quot;Speaker Portrait&quot;&gt;&lt;/canvas&gt;\
   &lt;/div&gt;\
+  &lt;div id=&quot;dialogue-text&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;\
+  &lt;button id=&quot;dialogue-historybtn&quot; aria-controls=&quot;dialogue-history-container&quot;&gt;\
+    读取回忆\
+  &lt;/button&gt;\
+&lt;/div&gt;\
+&lt;div id=&quot;dialogue-history-container&quot; style=&quot;display: none;&quot; aria-hidden=&quot;true&quot;&gt;\&lt;/div&gt;\
+&lt;div id=&quot;dialogue-choice-container&quot; style=&quot;display: none&quot;&gt;
 &lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="7" name="Test2" tags="" position="750,275" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
 
 &lt;&lt;script&gt;&gt;
@@ -784,13 +786,13 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
 &lt;div id=&quot;game-environment&quot; style=&quot;display: none;&quot;&gt;\
     &lt;canvas id=&quot;canvas-env-weather&quot;&gt;&lt;/canvas&gt;\
     &lt;canvas id=&quot;canvas-env-lighting&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-specialized&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-particle&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-team&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-NPC&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-interactables&quot;&gt;&lt;/canvas&gt;\
-	&lt;canvas id=&quot;canvas-env-background&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-terrain&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-specialized&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-particle&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-team&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-NPC&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-interactables&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-terrain&quot; &gt;&lt;/canvas&gt;\
+	&lt;canvas id=&quot;canvas-env-background&quot; &gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
 &lt;div id=&quot;interact-prompt&quot; style=&quot;display: none&quot;&gt;press E to interact&lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="9" name="start-screen" tags="widget" position="300,500" size="100,100">&lt;&lt;widget &quot;startscreen&quot;&gt;&gt;\

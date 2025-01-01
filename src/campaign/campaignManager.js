@@ -2,10 +2,15 @@
 
 class CampaignManager {
 	
-	constructor(engine) {
-		if (engine instanceof Engine) this.engine = engine;
-		this.members = [this.engine.player];
+	constructor(logic) {
+		if (logic instanceof LogicManager) this.logic = logic;
+		this.members = [];
+		this.add_member(this.logic.player);
 		this.team = new TeamManager(this);
+	}
+	
+	update(timestamp) {
+		this.members.forEach(member => member.update(timestamp));
 	}
 	
 	add_member(member) {

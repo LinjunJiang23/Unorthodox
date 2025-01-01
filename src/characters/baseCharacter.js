@@ -1,6 +1,12 @@
 // src/characters/baseCharacter.js
 
 class BaseCharacter {
+	static validDirections = 
+	  ['left', 'up', 'right', 'down', 'upleft', 
+	   'upright', 'downleft', 'downright'];
+	static validModes = 
+	  ['normal', 'combat', 'stealth'];
+	
 	constructor() {
 		this.app;
 		this.model;
@@ -9,11 +15,24 @@ class BaseCharacter {
 		this.intro;
 		this.inventory;
 		this.stats;
+		this.currentFrame = 0;
+		this.mode = 'normal';
+		this.state;
+		this.action;
+		this.direction = 'down';
+		this.idleTime = 0;
+		this.lastUpdateTime = 0;
 	}
 	
 	set_intro(intro) {
 		if (typeof intro === "string") this.intro = intro;
-	}		
+	}
+
+	set_direction(direction) {
+		if (BaseCharacter.validDirections.includes(direction)) {
+			if (this.direction !== direction) this.direction = direction;
+		}
+	}	
 	
 	get_intro() {
 		return this.intro;
@@ -41,5 +60,25 @@ class BaseCharacter {
 	
 	get_actions() {
 		return this.actions;
+	}
+	
+	get_idleTime() {
+		return this.idleTime;
+	}
+	
+	get_currentFrame() {
+		return this.currentFrame;
+	}
+	
+	get_state() {
+		return this.state;
+	}
+	
+	get_action() {
+		return this.action;
+	}
+
+	get_direction() {
+		return this.direction;
 	}
 };

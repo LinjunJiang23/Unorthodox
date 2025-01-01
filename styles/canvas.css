@@ -1,0 +1,55 @@
+/* ./styles/canvas.css */
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure canvases fill their parent container */
+    height: 100%;
+    display: block;
+}
+
+#canvas-env-weather {
+	position: absolute;
+  	z-index: 109;
+}
+
+#canvas-env-lighting {
+	position: absolute;
+    z-index: 108;
+}
+
+#canvas-env-specialized {
+	position: absolute;
+    z-index: 107;
+}
+
+#canvas-env-particle {
+	position: absolute;
+    z-index: 106;
+}
+
+#canvas-env-team {
+	position: absolute;
+  	z-index: 105;
+}
+
+#canvas-env-NPC {
+	position: absolute;
+    z-index: 104;
+}
+
+#canvas-env-interactables {
+	position: absolute;
+ 	z-index: 103;
+}
+
+#canvas-env-terrain {
+	position: absolute;
+    z-index: 102;
+}
+
+#canvas-env-background {
+	position: absolute;
+    z-index: 100;
+}

@@ -4,29 +4,20 @@ class InputHandler {
 	constructor(engine) {
 		if (engine instanceof Engine)
 			this.engine = engine;
-		this.pressedKeys = new Set();
+			this.kbHandler = new KeyboardHandler(this);
+			this.mouseHandler = new MouseHandler(this);
+			
 	}
 	
-	handle_kb_control(timestamp) {
-		handleKBMove(this.pressedKeys, timestamp);
+	handle_input(event) {
+        if (event.type === "keydown" || event.type === "keyup") {
+            this.kbHandler[event.type === "keydown" ? "onKeyPress" : "onKeyRelease"](event);
+        }
 		
-	}
-	
-	handle_mouse_control(timestamp) {
-		
-	}
-	
-	add_keys(keys) {
-		keys.forEach(key =>
-			this.pressedKeys.add(key));
-	}
-	
-	remove_keys(keys) {
-		keys.forEach(key => {
-			if (this.pressedKeys.has(key)) 
-				this.pressedKeys.delete(key);
-		});
-	}
+		if (event.type === "click") {
+			this.mouseHandler.onMouseClick(event);
+		}
+    }
 	
 	
 };

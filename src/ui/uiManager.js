@@ -10,20 +10,26 @@ class UIManager {
 	
 	init() {
 		myPromise.then(() => this.uiElements.lazyloadStartscreen())
-		.then(() => this.startScreenMenu.initialize_listeners());
+		.then(() => this.startScreenMenu.initialize_listeners())
+		.then(() => this.uiElements.lazyloadGameUI());
+	}
+	
+	start_gameEnv() {
+		myPromise
+		.then(() => this.uiElements.lazyloadGameUI())
+		.then(() => {
+			this.hide_UI('startscreen');
+			this.show_UI('gameUI', 'gameEnv');
+		});
 	}
 	
 	show_UI(...keys) {
 		const current = this.get_UI(...keys);
 		if (current instanceof HTMLElement) {
-			current.style.transition = 'opacity 0.5s';
-			current.style.opacity = 1;
 			current.style.display = "block";
 		} else if (typeof current === "object") {
 			Object.values(current).forEach(ele => {
 				if (ele instanceof HTMLElement) {
-					ele.style.transition = 'opacity 0.5s';
-					ele.style.opacity = 1;
 					ele.style.display = "block";
 				}
 			});

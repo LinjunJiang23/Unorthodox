@@ -2,35 +2,11 @@
 
 class AssetLoader {
 	constructor() {
-		this.loadedAssets = {
-			startScreen: null, 
-			animation: {
-				characters: {
-						player: {
-							normal: {
-								hairStyle: null,
-								eyeShape: null,
-								baseBody: null,
-								outfit: null,
-								accessories: null,
-								weapon: null
-							},
-							combat: null,
-							stealth: null
-						},
-						companions: null,
-						NPCs: null
-				},
-			},
-			maps: {
-				testLayer: null
-			},
-			items: null,
-			envs: null
-		};
+		this.loadedAssets = assets;
 		this.load_images('./img/maps/testMap.png', 'maps', 'testLayer');
 		this.load_images('./img/animation/characters/player/chibi/normal/baseBody/baseBody1.png', 
 			'animation', 'characters', 'player', 'normal', 'baseBody');
+		this.load_images('./img/portraits/chenru/neutral.png', 'portraits', 'chenru', 'neutral');
 	}
 	
 	load_images(url, ...keys) {
@@ -64,15 +40,12 @@ class AssetLoader {
 		for (let key of keys) {
 			if (current[key]) {
 				current = current[key];
-				console.log(current);
 			} else {
 				console.log(`Key "${key}" not found in loadedAssets.`);
 				return; // Exit if a key is invalid
 			}
-		}
-		console.log('Found the asset: ', current);
-		
+		}		
 		return current;
 	}
 
-}
+};
