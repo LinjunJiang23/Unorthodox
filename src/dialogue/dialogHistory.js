@@ -40,8 +40,6 @@ class DialogHistoryManager {
 	}
 };
 
-let dialogHistory = new DialogHistoryManager();
-
 $(document).on('click', '#dialog-history-btn', () => {
 	console.log("triggered");
 	let historyVisible = $('#dialog-history-container').hasClass('hidden');

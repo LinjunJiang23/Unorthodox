@@ -37,7 +37,11 @@ class RenderEnv {
 		const captureY = this.engine.camera.maxY;
 			
 		const currentCTX = this.renderManager.ctx['environment']['background'];
-				
+		
+		if (!currentCTX) {
+			console.error("The background ctx isn't right!");
+		}
+		
 		const bgData = {
 			context: currentCTX, 
 			spriteSheet: bgSheets,

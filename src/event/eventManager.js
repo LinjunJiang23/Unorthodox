@@ -6,27 +6,28 @@
  * @property {Object} listeners
  */
 class EventManager {
-	constructor() {
+	constructor(logic) {
+		this.logic = logic;
 		this.listeners = {
 		};
 	}
 	
-	on(event, callback) {
-		if (!this.listeners[event]) {
-			this.listeners[event] = [];
+	on(e, callback) {
+		if (!this.listeners[e]) {
+			this.listeners[e] = [];
 		}
-		this.listeners[event].push(callback);
+		this.listeners[e].push(callback);
 	}
 	
-	off(event, callback) {
-		if (this.listeners[event]) {
-			this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+	off(e, callback) {
+		if (this.listeners[e]) {
+			this.listeners[e] = this.listeners[e].filter(cb => cb !== callback);
 		}
 	}
 	
-	trigger(event, payload) {
-		if (this.listeners[event]) {
-			this.listners[event].forEach(callback => callback(payload));
+	trigger(e, payload) {
+		if (this.listeners[e]) {
+			this.listeners[e].forEach(callback => callback(payload));
 		}
 	}
 	

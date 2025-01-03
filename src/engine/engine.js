@@ -12,6 +12,8 @@ class Engine {
 		this.inputHandler = new InputHandler(this);
 		this.assetLoader = new AssetLoader();
 		this.settings = new SettingManager();
+		this.logic = new LogicManager(this);
+		this.stateManager = new StateManager(this);
 		//this.saveSystem = new SaveSystem();
 		
 		myPromise.then(() => {
@@ -38,7 +40,7 @@ class Engine {
 			window.addEventListener("keyup", (event) => this.inputHandler.handle_input(event));
 			window.addEventListener('click', (event) => this.inputHandler.handle_input(event));
 		})
-		.then(() => this.logic = new LogicManager(this))
+		.then(() => this.logic.init())
 		.then(() => this.isGameRunning = true)
 		.then(() => this.game_loop(0));
 	}

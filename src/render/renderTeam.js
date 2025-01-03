@@ -16,6 +16,7 @@ class RenderTeam {
 			companion: companionsData
 		};
 		
+		
 		return teamData;
 		
 	}
@@ -34,6 +35,11 @@ class RenderTeam {
 		const curCanvasX = screenPos.x - (128/2);
 		const curCanvasY = screenPos.y - (128/2);
 		
+		if (!currentCTX) {
+			console.error("Team_CTX isn't right.");
+			return;
+		}
+		
 		
 		const playerData = {
 				context: currentCTX, 
@@ -47,7 +53,6 @@ class RenderTeam {
 				canvasWidth: 128,
 				canvasHeight: 128
 		};
-
 
 		
 		return playerData;

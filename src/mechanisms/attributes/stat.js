@@ -4,56 +4,56 @@
 /**
  * Stat manager
  */
-class StatManager {
+class Stat {
 	
 	constructor() {
-		this.core_stats = {
-			intelligence: 1,
-			charm: 1,
-			luck: 0,
-			constitution: 1,
-			resentment: 1,
-			insight: 1
-		};
+		this.intel = 1; //Abbreviation of INTELLIGENCE
+		this.cha = 1; //Abbreviation of CHARISMA
+		this.luck = 0; //Abbreviation of LUCK
+		this.con = 1; //Abbreviation of CONSTITUTION
+		this.res = 1; //Abbreviation of RESENTMENT
+		this.insight = 1;
+		this.breath = 1;
 		this.stat_point = 15;
-		this.derived_stats = {
-			lv: 1,
-			hp: 1,
-			mp: 0,
-			exp: 0
-		};
-		this.skill_point = 5;
+
+		this.lv = 1;
+		this.hp = 1;
+		this.mp = 0;
+		this.exp = 0;
+		this.sp = 5;
 	}
 	
-	setCoreStat(changedVal, type) {
-		if (this.core_stats.hasOwnProperty(type)) {
-            // Additional checks can be added depending on the type of stat
-            if (typeof this.core_stats[type] === typeof changedVal) {
-                this.core_stats[type] = changedVal;
-				console.log(`Property ${type} changed.`);
-            } else {
-                console.error(`Invalid type for ${type}. Expected ${typeof this[type]}, got ${typeof changedVal}.`);
-            }
-        } else {
-            console.error(`Property ${type} does not exist on Player.`);
-        }
-	}
-	
-	setStatPoint(points) {
-		if (typeof points === "number" && points > 0 && points < 1000) {
-			this.stat_point = points;
+	set_stat(type, val) {
+		if (this[type] && typeof val === "number") {
+			this[type] = val;
+		} else {
+			console.error(`Property ${type} does not exist on Player.`);
 		}
 	}
 	
-	getCoreStats() {
-		return this.core_stats;
+	get_core_stats() {
+		const coreStat = {
+			intel: this.intel,
+			cha: this.charm,
+			luck: this.luck,
+			con: this.con,
+			res: this.res,
+			insight: this.insight,
+			breath: this.breath,
+			statPoint: this.stat_point
+			
+		};
+		return coreStat;
 	}
 	
-	getStatPoint() {
-		return this.stat_point;
-	}
+	get_ess_stat() {
+		const ess_stat = {
+			lv: this.lv,
+			hp: this.hp,
+			mp: this.mp,
+			sp: this.skill_point
+		};
 		
-	getDerivedStats() {
-		return this.derived_stats;
+		return this.ess_stat;
 	}
 };

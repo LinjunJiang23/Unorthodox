@@ -12,8 +12,8 @@ class KeyboardHandler {
 	constructor(inputHandler) {
 		this.inputHandler = inputHandler;
 		this.listeners = {
-			press: {},
-			release: {}
+			press: [],
+			release: []
 		};
 		this.pressedKeys = new Set();
 	}
@@ -23,17 +23,13 @@ class KeyboardHandler {
 	}
 	
 	onKeyPress(event) {
-		 if (this.validKeys.has(event.code)) {
-            this.pressedKeys.add(event.code);
-            this.notifyListeners(event.code, "press");
-        }
+        this.pressedKeys.add(event.code);
+        this.notifyListeners(event.code, "press");
 	}
 	
 	onKeyRelease(event) {
-        if (this.validKeys.has(event.code)) {
-            this.pressedKeys.delete(event.code);
-            this.notifyListeners(event.code, "release");
-        }
+        this.pressedKeys.delete(event.code);
+        this.notifyListeners(event.code, "release");
     }
 
     addListener(type, listener) {

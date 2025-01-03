@@ -1,0 +1,59 @@
+#dialogue {
+	background-image: url("../img/placeholder.png");
+	width: 700px;
+	height: 500px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#canvas-portrait {
+	width: 20%;
+	height: 20%;
+	z-index: 20;
+}
+
+#dialogue-speaker {
+	padding-left: 50px; 
+	height: 25px;
+	width: 100px;
+}
+
+#dialogue-container {
+	padding: 10px;
+	height: 400px;
+	width: 400px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+#dialogue-text {
+	z-index: 32;
+	height: 200px;
+	width: 300px;
+}
+
+#dialogue-historybtn {
+	z-index: 30;
+}
+
+#dialogue-history-container {
+	max-height: 300px;
+	overflow-y: auto;
+	background-color: #f5f5f5;
+	padding: 10px;
+	border: 1px solid #ccc;
+	width: 100%;
+	z-index: 40;
+}
+
+.dialogue-history-text {
+	display: block;
+}
+
+.dialogue-history-speaker {
+	display: block;
+	overflow-y: scroll;
+}

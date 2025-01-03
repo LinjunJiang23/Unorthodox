@@ -1,7 +1,9 @@
-const tutorial_scripts = 
+const prologue_tutorial = 
 {
-	id: "tutorial_scripts",
+	script_ID: "prologue_tutorial",
 	default_speaker: null,
+	require_focus: true,
+	start_node: 'start',
 	nodes: {
 		"start": {
 		  dialogue: [
@@ -19,20 +21,28 @@ const tutorial_scripts =
 			  ]
 			}
 		  ],
-		  choice: [
-			{
-				text: "挣脱",
-				next_node: "struggle" 
-			},
-			{
-				text: "求饶",
-				next_node: "plead"
-			},
-			{
-				text: "认命",
-				next_node: "give up"
-			}
-		  ]
+		  choice: {
+		    options: [
+				{
+					text: "挣脱",
+					next_node: "struggle" 
+				},
+				{
+					text: "求饶",
+					next_node: "plead"
+				},
+				{
+					text: "认命",
+					next_node: "give up"
+				}
+			],
+			wait_too_long: [
+				{
+					text: "我沉默地同这人对视良久，对方不耐烦地抓着我衣领将我拎了起来。",
+					timeout_duration: 10000
+				}
+			]
+		  }
 		},
 		"struggle": {
 		  dialogue: [
@@ -46,37 +56,45 @@ const tutorial_scripts =
 		  ],
 		  conditions: [
 			{
-				check: [
-				  {
-					type: "stat_check",
-					attribute: "constitution",
-					operator: ">=",
-					value: 10
-				  },
-				  {
-				    type: "stat_check",
-					attribute: "constitution",
-					operator: ">=",
-					value: 10
-				  }
-				],
-				consequences: {
-					on_success: "functionManager.increase_friendliness(100)",
-					on_failure: "functionManager.increase_friendliness(10)"
+				evaluate: {
+					type: 'parallel',
+					success_threshold: 2,
+					fail_threshold: 0,
+					check: [ 
+						{
+							type: "stat_check",
+							attribute: "constitution",
+							operator: ">=",
+							value: 10
+						},
+						{
+							type: "stat_check",
+							attribute: "constitution",
+							operator: ">=",
+							value: 10
+						}
+					]
 				},
+				action: "functionManager.increase_friendliness(100)",
 				next_node: "struggle_success"
 			},
 			{
-				check: {
-					type: "relationship_check",
-					attribute: "friendliness",
-					operator: ">=",
-					value: 10,
+				evaluate: {
+					check: {
+						type: "relationship_check",
+						attribute: "friendliness",
+						operator: ">=",
+						value: 10,
+					},
 				},
+				action: 'relationship',
 				next_node: "struggle_success"
 			},
 			{
-				check: "true", 
+				evaluate: {
+					check: "true"
+				},
+				action: "functionManager.increase_friendliness(10)",
 				next_node: "struggle_fail"
 			}
 		  ]

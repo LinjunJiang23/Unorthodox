@@ -148,128 +148,105 @@ async function loadScripts(scripts) {
 
 (async () => {
   try {
+    //Utils & Static Sources
+    await loadScripts(['./src/utils/promise.js', './src/utils/textProcessor.js', './misc/staticSources.js']);
     
-    await loadScripts(['./src/utils/promise.js',
-                       './src/utils/textProcessor.js',
-                       './misc/staticSources.js']);
+    //Setting Management
+    await loadScripts(['./src/setting/settingManager.js', './src/setting/canvas.js']);
     
-    await loadScripts(['./src/setting/settingManager.js',
-					   './src/setting/canvas.js']);
+    //State Management
+    await loadScripts(['./src/state/stateManager.js']);
     
-    await loadScripts(['./src/control/leaderController.js',
-                       './src/control/stateController.js',
-                       './src/control/movementController.js']);
+    //Gameplay Control
+    await loadScripts(['./src/control/leaderController.js', './src/control/stateController.js', './src/control/movementController.js']);
     
-    await loadScripts(['./src/input/keyboardHandler.js', 
-                       './src/input/mouseHandler.js',
-                       './src/input/utils/keyboardHelpers.js', 
-                       './src/input/inputHandler.js']);
+    //Input Handler
+    await loadScripts(['./src/input/keyboardHandler.js', './src/input/mouseHandler.js', './src/input/utils/keyboardHelpers.js', './src/input/inputHandler.js']);
     
-    await loadScripts(['./src/ui/uiElements.js',                     
-                       './src/ui/uiManager.js',
-                       './src/ui/startScreenMenu.js']);
+    //Event Management;
+    await loadScripts(['./src/event/eventManager.js']);
     
-    //Assets
-    await loadScripts(['./src/asset/assets.js',
-                       './src/asset/assetLoader.js']);
+    //Assets & AssetLoader
+    await loadScripts(['./src/asset/assets.js', './src/asset/assetLoader.js']);
     
-    //Render
-    await loadScripts(['./src/render/utils/renderHelpers.js',
-                       './src/render/utils/ctx.js',
-                       './src/render/renderManager.js',
-                       './src/render/renderEnv.js',
+    //UI Management
+    await loadScripts(['./src/ui/uiElements.js', './src/ui/uiManager.js', './src/ui/startScreenMenu.js']);
+    
+    //Render Management
+    await loadScripts(['./src/render/utils/renderHelpers.js', './src/render/utils/ctx.js', './src/render/renderManager.js', './src/render/renderEnv.js',
                        './src/render/renderTeam.js']);
     
-    //World
-    await loadScripts(['./src/world/worldManager.js']);
-	
-    //Scripts
-    await loadScripts(['./src/script/scriptManager.js',
-                       './src/script/gameScripts/tutorial-passages.js'
-                       ]);
+    //Game Scripts
+    await loadScripts(['./src/script/gameScripts/tutorial-passages.js', './src/script/gameScripts/allScripts.js', './src/script/scriptManager.js']);
+    
+    //Condition Management
+    await loadScripts(['./src/condition/conditionManager.js']);
+
+    //Dialogue Management
+    await loadScripts(['./src/dialogue/dialogueManager.js']);
+
     //Camera 
     await loadScripts(['./src/camera/camera.js']);
-    
+    	
     //Time
     await loadScripts(['./src/time/timeManager.js']);
 	
     //Tilemap
-    await loadScripts(['./src/tilemaps/tilemap.js',
-                       './src/tilemaps/tilemapManager.js',
-                       './src/tilemaps/test/testLayer.js']);
+    await loadScripts(['./src/tilemaps/tilemap.js', './src/tilemaps/tilemapManager.js', './src/tilemaps/test/testLayer.js']);
 	
+    //World
+    await loadScripts(['./src/world/worldManager.js']);
+    
+    //Visibility
+    await loadScripts(['./src/visibility/visibilityManager.js']);
+    
     //Campaign & Team
-    await loadScripts(['./src/visibility/visibilityManager.js',
-                       './src/campaign/campaignManager.js',
-                       './src/team/subteam.js',
-                       './src/team/teamManager.js',
-                       './src/team/utils/teamHelpers.js',
+    await loadScripts(['./src/campaign/campaignManager.js', './src/team/subteam.js', './src/team/teamManager.js', './src/team/utils/teamHelpers.js',
                        './src/utils/getDirection.js']);
         
-    //Environment
-    await loadScripts([
-      './src/environment/envManager.js']);
+    //Environment Management
+    await loadScripts(['./src/environment/envManager.js']);
     
     //Physics
-    await loadScripts(['./src/physics/collision/collisionManager.js',
-      './src/physics/physicsCollider/physicsCollider.js',
-      './src/physics/triggerCollider/triggerCollider.js',
+    await loadScripts(['./src/physics/collision/collisionManager.js', './src/physics/physicsCollider/physicsCollider.js', './src/physics/triggerCollider/triggerCollider.js',
       './src/physics/triggerCollider/triggerManager.js'
     ]);
+    
+    //Combat Management
+    await loadScripts(['./src/mechanisms/combat/combat.js', './src/mechanisms/combat/combatManager.js']);
 
-    // Load Added Mechanisms Here 
-    await loadScripts(['./src/mechanisms/map/map.js', 
-                       './src/mechanisms/combat/combat.js',
-                       './src/mechanisms/combat/combatManager.js']);
+    //Character Model
+    await loadScripts(['./src/model/baseModel.js', './src/model/frames/playerFrames.js', './src/model/frames/npcFrames.js', './src/model/utils/getModel.js',
+                  	   './src/model/companions/companionModel.js', './src/model/NPC/npcModel.js', './src/model/player/playerModel.js']);
+    
+    //Object Apperance Management
+    await loadScripts(['./src/mechanisms/appearance/baseAppManager.js', './src/mechanisms/appearance/player/playerAppManager.js', 
+                       './src/mechanisms/appearance/companions/companionAppManager.js', './src/mechanisms/appearance/NPC/npcAppManager.js']);
+    
+    //Load Added Mechanisms Here 
+    await loadScripts(['./src/mechanisms/map/map.js']);
     
     await loadScripts(['./src/mechanisms/factions/faction.js']);
     
-    await loadScripts(['./src/mechanisms/appearance/baseAppManager.js', 
-                       './src/mechanisms/appearance/player/playerAppManager.js', 
-                        './src/mechanisms/appearance/companions/companionAppManager.js', 
-                        './src/mechanisms/appearance/NPC/npcAppManager.js']);
-
-    await loadScripts(['./src/mechanisms/gameplay/dice/dice.js',
-                  './src/mechanisms/gameplay/dice/modifier.js',
-                  './src/mechanisms/gameplay/display.js']);
+    await loadScripts(['./src/mechanisms/gameplay/dice/dice.js', './src/mechanisms/gameplay/dice/modifier.js', './src/mechanisms/gameplay/display.js']);
     
-    await loadScripts(['./src/dialogue/dialogueManager.js']);
+    await loadScripts(['./src/mechanisms/pathfinding/aStarPathFinding.js', './src/mechanisms/action/actionManager.js', './src/mechanisms/action/drag/drag.js', 
+                       './src/mechanisms/action/drop/drop.js']);
     
-    await loadScripts(['./src/mechanisms/pathfinding/aStarPathFinding.js',
-               './src/mechanisms/action/actionManager.js',
-               './src/mechanisms/action/drag/drag.js', 
-               './src/mechanisms/action/drop/drop.js']);
+    await  loadScripts(['./src/mechanisms/attributes/stat.js', './src/mechanisms/attributes/traits.js']);
     
-    await loadScripts(['./src/model/baseModel.js',
-                  	   './src/model/frames/playerFrames.js',
-                  	   './src/model/frames/npcFrames.js',
-                  	   './src/model/utils/getModel.js',
-                  	   './src/model/companions/companionModel.js', 
-                  	   './src/model/NPC/npcModel.js',
-                       './src/model/player/playerModel.js']);
-    
-    await  loadScripts(['./src/mechanisms/attributes/stat.js',
-                    './src/mechanisms/attributes/traits.js']);
-    
-    await loadScripts(['./src/mechanisms/resources/item/item.js', 
-                     './src/mechanisms/resources/item/itemTag.js', 
-                     './src/mechanisms/resources/inventory/inventory.js']);
-    
-    await loadScripts(['./src/characters/NPC/utils.js', 
-                       './src/characters/baseCharacter.js',
-                      './src/characters/player/player.js',
-                      './src/characters/NPC/npc.js']);
+    await loadScripts(['./src/mechanisms/resources/item/item.js', './src/mechanisms/resources/item/itemTag.js', './src/mechanisms/resources/inventory/inventory.js']);
+        
+    //Character
+    await loadScripts(['./src/characters/NPC/utils.js', './src/characters/baseCharacter.js', './src/characters/player/player.js', './src/characters/NPC/npc.js']);
 
   	//UI
-    await loadScripts(['./src/ui/hud.js',
-                       './src/ui/map/miniMap.js',
-                       './src/ui/map/mapUI.js',
-                       './src/ui/header.js',
-                       './src/ui/overlay.js',
-                       './src/ui/dialogBox.js']);
+    await loadScripts(['./src/ui/hud.js', './src/ui/map/miniMap.js', './src/ui/map/mapUI.js', './src/ui/header.js', './src/ui/overlay.js', './src/ui/dialogBox.js']);
     
+    //Game Logic
     await loadScripts(['./src/logic/logicManager.js']);
     
+    //Game Engine
     await loadScripts(['./src/engine/engine.js']);
     
     console.log('All scripts & styles loaded successfully!');
@@ -280,13 +257,7 @@ async function loadScripts(scripts) {
     
 
 //Styles
-importStyles('./styles/overlay.css', 
-             './styles/spriteSheets.css', 
-             './styles/ui.css', 
-             './styles/dialog.css', 
-             './styles/dialogHistory.css',
-             './styles/gameEnv.css',
-             './styles/canvas.css');
+importStyles('./styles/overlay.css', './styles/spriteSheets.css', './styles/ui.css', './styles/dialogue.css', './styles/gameEnv.css', './styles/canvas.css');
 
 
 </script><tw-tag name="widget" color="red"></tw-tag><tw-passagedata pid="1" name="Unorthodox" tags="" position="75,275" size="100,100">&lt;&lt;dialogue&gt;&gt;\
@@ -659,20 +630,24 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
 \&lt;/div&gt;
 &lt;div class=&quot;link-next&quot;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="dialogue" tags="widget" position="100,500" size="100,100">&lt;&lt;widget &quot;dialogue&quot;&gt;&gt;\
-  &lt;div class=&quot;dialogue-container&quot; style=&quot;display:none;&quot; role=&quot;dialog&quot;&gt;\
+&lt;div id=&quot;dialogue&quot; style=&quot;display:none;&quot;&gt;\
+  &lt;div id=&quot;dialogue-container&quot; role=&quot;dialog&quot;&gt;\
   &lt;span id=&quot;dialogue-speaker&quot; aria-label=&quot;Speaker Name&quot;&gt;&lt;/span&gt;\
   &lt;img id=&quot;dialogue-box-background&quot; alt=&quot;Dialogue Background&quot;/&gt;\
   &lt;div id=&quot;dialogue-canvas-speaker&quot;&gt;\
     &lt;canvas id=&quot;canvas-portrait&quot; aria-label=&quot;Speaker Portrait&quot;&gt;&lt;/canvas&gt;\
+    &lt;div id=&quot;dialogue-text&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;\
   &lt;/div&gt;\
-  &lt;div id=&quot;dialogue-text&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;\
   &lt;button id=&quot;dialogue-historybtn&quot; aria-controls=&quot;dialogue-history-container&quot;&gt;\
     读取回忆\
   &lt;/button&gt;\
 &lt;/div&gt;\
-&lt;div id=&quot;dialogue-history-container&quot; style=&quot;display: none;&quot; aria-hidden=&quot;true&quot;&gt;\&lt;/div&gt;\
-&lt;div id=&quot;dialogue-choice-container&quot; style=&quot;display: none&quot;&gt;
-&lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="7" name="Test2" tags="" position="750,275" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
+&lt;div id=&quot;dialogue-history-container&quot; style=&quot;display: none;&quot; aria-hidden=&quot;true&quot;&gt;\
+&lt;div id=&quot;dialogue-history-log&quot;&gt;&lt;/div&gt;&lt;div id=&quot;dialogue-history-closebtn&quot;&gt;&lt;/div&gt;\
+&lt;/div&gt;\
+&lt;div id=&quot;dialogue-choice-container&quot; style=&quot;display: none&quot;&gt;&lt;/div&gt;\
+&lt;/div&gt;
+&lt;&lt;/widget&gt;&gt;\ssss</tw-passagedata><tw-passagedata pid="7" name="Test2" tags="" position="750,275" size="100,100">&lt;canvas id=&quot;gameCanvas&quot; width=&quot;800&quot; height=&quot;600&quot;&gt;&lt;/canvas&gt;
 
 &lt;&lt;script&gt;&gt;
     setTimeout(() =&gt; { const canvas = document.getElementById(&#39;gameCanvas&#39;);

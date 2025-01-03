@@ -13,14 +13,16 @@ class Player extends BaseCharacter {
 		this.tag = 'player';
 		this.lname = "左";
 		this.fname = "汶";
+		this.state = "idle";
+		this.action = "rest";
+		this.composure = 100;
 		this.intro = 
-			"We still recognize ourselves in the mirrors. How fascinating is that?";
+			`Still familiar with the silhouette in mirror. How fascinating is that?
+			镜中人仍熟悉，何等精妙？`;
     }
 	
 	init() {
-		this.state = "idle";
-		this.action = "rest";
-		this.stats = new StatManager();
+		this.stats = new Stat();
 		this.inventory = new Inventory([]);
 		this.traits = new CharacterTraitManager([
 			new Trait('老大', '陈桥的老大', true, 'relationship', 100),
@@ -28,8 +30,7 @@ class Player extends BaseCharacter {
 		]);
 		this.app = new PlayerAppManager(this);
 		this.model = new PlayerModel(this);
-		this.stabilization = 100;
-		this.actions = new ActionManager(this);
+		this.actions = new ActionManager(this);		
 	}
 	
 	update(timestamp) {
@@ -104,14 +105,6 @@ class Player extends BaseCharacter {
 
 	get_name() {
 		return {lname: this.lname, fname: this.fname};
-	}
-	
-	get_CoreStats() {
-		return this.stats.getCoreStats();
-	}
-	
-	get_DerivedStats() {
-		return this.stats.getDerivedStats();
 	}
 	
 	get_position() {

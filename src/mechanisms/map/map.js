@@ -232,9 +232,3 @@ realm_taixu.addSubElement(location_foggyforest);
 worldMap.addRealm(realm_common);
 worldMap.addRealm(realm_taixu);
 worldMap.addRealm(realm_demonic);
-
-//TESTING PURPOSES ONLY, MAKE SURE TO DELETE AFTER DEBUG
-realm_common.unlock();
-location_laorange.unlock();
-point_rongcity.unlock();
-worldMap.travelTo('荣城');

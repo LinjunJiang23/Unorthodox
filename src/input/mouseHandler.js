@@ -12,8 +12,12 @@ class MouseHandler {
 	
 	onMouseClick(event) {
 		const ele = event.target;
-		if (this.listeners.click[ele]) 
-			this.notifyListeners('click', ele);
+		console.log("This is the mouse click target: ", ele);
+		console.log("This is the event: ", event);
+		const key = ele.id || ele.className;
+
+		if (this.listeners.click[key]) 
+			this.notifyListeners('click', key);
 	}
 	
 	onMouseHover(event) {
@@ -28,16 +32,16 @@ class MouseHandler {
 			this.notifyListeners('hover', ele);
 	}
 	
-	addListeners(type, ele, listener) {
-		if (!this.listeners[type][ele] && this.listeners[type]) {
-			this.listeners[type][ele] = [];  // Initialize the array for this element if not already initialized
+	addListeners(type, key, listener) {
+		if (!this.listeners[type][key] && this.listeners[type]) {
+			this.listeners[type][key] = [];  // Initialize the array for this element if not already initialized
 		}
-		this.listeners[type][ele].push(listener);
+		this.listeners[type][key].push(listener);
 	}
 	
-	removeListeners(type, ele, listener) {
-		if (this.listeners[type][ele]) {
-			this.listeners[type][ele] = this.listeners[ele].filter(listener => listener !== listener);
+	removeListeners(type, key, listener) {
+		if (this.listeners[type][key]) {
+			this.listeners[type][key] = this.listeners[key].filter(listener => listener !== listener);
 		}
 	}
 	

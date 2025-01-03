@@ -13,8 +13,11 @@ const TextProcessor = {
 	str: '',
 	
 	processText(textObject, ele) {
-		const { text: str, noClear = false, effect, type } = textObject;
 		
+		const str = textObject.text;
+		const effect = textObject.effect;
+		const type = textObject.type;
+				
 		if (effect) {
 			this.applyEffects(ele, textObject.effect);
 		} else {
@@ -23,28 +26,24 @@ const TextProcessor = {
 		
 		
 		if (type) {
-			this.applyTypeWrite(str, ele, type, noClear);
+			this.displayPlainText(str, ele);
 		} else {
-			this.displayPlainText(str, ele, noClear);
+			this.applyTypeWrite(str, ele, type);
 		}
 	},
 	
-	displayPlainText(str, ele, noClear) {
-		if (!noClear) this.clearTexts(ele);
-		
-		ele.textContent += str;
+	displayPlainText(str, ele) {		
+		ele.textContent = str;
 	},
 	
-	typeWrite(str, speed, ele, noClear = false) {
+	typeWrite(str, speed, ele) {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
-		
+				
 		this.str = str;
 		this.isTyping = true;
 		this.type_index = 0;
-
-		if (!noClear) this.clearTexts(ele);
 		
 		this.interval = setInterval(() => {
 		  
@@ -60,15 +59,12 @@ const TextProcessor = {
 		}, speed);
 	},
 	
-	clearTexts(ele) {
-		ele.textContent = '';
-	},
-	
 	finishType(ele) {
 	  if (this.type_index < this.str.length) {
 		clearInterval(this.interval);
-		this.isTyping = false;
-		this.displayPlainText(this.str, ele);
+		myPromise
+		.then(() => this.displayPlainText(this.str, ele))
+		.then(() => this.isTyping = false);
 	  }
     },
 	
@@ -83,19 +79,20 @@ const TextProcessor = {
 	},
 	
 	removeEffects(ele) {
-		ele.classList.remove('shake-effect');
-		ele.style.color = "black";
+		if (ele)
+		{	ele.classList.remove('shake-effect');
+			ele.style.color = "black";
+		}
 	},
 	
-	applyTypeWrite(str, ele, type, noClear) {
+	applyTypeWrite(str, ele, type) {
 		const speeds = {
-			normal: 60,
 			slow: 500,
 			fast: 1,
 		};
 
 		const speed = speeds[type] || 60;  // Default to normal speed
-		this.typeWrite(str, speed, ele, noClear);
+		this.typeWrite(str, speed, ele);
 	}
 	
 };

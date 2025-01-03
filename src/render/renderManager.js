@@ -36,10 +36,10 @@ class RenderManager {
 	render_sprite(ctx, spriteSheet, imageX, imageY, 
 	  captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight) {
 			
-		if (!ctx) {
-			console.error("Invalid context passed to render_sprite");
-			return;
-		}
+		// if (!ctx) {
+			// console.error("Invalid context passed to render_sprite");
+			// return;
+		// }
 		
 		ctx.drawImage(spriteSheet, imageX, imageY, 
 		  captureWidth, captureHeight, canvasX, canvasY, 
@@ -60,8 +60,8 @@ class RenderManager {
 		this.clear_sprite(this.ctx['environment']['team'], 
 			this.ctx['environment']['team'].canvas.width, this.ctx['environment']['team'].canvas.height);
 		
-		// Object.values(teamData).forEach(data => {
-		// this.render_datas(teamData);
+		Object.values(teamData).forEach(data => 
+		  this.render_data(data));
 	}
 	
 	render_data(data) {
@@ -77,11 +77,11 @@ class RenderManager {
 	
 	render_speaker_portrait(speaker) {
 		if (speaker !== null) {
-			const sheets = this.assetLoader.get_assets(this.speaker.character, this.speaker.portrait);
+			const sheets = this.assetLoader.get_assets(speaker.character, speaker.portrait);
 			const currentCTX = 
 				this.ctx['dialogue']['portrait'];
 			
-			this.render_sprite(currentCTX, sheets, 0, 0, 2480, 3508,
+			this.render_sprite(currentCTX, sheets, 0, 0, 2480, 3508, 0, 0,
 				currentCTX.canvas.width, currentCTX.canvas.height);
 		}
 	}

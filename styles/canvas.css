@@ -9,47 +9,49 @@ canvas {
     display: block;
 }
 
+
+
 #canvas-env-weather {
 	position: absolute;
-  	z-index: 109;
+  	z-index: 19;
 }
 
 #canvas-env-lighting {
 	position: absolute;
-    z-index: 108;
+    z-index: 18;
 }
 
 #canvas-env-specialized {
 	position: absolute;
-    z-index: 107;
+    z-index: 17;
 }
 
 #canvas-env-particle {
 	position: absolute;
-    z-index: 106;
+    z-index: 16;
 }
 
 #canvas-env-team {
 	position: absolute;
-  	z-index: 105;
+  	z-index: 15;
 }
 
 #canvas-env-NPC {
 	position: absolute;
-    z-index: 104;
+    z-index: 14;
 }
 
 #canvas-env-interactables {
 	position: absolute;
- 	z-index: 103;
+ 	z-index: 13;
 }
 
 #canvas-env-terrain {
 	position: absolute;
-    z-index: 102;
+    z-index: 12;
 }
 
 #canvas-env-background {
 	position: absolute;
-    z-index: 100;
+    z-index: 10;
 }

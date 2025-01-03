@@ -1,16 +1,14 @@
 // scripts/mechanisms/gamePlay/camera/camera.js
 
 /**
- * Singleton class serves as viewport
- * Camera centers around leader
- * MAY IMPLEMENT PROPS THAT ALLOW PLAYER TO MOVE CAMERA IN THE FUTURE
+ * @class
  * @property x
  * @property y
  * @property minX
  * @property minY
  * @property maxX
  * @property maxY
- * @property zoomFactor - default 7.5 zoomFactor
+ * @property zoomFactor - default 5 zoomFactor
  */
 class Camera {
 	
@@ -27,7 +25,6 @@ class Camera {
 		this.zoomFactor = 5;
 	}
 	
-	// Converts map coordinates to screen coordinates
 	map_to_screen(mapPos) {
 		const pos = { 
 			x: ((mapPos.x - this.x) * this.zoomFactor), 
@@ -36,7 +33,6 @@ class Camera {
 		return pos;
 	}
 
-	// Converts screen coordinates to map coordinates
 	screen_to_map(screenPos) {
 		return { 
 		  x: (screenPos.x + this.x) / this.zoomFactor, 
@@ -44,33 +40,60 @@ class Camera {
 		};
 	}
 
-	//Centers the camera on a specific point
 	center_camera_on(pos) {
-		this.x = pos.x - this.maxX / 2 ;
+		this.x = pos.x - this.maxX / 2;
 		this.y = pos.y - this.maxY / 2;
 		this.set_camera_bounds();
 	}
 
-	//
 	set_camera_bounds() {
 		this.x = Math.max(this.minX, Math.min(this.x, this.maxX));
 		this.y = Math.max(this.minY, Math.min(this.y, this.maxY));
 	}
-
-	//
+	
 	move_camera_to(pos, speed = 1) {
-		let newX = this.x + pos.x * speed;
-		let newY = this.y + pos.y * speed;
-		newX <= -(this.maxX / 2) ? this.x = -(this.maxX / 2) : this.x = newX;
-		newY <= -(this.maxY / 2) ? this.y = -(this.maxY / 2) : this.y = newY;
+		this.x += (pos.x - this.x) * speed;
+		this.y += (pos.y - this.y) * speed;
+		this.set_camera_bounds();
 	}
 	
-	//
 	reset_camera() {
 		this.centerCameraOn(getLeader().physics);
 	}
 	
-	//
+	follow_character(character) {
+		const offsetX = 10;
+		const offsetY = 5;
+		const newX = character.model.physics.x - offsetX - this.maxX / 2;
+		const newY = character.model.physics.y - offsetY - this.maxY / 2;
+		this.center_camera_on({
+			x: newX,
+			y: newY
+		});
+	}
+	
+	shake(intensity, duration) {
+		const originalPos = this.get_position();
+		let timeLeft = duration;
+		const shakeInterval = setInterval(() => {
+			if (timeLeft <= 0) {
+				clearInterval(shakeInterval);
+				this.x = originalPos.x;
+				this.y = originalPos.y;
+			} else {
+				this.x += (Math.random() - 0.5) * intensity;
+				this.y += (Math.random() - 0.5) * intensity;
+				timeLeft -= 100;
+			}
+		}, 100);
+	}
+	
+	move_camera_smooth_damp(targetX, targetY, smoothingFactor) {
+		this.x += (targetX - this.x) * smoothingFactor;
+		this.y += (targetY - this.y) * smoothingFactor;
+	}
+
+	
 	get_position() {
 		return {x: this.x, y: this.y};
 	}

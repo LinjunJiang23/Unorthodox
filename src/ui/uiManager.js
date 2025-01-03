@@ -27,9 +27,9 @@ class UIManager {
 		const current = this.get_UI(...keys);
 		if (current instanceof HTMLElement) {
 			current.style.display = "block";
-		} else if (typeof current === "object") {
+		} else if (current && typeof current === "object") {
 			Object.values(current).forEach(ele => {
-				if (ele instanceof HTMLElement) {
+				if (ele instanceof HTMLElement && ele.style.display !== "block") {
 					ele.style.display = "block";
 				}
 			});
@@ -38,13 +38,13 @@ class UIManager {
 		}
 	}
 	
-	hide_UI(keys) {
-		const current = this.get_UI(keys);
+	hide_UI(...keys) {
+		const current = this.get_UI(...keys);
 		if (current instanceof HTMLElement) {
 			current.style.display = "none";
 		} else if (typeof current === "object") {
 			Object.values(current).forEach(ele => {
-				if (ele instanceof HTMLElement) {
+				if (ele instanceof HTMLElement && ele.style.display !== "none") {
 					ele.style.display = "none";
 				}
 			});
@@ -53,31 +53,38 @@ class UIManager {
 		}
 	}
 	
-	update_UI(elementName, callback) {
-		callback(this.uiElements[elementName]);
-	}
 	
 	get_UI(...keys) {
+		if (!this.uiElements) {
+			console.error('uiElements is not initialized or is null.');
+			return null;
+		}
+
 		let current = this.uiElements;
-    
-		// Traverse the keys step by step
-		for (let key of keys) {
+		const keyArray = Array.isArray(keys) ? keys : Object.values(keys);
+
+		for (let key of keyArray) {
 			if (current[key]) {
 				current = current[key];
 			} else {
 				console.warn(`Key "${key}" not found in uiElements.`);
-				return; // Exit if a key is invalid
+				return null; // Return null if a key is invalid
 			}
 		}
-		
 		return current;
 	}
+
+
 	
-	addButtonListeners(divs, callbacks) {
-        Object.entries(divs).forEach(([key, div]) => {
-            div.addEventListener("click", callbacks[key]);
-        });
-    }
+	eleOnShow(...keys) {
+		const ele = this.get_UI(...keys);
+		if (ele)
+		return (ele.display !== "none") ? true : false;
+	}
+	
+	update_UI(elementName, callback) {
+		callback(this.uiElements[elementName]);
+	}
 };
 
 // Start Screen Button Callbacks
