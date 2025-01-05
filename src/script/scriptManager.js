@@ -9,20 +9,16 @@ class ScriptManager {
 		
 		this.dialogueManager = new DialogueManager(this.eventManager);
 		this.currentChunkIndex = 0;
+		this.currentScript;
 		this.default_speaker;
-		this.initiate_listeners();
+		this.timeoutTimers = {};
 		this.eventManager.logic.engine.ui.uiElements.lazyloadDialogueContainer();		
 		this.dialogueManager.initiate_listeners();
-		
-		this.timeoutTimers = {};
+		this.initiate_listeners();
+
 	}
 	
-	
-	
-	run(stage, scriptType, scriptID, startingNodeID) {
-		this.currentScript = allScripts.findScript(stage, scriptType, scriptID);
-		if (!this.currentScript) 
-			console.error(`Stage ${stage} scriptType ${scriptType} with id ${scriptID} not found!`);
+	run(startingNodeID) {
 		this.default_speaker = this.currentScript.default_speaker;
 		if (this.currentScript.nodes[startingNodeID]) {
 			this.execute_node(this.currentScript.nodes[startingNodeID]);
@@ -98,7 +94,7 @@ class ScriptManager {
 	}
 	
 	triggerWaitTooLong(waitTooLong) {
-		this.curTimeoutIndex
+		this.curTimeoutIndex;
 		const newTimeout = waitToolong
 	}
 	
@@ -108,6 +104,16 @@ class ScriptManager {
 			// Add logic to determine which script to run for the NPC
 			// this.run_script(payload.npc, payload.initiator);
 			//this.run_script(payload.npc, payload.initiator);
+		});
+		this.eventManager.on('runScript', (payload) => {
+			const {stage, scriptType, scriptID, startingNodeID} = payload;
+			const foundScript = allScripts.findScript(stage, scriptType, scriptID);
+			if (!foundScript) 
+				console.error(`Stage ${stage} scriptType ${scriptType} with id ${scriptID} not found!`);
+			if (this.currentScript !== foundScript) {
+				this.currentScript = foundScript;
+				this.run(startingNodeID);
+			}
 		});
 	}
 	

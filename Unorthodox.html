@@ -223,23 +223,33 @@ async function loadScripts(scripts) {
     await loadScripts(['./src/mechanisms/appearance/baseAppManager.js', './src/mechanisms/appearance/player/playerAppManager.js', 
                        './src/mechanisms/appearance/companions/companionAppManager.js', './src/mechanisms/appearance/NPC/npcAppManager.js']);
     
-    //Load Added Mechanisms Here 
+    //World location system 
     await loadScripts(['./src/mechanisms/map/map.js']);
     
+    //Faction
     await loadScripts(['./src/mechanisms/factions/faction.js']);
     
+    //Dice Rolling System
     await loadScripts(['./src/mechanisms/gameplay/dice/dice.js', './src/mechanisms/gameplay/dice/modifier.js', './src/mechanisms/gameplay/display.js']);
     
+    //Pathfinding & AI
     await loadScripts(['./src/mechanisms/pathfinding/aStarPathFinding.js', './src/mechanisms/action/actionManager.js', './src/mechanisms/action/drag/drag.js', 
                        './src/mechanisms/action/drop/drop.js']);
     
+    //Attributes of characters
     await  loadScripts(['./src/mechanisms/attributes/stat.js', './src/mechanisms/attributes/traits.js']);
     
+    //Items & Currency
     await loadScripts(['./src/mechanisms/resources/item/item.js', './src/mechanisms/resources/item/itemTag.js', './src/mechanisms/resources/inventory/inventory.js']);
         
     //Character
     await loadScripts(['./src/characters/NPC/utils.js', './src/characters/baseCharacter.js', './src/characters/player/player.js', './src/characters/NPC/npc.js']);
-
+	
+    //Quest
+    
+    //Relationship
+    await loadScripts(['./src/relationship/relationship.js', './src/relationship/relationshipManager.js']);
+    
   	//UI
     await loadScripts(['./src/ui/hud.js', './src/ui/map/miniMap.js', './src/ui/map/mapUI.js', './src/ui/header.js', './src/ui/overlay.js', './src/ui/dialogBox.js']);
     

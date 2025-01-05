@@ -8,7 +8,6 @@ const prologue_tutorial =
 		"start": {
 		  dialogue: [
 			{
-			  character: 'player',
 			  content: [ 
 				{text: '此人面相和善，披风间却刀闪寒光。'},
 				{text: '我则正紧紧攥着其裤脚，与其空空如也钱袋。'},
@@ -62,14 +61,14 @@ const prologue_tutorial =
 					fail_threshold: 0,
 					check: [ 
 						{
-							type: "stat_check",
-							attribute: "constitution",
+							type: "stat",
+							attribute: "con",
 							operator: ">=",
 							value: 10
 						},
 						{
-							type: "stat_check",
-							attribute: "constitution",
+							type: "stat",
+							attribute: "con",
 							operator: ">=",
 							value: 10
 						}
@@ -81,8 +80,8 @@ const prologue_tutorial =
 			{
 				evaluate: {
 					check: {
-						type: "relationship_check",
-						attribute: "friendliness",
+						type: "relationship",
+						attribute: "fl",
 						operator: ">=",
 						value: 10,
 					},

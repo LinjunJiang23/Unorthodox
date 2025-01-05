@@ -26,6 +26,8 @@ class Engine {
 			.then(() => this.renderManager.init());
 		});
 		
+		this.settings.init();
+		
 		this.audioManager;
 		this.logic;
 		
@@ -33,7 +35,6 @@ class Engine {
 	
 	initialize_game() {
 		myPromise
-		.then(() => this.settings.init())
 		.then(() => this.ui.start_gameEnv())
 		.then(() => {
 			window.addEventListener("keydown", (event) => this.inputHandler.handle_input(event));
@@ -41,6 +42,7 @@ class Engine {
 			window.addEventListener('click', (event) => this.inputHandler.handle_input(event));
 		})
 		.then(() => this.logic.init())
+		.then(() => this.stateManager.initialize_state())
 		.then(() => this.isGameRunning = true)
 		.then(() => this.game_loop(0));
 	}
@@ -57,6 +59,7 @@ class Engine {
 	
 	update_game(timestamp) {
 		this.logic.update(timestamp);
+		this.stateManager.update(timestamp);
 	}
 	
 	render_game() {

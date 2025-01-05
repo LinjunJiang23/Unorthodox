@@ -79,12 +79,17 @@ class StateManager {
 		};
 	}
 	
+	update(timestamp) {
+		this.check_paused_scripts();
+		this.run_active_scripts();
+	}
+	
 	flush_updates() {
 		this.batch_updates(this.pendingUpdates);
 		this.pendingUpdates = null;
 	}
 	
-	update(key, value) {
+	update_state(key, value) {
 		
 	}
 	
@@ -103,17 +108,17 @@ class StateManager {
 	}
 	
 	run_active_scripts() {
-		const reqFocus = false;
+		let reqFocus = false;
 		for (let [scriptType, scripts] of Object.entries(this.activeScripts)) {
 			for (let [scriptID, content] of Object.entries(scripts)) {
 				if (reqFocus && content.require_focus) continue; 
-				this.eventManager.trigger('runScript', {
+				this.engine.logic.eventManager.trigger('runScript', {
 					stage: this.currentStage, 
 					scriptType: scriptType, 
 					scriptID: scriptID, 
 					startingNodeID: content.current_node
 				});
-				if (content.require_focus && reqFoucs !== true) reqFocus = true;
+				if (content.require_focus && reqFocus !== true) reqFocus = true;
 			}
 		}
 		

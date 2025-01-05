@@ -97,16 +97,37 @@ class ConditionManager {
 	}
 	
 	evaluate(condition) {
+		const result = [];
+		const value = condition.value;
 		switch (condition.type) {
 			case 'stat':
-				
+				this.eventManager.trigger('conditionCheckStat', {
+					attribute: condition.attribute,
+					operator: condition.operator,
+					value: condition.value,
+					result: result
+				});
+				return result[0];
 				break;
 			case 'relationship':
+				this.eventManager.trigger('conditionCheckRelationship', {
+					attribute: condition.attribute,
+					operator: condition.operator,
+					value: condition.value,
+					result: result
+				});
+				break;
 			case 'true':
+				return true;
+				break;
+			case 'hasItem':
 				break;
 			default:
 				return false;
 		}
+	}
+	
+	return_result(result) {
 	}
 	
 	process_action(action) {

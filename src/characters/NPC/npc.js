@@ -18,11 +18,6 @@ class NPC extends BaseCharacter {
     (typeof intro === "string") ? this.intro = intro : this.intro = "Unknown";
     (typeof tag === "string") ? this.tag = tag : this.tag = "Unknown";
 	
-	//Evals for relationship check
-    (typeof fl === "number" && fl >= 0) ? this.fl = fl : this.fl = 0;
-    (typeof idf === "number" && idf >= 0) ? this.idf = idf : this.idf = 0;
-    (typeof it === "number" && it >= 0) ? this.it = it : this.it = 0;
-	
     this.relationships = [];
 	this.gold = 0;
 	this.path = [];
