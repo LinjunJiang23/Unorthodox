@@ -6,32 +6,31 @@
  * @property {Object} listeners
  */
 class EventManager {
-	constructor(logic) {
-		this.logic = logic;
-		this.listeners = {
-		};
-	}
+  constructor(logic) {
+	this.logic = logic;
+	this.listeners = {};
+  }
 	
-	on(e, callback) {
-		if (!this.listeners[e]) {
-			this.listeners[e] = [];
-		}
-		this.listeners[e].push(callback);
+  on(e, callback) {
+	if (!this.listeners[e]) {
+	  this.listeners[e] = [];
 	}
+    this.listeners[e].push(callback);
+  }
 	
-	off(e, callback) {
-		if (this.listeners[e]) {
-			this.listeners[e] = this.listeners[e].filter(cb => cb !== callback);
-		}
+  off(e, callback) {
+	if (this.listeners[e]) {
+	  this.listeners[e] = this.listeners[e].filter(cb => cb !== callback);
 	}
+  }
 	
-	trigger(e, payload) {
-		if (this.listeners[e]) {
-			this.listeners[e].forEach(callback => callback(payload));
-		}
+  trigger(e, payload) {
+	if (this.listeners[e]) {
+	  this.listeners[e].forEach(callback => callback(payload));
 	}
+  }
 	
-	show_all_events() {
-		console.log("Current registered events: ", this.listeners);
-	}
+  show_all_events() {
+	console.log("Current registered events: ", this.listeners);
+  }
 };

@@ -22,12 +22,11 @@ class RenderTeam {
 	}
 	
 	get_player() {
-		const playerModel = this.engine.logic.player.model;
+		const playerModel = this.engine.logic.characters.player.player.model;
 		const currentCTX = this.renderManager.ctx['environment']['team'];
 		
-		const imagePos = playerModel.modelFrame;
-		
-		
+		const imagePos = playerModel.animation.get_current_frame();
+			
 		const spriteSheets = playerModel.spriteSheets;
 		
 		const screenPos = playerModel.get_screen_position();
@@ -42,16 +41,16 @@ class RenderTeam {
 		
 		
 		const playerData = {
-				context: currentCTX, 
-				spriteSheet: spriteSheets,
-				imageX: imagePos.baseBody.x,
-				imageY: imagePos.baseBody.y,
-				captureWidth: 128,
-				captureHeight: 128,
-				canvasX: curCanvasX,
-				canvasY: curCanvasY,
-				canvasWidth: 128,
-				canvasHeight: 128
+			context: currentCTX, 
+			spriteSheet: spriteSheets,
+			imageX: imagePos.x,
+			imageY: imagePos.y,
+			captureWidth: 128,
+			captureHeight: 128,
+			canvasX: curCanvasX,
+			canvasY: curCanvasY,
+			canvasWidth: 128,
+			canvasHeight: 128
 		};
 
 		

@@ -18,13 +18,14 @@ class UIManager {
 		myPromise
 		.then(() => this.uiElements.lazyloadGameUI())
 		.then(() => {
-			this.hide_UI('startscreen');
-			this.show_UI('gameUI', 'gameEnv');
-		});
+			this.hide_UI(['startscreen']);
+			this.show_UI(['gameUI', 'gameEnv']);
+		})
+		.then(() => this.init_listeners());
 	}
 	
-	show_UI(...keys) {
-		const current = this.get_UI(...keys);
+	show_UI(keys) {
+		const current = this.get_UI(keys);
 		if (current instanceof HTMLElement) {
 			current.style.display = "block";
 		} else if (current && typeof current === "object") {
@@ -38,8 +39,8 @@ class UIManager {
 		}
 	}
 	
-	hide_UI(...keys) {
-		const current = this.get_UI(...keys);
+	hide_UI(keys) {
+		const current = this.get_UI(keys);
 		if (current instanceof HTMLElement) {
 			current.style.display = "none";
 		} else if (typeof current === "object") {
@@ -54,16 +55,15 @@ class UIManager {
 	}
 	
 	
-	get_UI(...keys) {
+	get_UI(keys) {
 		if (!this.uiElements) {
 			console.error('uiElements is not initialized or is null.');
 			return null;
 		}
 
 		let current = this.uiElements;
-		const keyArray = Array.isArray(keys) ? keys : Object.values(keys);
 
-		for (let key of keyArray) {
+		for (let key of keys) {
 			if (current[key]) {
 				current = current[key];
 			} else {
@@ -76,20 +76,27 @@ class UIManager {
 
 
 	
-	eleOnShow(...keys) {
-		const ele = this.get_UI(...keys);
+	eleOnShow(keys) {
+		const ele = this.get_UI(keys);
 		if (ele)
 		return (ele.display !== "none") ? true : false;
 	}
 	
-	update_UI(elementName, callback) {
-		callback(this.uiElements[elementName]);
-	}
+  update_UI(keys, callback) {
+	const current = this.get_UI(keys);
+	callback(current);
+  }
+	
+  init_listeners() {
+	this.eventManager = this.engine.logic.eventManager;
+	this.eventManager.on('showUI', (payload) => {
+	  this.show_UI(payload.uiArray);
+	});
+	this.eventManager.on('hideUI', (payload) => {
+	  this.hide_UI(payload.uiArray);
+	});
+	this.eventManager.on('updateUI', (payload) => {
+	  this.update_UI(payload.uiArray, payload.cb);
+	});
+  }
 };
-
-// Start Screen Button Callbacks
-// uiManager.addButtonListeners(uiManager.uiElements.startScreen.buttons, {
-    // startGame: () => console.log("Starting game..."),
-    // loadGame: () => console.log("Loading game..."),
-    // ...
-// });

@@ -8,6 +8,7 @@ class BaseCharacter {
 	  ['normal', 'combat', 'stealth'];
 	
 	constructor() {
+		this.id;
 		this.app;
 		this.model;
 		this.actions;
@@ -22,6 +23,7 @@ class BaseCharacter {
 		this.direction = 'down';
 		this.idleTime = 0;
 		this.lastUpdateTime = 0;
+		this.relationshipManager;
 	}
 	
 	set_intro(intro) {

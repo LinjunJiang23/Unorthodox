@@ -35,7 +35,12 @@ const uiElements = {
 				container: null
 			}
 		},
-		miniMap: {}
+		miniMap: {
+		},
+		interaction: {
+			interactButton: null,
+			interactMenu: null
+		},
 	},
 	
 	settingsUI: {

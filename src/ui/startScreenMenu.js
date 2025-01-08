@@ -4,7 +4,7 @@ class StartScreenMenu {
 	constructor(uiManager) {
 		this.ui = uiManager;
 		this.engine = this.ui.engine;
-		this.uiElements = this.ui.get_UI('startscreen');
+		this.uiElements = this.ui.get_UI(['startscreen']);
 		//this.settings = this.engine.settingManager;
 		//this.saveSystem = this.engine.saveSystem;
 	}

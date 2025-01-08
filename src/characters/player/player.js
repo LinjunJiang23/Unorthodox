@@ -30,7 +30,8 @@ class Player extends BaseCharacter {
 		]);
 		this.app = new PlayerAppManager(this);
 		this.model = new PlayerModel(this);
-		this.actions = new ActionManager(this);		
+		this.actions = new ActionManager(this);
+		this.relationshipManager = new RelationshipManager();
 	}
 	
 	update(timestamp) {
@@ -39,51 +40,25 @@ class Player extends BaseCharacter {
 	
 	set_mode(mode) {
 		if (Player.validModes.includes(mode)) {
-			if (this.mode !== mode) {
-				this.mode = mode;
-			}
+			if (this.mode !== mode) this.mode = mode;
+		} else {
+			throw new Error("Unrecognized mode: ", mode);
 		}
 	}
 	
 	set_state(state) {
-		if (Player.validStates.includes(state)) {
-			(state === 'idle') ? this.model.animationSpeed = 500 : this.model.animationSpeed = 180;
-			switch (state) {
-				case 'walk':
-					if (this.state !== 'walk') this.state = "walk";
-					break;
-				case 'run':
-					if (this.state !== 'run') this.state = "run";
-					break;
-				case 'backup':
-					if (this.state !== 'backup') this.state = "backup";
-					break;
-				case 'jump':
-					if (this.state !== 'jump') this.state = "jump";
-					break;
-				default:
-					if (this.state !== "idle") this.state = 'idle';
-					if (this.model.animationSpeed !== 500) this.model.animationSpeed = 500;
-					break;
-			}
+		if (Player.validStates.includes(state)) {			
+			if (this.state !== state) this.state = state;
+		} else {
+			throw new Error('Unrecognized state: ', state);
 		}
 	}
 	
 	set_action(action) {
 		if (Player.validActions.includes(action)) {
-			switch(action) {
-				case 'hold': 
-					if (this.action !== 'hold') this.action = 'hold';
-					break;
-				case 'lift':
-					if (this.action !== 'lift') this.action = 'lift';
-					break;
-				case 'drop':
-					if (this.action !== 'drop') this.action = 'drop';
-				default:
-					if (this.action !== "rest") this.action = 'rest';
-					break;
-			}
+			if (this.action !== action) this.action = action;
+		} else {
+			throw new Error('Unrecognized action: ', action);
 		}
 	}
 

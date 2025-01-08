@@ -1,6 +1,7 @@
 // src/characters/NPC/npcManager.js
 
 class NPCManager {
-	constructor() {
+	constructor(characterManager) {
+		this.characterManager = characterManager;
 	}
 };

@@ -14,25 +14,16 @@
 class BaseModel {
 	constructor(character) {
 		this.character = character;
-		this.animationSpeed = 440;
-		this.lastUpdateTime = 0;
-		this.frameSheet;
 		this.spriteSheets;
 		this.physics;
+		this.animation;
 	}
 	
 	update(timestamp) {
 		const _check = this.isInViewport();
 		
 		if (_check) {
-		  if ((timestamp - this.character.lastUpdateTime) > this.animationSpeed) {
-			if (this.character.state === "idle" && this.character.idleTime > 300000) 
-				console.log('Idle action animations should trigger after npc being idle for 5 min');
-			this.character.currentFrame = (this.character.currentFrame + 1) % 
-				this.frameSheet[this.character.mode][this.character.direction][this.character.state]['baseBody'].length;
-			this.character.lastUpdateTime = timestamp;
-			
-		  }
+		  this.animation.update(timestamp);
 		}
 	}
 	
@@ -65,5 +56,16 @@ class BaseModel {
 		return this.spriteSheets;
 	}
 	
+	get_map_position() {
+		return {
+			x: this.physics.x,
+			y: this.physics.y
+		};
+	}
+	
+	get_screen_position() {
+		const pos = { x: this.animation.x, y: this.animation.y };
+		return pos;
+	}
 	
 };

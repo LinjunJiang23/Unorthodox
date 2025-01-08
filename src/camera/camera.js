@@ -62,10 +62,12 @@ class Camera {
 	}
 	
 	follow_character(character) {
+		console.log("Following character: ", character);
 		const offsetX = 10;
 		const offsetY = 5;
-		const newX = character.model.physics.x - offsetX - this.maxX / 2;
-		const newY = character.model.physics.y - offsetY - this.maxY / 2;
+		const newX = character.model.physics.x - offsetX;
+		const newY = character.model.physics.y - offsetY;
+		console.log("New x: ", newX, "y: ", newY);
 		this.center_camera_on({
 			x: newX,
 			y: newY

@@ -31,12 +31,11 @@ class MovementController {
 	  
 		if (!isBlocked) {
 			this.update_position(newX, newY, direction, 'walk');
-
-			
 		} else {
 			/** @todo Add collision reaction*/
 			leader.set_direction(direction);
 			leader.set_state('idle');
+			leader.model.animation.change_current_animation(leader.mode, 'idle', direction);
 		}
 	}
 	
@@ -77,8 +76,11 @@ class MovementController {
 		leader.set_state(type);
 		leader.model.physics.x = newX;
 		leader.model.physics.y = newY;
-				
-		this.leaderController.logic.engine.camera.center_camera_on(leader.model.physics);		
+		leader.model.animation.change_current_animation(leader.mode, type, direction);
+		const newScreenPos = this.leaderController.logic.engine.camera.map_to_screen({x: newX, y: newY});
+		leader.model.animation.change_position(newScreenPos.x, newScreenPos.y);
+		this.leaderController.logic.engine.camera.follow_character(leader);
+	
 	}
 	
 	handle_collision() {

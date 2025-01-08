@@ -3,7 +3,7 @@
 class LeaderController {
 	constructor(logic) {
 		this.logic = logic;
-		this.leader = this.logic.player;
+		this.leader = this.logic.characters.player.player;
 		
 		this.inputHandler = this.logic.engine.inputHandler.kbHandler;
 		this.inputHandler.addListener((key, type) => this.controlKBInput(key, type));
@@ -39,7 +39,7 @@ class LeaderController {
 			this.movementController.handle_movement(dx, dy, isRunning, deltaTime);
 		} else {
 			this.leader.set_state("idle");
-			this.stateController.control_idle();
+			this.leader.model.animation.change_current_animation(this.leader.mode, 'idle', this.leader.direction);
 		}
 	}
 	

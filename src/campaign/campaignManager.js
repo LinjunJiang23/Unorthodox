@@ -5,7 +5,7 @@ class CampaignManager {
 	constructor(logic) {
 		if (logic instanceof LogicManager) this.logic = logic;
 		this.members = [];
-		this.add_member(this.logic.player);
+		this.add_member(this.logic.characters.player.player);
 		this.team = new TeamManager(this);
 	}
 	

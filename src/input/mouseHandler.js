@@ -12,8 +12,8 @@ class MouseHandler {
 	
 	onMouseClick(event) {
 		const ele = event.target;
-		console.log("This is the mouse click target: ", ele);
-		console.log("This is the event: ", event);
+		// console.log("This is the mouse click target: ", ele);
+		// console.log("This is the event: ", event);
 		const key = ele.id || ele.className;
 
 		if (this.listeners.click[key]) 

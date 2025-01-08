@@ -23,9 +23,7 @@ class StateManager {
 		};
 		this.currentStage;
 		this.state = {
-			player: {
-				
-			},
+			player: {},
 			env: {},
 			world: {},
 			factions: {},
@@ -121,12 +119,16 @@ class StateManager {
 				if (content.require_focus && reqFocus !== true) reqFocus = true;
 			}
 		}
-		
 	}
 	
 	start_script(scriptType, scriptID, startingNode = "start") {
 		this.activeScripts[scriptType][script_ID].current_node = startingNode;
-		this.scriptManager.run(this.currentStage, scriptType, scriptID, startingNode);
+		this.engine.logic.eventManager.trigger('runScript', {
+					stage: this.currentStage, 
+					scriptType: scriptType, 
+					scriptID: scriptID, 
+					startingNodeID: startingNode
+		});
 	}
 	
 	update_script_progress(scriptType, scriptID, nodeID) {
