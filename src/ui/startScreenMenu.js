@@ -1,46 +1,42 @@
 // src/ui/startScreenMenu.js
 
 class StartScreenMenu {
-	constructor(uiManager) {
-		this.ui = uiManager;
-		this.engine = this.ui.engine;
-		this.uiElements = this.ui.get_UI(['startscreen']);
-		//this.settings = this.engine.settingManager;
-		//this.saveSystem = this.engine.saveSystem;
-	}
+  constructor(eventManager) {
+	this.eventManager = eventManager;
+  }
 	
-	initialize_listeners() {
-		this.setup_animation_listeners();
-		this.setup_startgame_listeners();
-		//...
-	}
+  initialize_listeners() {
+	this.setup_startgame_listeners();
+	//...
+  }
 	
-	setup_animation_listeners() {
-		//this.uiElements['animation'].addEventListener();
-	}
+  setup_animation_listeners() {
+	//this.uiElements['animation'].addEventListener();
+  }
 	
-	setup_startgame_listeners() {
-		this.uiElements['startGame'].addEventListener('click', () => this.start_game());
-	}
+  setup_startgame_listeners() {
 	
-	animation() {
-		const aElement = this.uiElements['animation'];
-	}
+	this.uiElements['startGame'].addEventListener('click', () => this.start_game());
+  }
 	
-	start_game() {
-		this.engine.initialize_game();
-	}
+  animation() {
+	const aElement = this.uiElements['animation'];
+  }
 	
-	load_game() {
-		//this.saveSystem.show_load();
-	}
+  start_game() {
+	this.eventManager.trigger('startNewGame', {});
+  }
 	
-	open_settings() {
-		//this.settings.show_settings();
-	}
+  load_game() {
+	//this.saveSystem.show_load();
+  }
 	
-	quit_game() {
-		//this.engine.quit_game();
-	}
+  open_settings() {
+	//this.settings.show_settings();
+  }
+	
+  quit_game() {
+	//this.engine.quit_game();
+  }
 	
 };

@@ -1,6 +1,5 @@
 // src/condition/conditionManager.js
 
-
 /**
  * @class
  * Centralized for evaluating conditions
@@ -8,9 +7,40 @@
 class ConditionManager {
   constructor(eventManager) {
 	this.eventManager = eventManager;
-	this.onComplete;
 	this.questConditions = new Map();
 	this.scriptConditions = new Map();
+	this.init_events();
+  }
+  
+  parse_conditions(conditions) {
+	for (let condition of conditions) {
+	  const { evaluate } = condition;
+	  if (!evaluate) continue;
+	  const checks = evaluate.check;
+	  if (!checks) continue;
+	  for (let check of checks) {
+	    this.subscribe_conditions(check);
+		check.check_condition();
+	  }
+	}
+  }
+  
+  static handlers = {
+    selector: 'handle_selector',
+	sequence: 'handle_sequence',
+	parallel: 'handle_parallel'
+  };
+  
+  subscribe_conditions(check) {
+	if (!check) console.error("Empty check: ", check);
+	if (check.isDeferred) {
+	  check.check_condition();
+	  this.eventManager.on(check.eventType, (payload) => {
+		check.check_condition(payload);
+	  });
+	} else {
+	  this.eventManager.trigger(check.eventType, check);
+	}
   }
 	
   check_conditions(conditions) {
@@ -22,36 +52,26 @@ class ConditionManager {
 	  let result = false;
 	  if (!evaluate) throw new Error('Missing evaluate object: ', condition);
 	  const type = evaluate.type || 'selector';
-	  switch(type) {
-		case 'selector': // At least one condition must succeed
-		  result = this.handle_selector(evaluate.check);
-		  if (result && next_node) this.onComplete(next_node);
-		  return result;
-		case 'sequence': //Stoped at failed condiitons, but will execute actions regardless
-		  result = this.handle_sequence(evaluate.check);
-		  if (result && next_node) this.onComplete(next_node);
-		  return result;					
-		case 'parallel': //Execute multiple actions only after passing a threshold of success/fail
-		  result = this.handle_parallel(evaluate.check);
-		  if (result && next_node) this.onComplete(next_node);
-		  return result;
-		default:
-		  throw new Error('Unknown condition type: ', type);	
+	  const currentHandler = ConditionManager.handlers[type];
+	  if (!currentHandler) throw new Error("Does not recognize the type of condition check: ", type);
+	  result = this[currentHandler](evaluate.check);
+	  if (result && next_node) {
+		this.eventManager.trigger('runNextNode', {nextNode: next_node});
+	    return true;
 	  }
 	}	
   }
+  
+  
 	
   handle_selector(checks) {
 	for (let check of checks) {
 	  const action = check.action;
-	  const result = this.check(check);
+	  const result = check.isMet;
 	  if (result) {
 		myPromise
 		.then(() => {
 		  if (action) this.process_action(action);
-		})
-		.then(() => {
-		  if (check.next_node) this.onComplete(next_node);
 		});
 		return true;
 	  }
@@ -61,7 +81,7 @@ class ConditionManager {
 	
   handle_sequence(checks) {
 	for (let check of checks) {
-	  const result = this.evaluate(check);
+	  const result = check.isMet;
 	  if (!result) return false;
 	  const action = check.action;					
 	  if (action) this.process_action(action);
@@ -77,7 +97,7 @@ class ConditionManager {
 	const actions = [];
 	
 	for (let check of checks) {
-	  const result = this.check(check);
+	  const result = check.isMet;
 	  const action = check.action;
 	  if (result) {
 		actions.push(action);
@@ -91,29 +111,19 @@ class ConditionManager {
 	  if (failCount > failThreshold) return false;
 	} else {
 	  if (successCount >= successThreshold) {	
-		myPromise.then(() => {
-		  actions.forEach(action => {
-		    this.process_action(action);
-		  });
-		})
-		.then(() => {
-		  if (checks.next_node) this.onComplete(next_node);
-		});	
+		actions.forEach(action => {
+		  this.process_action(action);
+		});
 		return true;
 	  }
 	}
   }
-	
+  
   add_quest_condition(quest, condition) {
 	if (!this.questConditions.has(quest)) {
 	  this.questConditions.set(quest, []);	
 	}
 	this.questConditions.get(quest).push(condition);
-  }
-	
-  on_choice_complete(callback) {
-	console.log("Registered on complete: ", callback);
-	this.onComplete = callback;
   }
   
   process_action(action) {
@@ -122,8 +132,10 @@ class ConditionManager {
   
   init_events() {
 	this.eventManager.on('checkConditions', (payload) => {
-	  const result = this.check_conditions(payload.conditions);
-	  if (result) payload.callback();
+	  const conditions = payload.conditions;
+	  this.parse_conditions(conditions);
+	  const result = this.check_conditions(conditions);
+	  if (result && payload.callback) payload.callback();
 	});
   }
 };

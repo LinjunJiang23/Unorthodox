@@ -149,7 +149,13 @@ async function loadScripts(scripts) {
 (async () => {
   try {
     //Utils & Static Sources
-    await loadScripts(['./src/utils/promise.js', './src/utils/textProcessor.js', './misc/staticSources.js']);
+    await loadScripts(['./src/utils/promise.js', './misc/staticSources.js']);
+    
+    //Error Handler
+    await loadScripts(['./src/error/errorHandler.js']);
+    
+    //Localization files
+    await loadScripts(['./misc/localization/chs.js', './src/localization/localizationManager.js', './src/localization/scriptParser.js']);
     
     //Setting Management
     await loadScripts(['./src/setting/settingManager.js', './src/setting/canvas.js']);
@@ -176,11 +182,11 @@ async function loadScripts(scripts) {
     await loadScripts(['./src/render/utils/renderHelpers.js', './src/render/utils/ctx.js', './src/render/renderManager.js', './src/render/renderEnv.js',
                        './src/render/renderTeam.js']);
     
-    //Game Scripts
-    await loadScripts(['./src/script/gameScripts/tutorial-passages.js', './src/script/gameScripts/allScripts.js', './src/script/scriptManager.js']);
-    
     //Condition Management
-    await loadScripts(['./src/condition/conditionManager.js']);
+    await loadScripts(['./src/condition/condition.js', './src/condition/conditionManager.js']);
+    
+    //Game Scripts
+    await loadScripts(['./src/script/gameScripts/tutorial-passages.js', './src/script/allScripts.js', './src/script/scriptManager.js']);
 
     //Dialogue Management
     await loadScripts(['./src/dialogue/dialogueManager.js']);
@@ -257,7 +263,7 @@ async function loadScripts(scripts) {
     await loadScripts(['./src/relationship/relationshipHelpers.js', './src/relationship/relationship.js', './src/relationship/relationshipManager.js']);
     
   	//UI
-    await loadScripts(['./src/ui/hud.js', './src/ui/map/miniMap.js', './src/ui/map/mapUI.js', './src/ui/header.js', './src/ui/overlay.js', './src/ui/dialogBox.js']);
+    await loadScripts(['./src/ui/hud.js', './src/ui/map/miniMap.js', './src/ui/map/mapUI.js', './src/ui/header.js', './src/ui/overlay.js', './src/ui/dialogBox.js', './src/ui/textProcessor.js']);
     
     //Game Logic
     await loadScripts(['./src/logic/logicManager.js']);
@@ -277,9 +283,7 @@ importStyles('./styles/overlay.css', './styles/spriteSheets.css', './styles/ui.c
 
 
 </script><tw-tag name="widget" color="red"></tw-tag><tw-passagedata pid="1" name="Unorthodox" tags="" position="75,275" size="100,100">&lt;&lt;dialogue&gt;&gt;\
-\
 &lt;&lt;gameEnv&gt;&gt;\
-\
 &lt;&lt;startscreen&gt;&gt;\</tw-passagedata><tw-passagedata pid="2" name="Player Initialization" tags="" position="425,275" size="100,100">&lt;&lt;script&gt;&gt;
   setTimeout(appendRandomTraits, 100);
   $(document).one(&#39;:passagestart&#39;, (event) =&gt; {
@@ -771,7 +775,7 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
     draw();
     }, 40);
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="gameEnv" tags="widget" position="200,500" size="100,100">&lt;&lt;widget &quot;gameEnv&quot;&gt;&gt;\
-&lt;div id=&quot;game-ui&quot; style=&quot;display: none&quot;&gt;
+&lt;div id=&quot;game-ui&quot; style=&quot;display: none&quot;&gt;\
 	&lt;canvas id=&quot;canvas-ui&quot;&gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
 &lt;div id=&quot;game-environment&quot; style=&quot;display: none;&quot;&gt;\

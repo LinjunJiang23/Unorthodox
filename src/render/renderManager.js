@@ -18,98 +18,96 @@
  * @property {class} renderNPCs
  */
 class RenderManager {
-    constructor(engine) {
-		this.engine = engine;
-		this.assetLoader = this.engine.assetLoader;
-        this.ctx = CTX;
-		this.showDebug = false;
-    }
+  constructor(eventManager) {
+	this.eventManager = eventManager;
+	this.assetLoader = this.engine.assetLoader;
+    this.ctx = CTX;
+	this.showDebug = false;
+	this.init();
+  }
 	
-	init() {
-		myPromise
-		.then(() => this.ctx.lazyloadEnvironmentCTX?.())
-		.then(() => this.ctx.lazyloadDialogueCTX())
-		.then(() => this.renderEnv = new RenderEnv(this))
-		.then(() => this.renderTeam = new RenderTeam(this));
-	}
+  init() {
+	myPromise
+	.then(() => this.ctx.lazyloadEnvironmentCTX?.())
+	.then(() => this.ctx.lazyloadDialogueCTX())
+	.then(() => this.renderEnv = new RenderEnv(this))
+	.then(() => this.renderTeam = new RenderTeam(this));
+  }
 	
-	render_sprite(ctx, spriteSheet, imageX, imageY, 
-	  captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight) {
+  render_sprite(ctx, spriteSheet, imageX, imageY, 
+	captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight) {
 			
-		// if (!ctx) {
-			// console.error("Invalid context passed to render_sprite");
-			// return;
-		// }
+	if (!ctx) this.eventManager.trigger('error', { type: 'render', message: `Context produces error.`, context: {ctx: ctx}});
 		
-		ctx.drawImage(spriteSheet, imageX, imageY, 
-		  captureWidth, captureHeight, canvasX, canvasY, 
-		  canvasWidth, canvasHeight);
-	}
+	ctx.drawImage(spriteSheet, imageX, imageY, 
+	captureWidth, captureHeight, canvasX, canvasY, 
+	  canvasWidth, canvasHeight);
+  }
+	
+  render_env(currentArea) {
+	const envData = this.renderEnv.get_data(currentArea);
+	Object.values(envData).forEach(data => this.render_data(data));
+  }
 	
 	
 	
-	render_env(currentArea) {
-		const envData = this.renderEnv.get_data(currentArea);
-		Object.values(envData).forEach(data => this.render_data(data));
-	}
-	
-	
-	
-	render_team() {
-		const teamData = this.renderTeam.get_data();
-		this.clear_sprite(this.ctx['environment']['team'], 
-			this.ctx['environment']['team'].canvas.width, this.ctx['environment']['team'].canvas.height);
+  render_team() {
+	const teamData = this.renderTeam.get_data();
+	const teamCTX = this.get_ctx(['environment', 'team']);
+	this.clear_sprite(teamCTX, 
+	  teamCTX.canvas.width, teamCTX.canvas.height);
 		
-		Object.values(teamData).forEach(data => 
-		  this.render_data(data));
-	}
+	  Object.values(teamData).forEach(data => 
+	  this.render_data(data));
+  }
 	
-	render_data(data) {
-		if (data !== null) 
-		  this.render_sprite(data['context'], data['spriteSheet'], data['imageX'], data['imageY'],
-			data['captureWidth'], data['captureHeight'], data['canvasX'], data['canvasY'],
-			data['canvasWidth'], data['canvasHeight']);
-	}
+  render_data(data) {
+	const { context, spriteSheet, imageX, imageY, captureWidth, 
+	  captureHeight, canvasX, canvasY, canvasWidth, canvasHeight } = data;
+	if (data !== null) this.render_sprite(context, spriteSheet, 
+	  imageX, imageY, captureWidth, captureHeight, canvasX, canvasY,
+	  canvasWidth, canvasHeight);
+  }
 	
-	clear_sprite(ctx, clearWidth, clearHeight) {
-		ctx.clearRect(0, 0, clearWidth, clearHeight);
-	}
+  clear_sprite(ctx, clearWidth, clearHeight) {
+	ctx.clearRect(0, 0, clearWidth, clearHeight);
+  }
 	
-	render_speaker_portrait(speaker) {
-		if (speaker !== null) {
-			const sheets = this.assetLoader.get_assets(speaker.character, speaker.portrait);
-			const currentCTX = 
-				this.ctx['dialogue']['portrait'];
-			
-			this.render_sprite(currentCTX, sheets, 0, 0, 2480, 3508, 0, 0,
-				currentCTX.canvas.width, currentCTX.canvas.height);
-		}
-	}
+  render_speaker_portrait(speaker) {
+	if (!speaker || !speaker.character || !speaker.portrait) this.eventManager.trigger('error', { type: 'param', message: 'The PARAM passed to render_speaker_portrait is not corret.' });
+	const { character, portrait } = speaker;
+	const currentCTX = this.get_ctx(['dialogue', 'portrait']);
+	this.eventManager.trigger('getAssets', { assetArray: [character, portrait], cb: (currentAsset) => {
+	  this.render_sprite(currentCTX, currentAsset, 0, 0, currentAsset.width, currentAsset.height, 
+	    0, 0, currentCTX.canvas.width, currentCTX.canvas.height );
+	}});
+  }
 	
-	get_ctx(...keys) {
-		let current = this.ctx;
-		for (let key of keys) {
-			if (current[key]) {
-				current = current[key];
-			} else {
-				console.warn(`Key "${key}" not found in ctx.`);
-				return; // Exit if a key is invalid
-			}
-		}
-		return current;
+  get_ctx(keys) {
+	let current = this.ctx;
+	for (let key of keys) {
+	  if (current[key]) {
+		current = current[key];
+	  } else {
+		this.eventManager.trigger('error', {type: 'render', message: 'Key is not found in ctx', 
+		  context: { key: key }});
+		return; // Exit if a key is invalid
+	  }
 	}
+	return current;
+  }
 	
-	render_NPCs() {
-	}
+  render_NPCs() {
+  }
 	
-	render_inGameUI() {
-	}
+  render_inGameUI() {
+  }
 	
-	render_display() {
-	}
+  render_display() {
+  }
 	
-	render_worldmap(areaName) {
-    }
+  render_worldmap(areaName) {
+  }
 
 };
 

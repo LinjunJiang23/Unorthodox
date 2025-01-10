@@ -9,43 +9,35 @@ class Engine {
 		this.lastUpdate = performance.now();
 		this.camera = new Camera();
 		this.timeManager = new TimeManager(this);
-		this.inputHandler = new InputHandler(this);
-		this.assetLoader = new AssetLoader();
-		this.settings = new SettingManager();
-		this.logic = new LogicManager(this);
-		this.stateManager = new StateManager(this);
+		this.eventManager = new EventManager();
+		this.errorHandler = new ErrorHandler(this.eventManager);
+		this.inputHandler = new InputHandler();
+		this.assetLoader = new AssetLoader(this.eventManager);
+		this.settings = new SettingManager(this.eventManager);
+		this.logic = new LogicManager(this.eventManager);
+		this.stateManager = new StateManager(this.eventManager);
 		//this.saveSystem = new SaveSystem();
 		
-		myPromise.then(() => {
-			myPromise.then(() => this.ui = new UIManager(this))
-			.then(() => this.ui.init());
-		})
-		.then(() => {
-			myPromise
-			.then(() => this.renderManager = new RenderManager(this))
-			.then(() => this.renderManager.init());
-		});
-		
-		this.settings.init();
+		this.ui = new UIManager(this.eventManager);
+		this.renderManager = new RenderManager(this.eventManager);
 		
 		this.audioManager;
 		this.logic;
 		
 	}
 	
-	initialize_game() {
+  initialize_game() {
+	this.eventManager.trigger('startNewGame', {timestamp: performance.now()});
+	this.isGameRunning = true;
+	this.game_loop(0);
 		myPromise
 		.then(() => this.ui.start_gameEnv())
-		.then(() => {
-			window.addEventListener("keydown", (event) => this.inputHandler.handle_input(event));
-			window.addEventListener("keyup", (event) => this.inputHandler.handle_input(event));
-			window.addEventListener('click', (event) => this.inputHandler.handle_input(event));
-		})
+		.then(() => this.inputHandler.init())
 		.then(() => this.logic.init())
 		.then(() => this.stateManager.initialize_state())
 		.then(() => this.isGameRunning = true)
 		.then(() => this.game_loop(0));
-	}
+  }
 	
 	game_loop(timestamp) {
 		if (!this.isGameRunning) {
@@ -59,7 +51,6 @@ class Engine {
 	
 	update_game(timestamp) {
 		this.logic.update(timestamp);
-		this.stateManager.update(timestamp);
 	}
 	
 	render_game() {

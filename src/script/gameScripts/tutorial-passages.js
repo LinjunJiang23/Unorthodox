@@ -6,37 +6,33 @@ const prologue_tutorial = {
   nodes: {
 	"start": {
 	  dialogue: [
-		{
-		  content: [ 
-			{text: '此人面相和善，披风间却刀闪寒光。'},
-			{text: '我则正紧紧攥着其裤脚，与其空空如也钱袋。'},
-			{text: '撒手太迟，狡辩太晚。'},
-			{text: '对方微微一笑。'},
-			{	
-			  text: '我脖颈皮一紧。', 
-			  effect: 'colorChange'
-			}
-		  ]
+		{text: "t('prologue_tutorial_start_dialogue_1')"},
+		{text: "t('prologue_tutorial_start_dialogue_2')"},
+		{text: "t('prologue_tutorial_start_dialogue_3')"},
+		{text: "t('prologue_tutorial_start_dialogue_4')"},
+		{	
+		  text: "t('prologue_tutorial_start_dialogue_5')", 
+		  effect: 'colorChange'
 		}
 	  ],
 	  choice: {
 	    options: [
 		  {
-			text: "挣脱",
+			text: 't("prologue_tutorial_start_choice_1")',
 			next_node: "struggle" 
 		  },
 		  {
-			text: "求饶",
+			text: 't("prologue_tutorial_start_choice_2")',
 			next_node: "plead"
 		  },
 		  {
-			text: "认命",
+			text: 't("prologue_tutorial_start_choice_3")',
 			next_node: "give up"
 		  }
 		],
 		wait_too_long: [
 		  {
-			text: "我沉默地同这人对视良久，对方不耐烦地抓着我衣领将我拎了起来。",
+			text: 't("prologue_tutorial_start_wait_too_long_1")',
 			timeout_duration: 10000
 		  }
 		]
@@ -44,13 +40,7 @@ const prologue_tutorial = {
 	},
 	"struggle": {
 	  dialogue: [
-		{
-		  content: [
-			{
-			  text: "我怎么可能束手就擒，奋力挣脱！",
-			}
-		  ]
-		}
+		{ text: 't("prologue_tutorial_struggle_dialogue_1")'},
 	  ],
 	  conditions: [
 		{
@@ -59,19 +49,18 @@ const prologue_tutorial = {
 			success_threshold: 2,
 			fail_threshold: 0,
 			check: [ 
-			  {
-				type: "stat",
-				attribute: "con",
-				operator: ">=",
+			  new Condition ({
+				type: 'con',
+				eventType: 'statChange', 
+				value: 10,
+				operator: '>='
+			  }),
+			  new Condition({ 
+			    type: 'insight',
+				eventType: 'statChange',
+				operator: '>=',
 				value: 10
-			  },
-			  {
-				type: "stat",
-				attribute: "con",
-				operator: ">=",
-				value: 10
-				//action
-			  }
+			  })
 			]
 		  },
 		  next_node: "struggle_success"
@@ -79,21 +68,25 @@ const prologue_tutorial = {
 		{
 		  evaluate: {
 			check: [
-			  {
-				type: "relationship",
-				character: 'chenru',
-				target: 'player',
-				attribute: "fl",
-				operator: ">=",
-				value: 10,
-			  },
+			  new Condition({
+				eventType: 'relationshipChange',
+				characterID: 'specials_chenru',
+				targetID: 'player',
+				type: 'fl.value',
+				operator: '>=',
+				value: 10
+			  })
 			]
 		  },
 		  next_node: "struggle_success"
 		},
 		{
 		  evaluate: {
-			check: [{type: "true"}]
+			check: [
+			  new Condition({
+				eventType: "fallback"
+			  })
+			]
 		  },
 		  next_node: "struggle_fail"
 		}
@@ -101,33 +94,24 @@ const prologue_tutorial = {
 	},
 	"struggle_success": {
 	  dialogue: [
-	    {
-		  content: [
-	        {text: "我的四肢并用乱蹬乱挠很有效，对方猝不及防松开了手。"},
-		    {text: "脸着地带来的剧痛令我头晕目眩，两眼一翻直接昏迷."}
-		  ]
-	    }
+	    {text: 't("prologue_tutorial_struggle_success_dialogue_1")'},
+		{text: 't("prologue_tutorial_struggle_success_dialogue_2")'}
 	  ]
 	},
 	"struggle_fail": {
 	  dialogue: [
-		{ 
-		  content: [
-			{text: "我四肢并用乱蹬乱挠的奋力致使对方抻长了胳膊。"}
-		  ]
-		},
-		{
+	    { text: 't("prologue_tutorial_struggle_fail_dialogue_1")'},
+	    { text: "Huh. Aren't you something special.", 
 		  speaker: {
-			name: "陈汝",
-			character: "chenru",
+			name: 't("chenru_name")',
+			characterID: "specials_chenru",
 			emotion: "curious",
 			portrait: "neutral"
-		  },
-		  content: [
-		    {text: "Huh. Aren't you something special."}
-		  ]
-		}
-	  ],
+		  }
+		},
+		
+		
+	  ]
 	}
   }
 };  

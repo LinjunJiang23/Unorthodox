@@ -9,58 +9,40 @@
 class DialogueManager {
   constructor(eventManager) {
 	this.eventManager = eventManager;
-	this.dialogues;
+	this.currentDialogue;
 	this.defaultSpeaker;
-	this.dialogueNum = 0;
-	this.dialogueLineIndex = 0;
-	this.onComplete;
+	this.currentDialogueLineIndex = 0;
 	this.disableClickAdvance = true;
 	this.mouseHandler = this.eventManager.logic.engine.inputHandler.mouseHandler;
-	
+	this.initiate_listeners();
+	this.autoOn = false;
   }
 	
   start_dialogue(dialogues, defaultSpeaker) {
-	this.speakerNameEle = 
-	  this.eventManager.logic.engine.ui.get_UI(['gameUI', 'dialogue', 'speakerDisplay']);
-	this.dialogueTextEle = 
-	  this.eventManager.logic.engine.ui.get_UI(['gameUI', 'dialogue', 'dialogueText']);
-	this.dialogues = dialogues;
-	this.defaultSpeaker = defaultSpeaker;
-	this.dialogueNum = 0;
-	this.dialogueLineIndex = 0;
+	this.eventManager.trigger('showUI', {uiArray: ['gameUI', 'dialogue', 'dialogue'] });
+	this.currentDialogue = dialogues;
 	this.disableClickAdvance = false;
+	this.defaultSpeaker = defaultSpeaker;
+	this.currentDialogueLineIndex = 0;
 	this.append_dialogue();
   }
 	
   append_dialogue() {
-	let currentLine;
-	let currentDialogue = this.dialogues[this.dialogueNum];
-	if (!(currentDialogue)) {
-	  console.log("Completing dialogue now");
-	  this.onComplete();
-	  return false;
-	}
-	currentLine = currentDialogue.content[this.dialogueLineIndex];
-	if (!currentLine) {
-	  this.dialogueNum++;
-	  this.dialogueLineIndex = 0;
-	  this.append_dialogue();
-	  return;
-	}
-	if (currentLine.noClear !== true) this.dialogueTextEle.textContent = '';
-	const speaker = currentDialogue.speaker || this.defaultSpeaker;
+	const currentLine = this.currentDialogue[this.currentDialogueLineIndex];
+	console.log("This is the currentLine", currentLine);
+    if (currentLine.noClear !== true) this.eventManager.trigger('clearText', { uiArray: ['gameUI', 'dialogue', 'dialogueText'] });
+	
+	const speaker = currentLine.speaker || this.defaultSpeaker;
 		
 	if (speaker) {
-	  this.speakerNameEle.textContent = speaker.name;
-	  if (speaker.portrait) this.eventManager.trigger('renderSpeakerPortrait', {speaker});
-	}
-					
-	TextProcessor.processText(currentLine, this.dialogueTextEle);
+	  this.eventManager.trigger('displayPlainText', { uiArray: ['gameUI', 'dialogue', 'speakerDisplay'],
+	    textObject: {
+		  text: speaker.name
+		}});
+	  //if (speaker.portrait) this.eventManager.trigger('renderSpeakerPortrait', {speaker});
+	}				
+	this.eventManager.trigger('processText', { uiArray: ['gameUI', 'dialogue', 'dialogueText'], textObject: currentLine });
 	this.append_dialogue_history({text: currentLine.text, speaker});
-  }
-	
-  on_dialogue_complete(callback) {
-	this.onComplete = callback;
   }
 	
   append_dialogue_history(historyObject) {
@@ -96,16 +78,71 @@ class DialogueManager {
 	  }
 	}});
   }
-	
-  finished_dialogue(end = false, ) {
-    this.dialogues = null;
-	this.dialogueNum = 0;
-	this.defaultSpeaker = null;
-	this.onComplete = null;
-	this.disableClickAdvance = true;
-	TextProcessor.clear();
-	if (end) this.eventManager.trigger('hideUI', { uiArray: ['gameUI', 'dialogue', 'dialogue'] });
+  
+  handle_text_typing() {
+    this.eventManager.trigger('onTextTyping', {
+      cb: (isTyping, str) => this.on_text_typing_complete(isTyping)
+    });
   }
+
+  on_text_typing_complete(isTyping) {
+    if (isTyping) {
+	  console.log("Still typing");
+      this.handle_text_typing_in_progress();
+    } else {
+	  console.log("Not typing anymore");
+      this.advance_dialogue();
+    }
+  }
+
+  handle_text_typing_in_progress() {
+    this.eventManager.trigger('finishTextTyping', { uiArray: ['gameUI', 'dialogue', 'dialogueText'] });
+  }
+
+  advance_dialogue() {
+	if (this.currentDialogueLineIndex < this.currentDialogue.length - 1) {
+	  this.currentDialogueLineIndex++;
+	  this.append_dialogue();
+	} else {
+	  if (this.currentDialogueLineIndex = this.currentDialogue.length - 1)
+	    this.finished_dialogue();
+	}
+  }
+	
+  finished_dialogue() {
+	console.log("Finished dialogue is triggereed");
+    this.currentDialogue = null;
+	this.currentDialogueLineIndex = 0;
+	this.defaultSpeaker = null;
+	this.disableClickAdvance = true;
+	this.eventManager.trigger('finishedDialogueAppending', {});
+
+  }
+  
+  reached_end_of_dialogue() {
+    
+  }
+  
+  close_dialogue() {
+	this.finished_dialogue();
+	this.eventManager.trigger('hideUI', { uiArray: ['gameUI', 'dialogue', 'dialogue'] });
+  }
+  
+  end_dialogue() {
+  }
+  
+  auto_advance() {
+    if (this.autoOn) {
+	  this.eventManager.trigger('onTextTyping', {cb: (isTyping, str) => {
+		if (!isTyping) setTimeout(this.advance_dialogue(), 100);
+	  }});
+	}
+  }
+  
+  toggle_auto() {
+    this.autoOn = !this.autoOn;		
+  }
+  
   initiate_listeners() {
 	this.mouseHandler.addListeners("click", 'dialogue-historybtn', 
 	  (payload) => this.eventManager.trigger('showUI', {uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container']}));
@@ -117,15 +154,11 @@ class DialogueManager {
 	});
 	this.mouseHandler.addListeners("click", 'dialogue-text', (payload) => {
 	  if (this.disableClickAdvance) return;
-			
-	  if (TextProcessor.isTyping) {
-		TextProcessor.finishType(this.dialogueTextEle);
-	  } else {
-		this.dialogueLineIndex++;
-		this.append_dialogue();
-	  }
+	  this.handle_text_typing();	
 	});
-	this.eventManager.on('endDialogue', (payload) => this.end_dialogue());
+	this.eventManager.on('reachedEndOfDialogue', (payload) => this.reached_end_of_dialogue());
+	this.eventManager.on('startDialogue', (payload) => {
+	  this.start_dialogue(payload.dialogues, payload.defaultSpeaker);
+	});
   }
-  
 };

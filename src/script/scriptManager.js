@@ -1,83 +1,147 @@
 // src/scripts/scriptManager.js
 
+/**
+ *
+ * @class 
+ */
 class ScriptManager {
-	constructor(eventManager) {
-		this.eventManager = eventManager;
-		if (!this.eventManager || typeof this.eventManager.on !== 'function') {
-			throw new Error('ScriptManager: Invalid eventManager.');
+  static handlers = {
+	dialogue: 'handle_dialogues',
+	event: 'handle_events',
+	choice: 'handle_choices',
+	conditions: 'handle_conditions'
+  };
+  
+  constructor(eventManager) {
+	this.eventManager = eventManager;
+	if (!this.eventManager || typeof this.eventManager.on !== 'function') 
+	  throw new Error('ScriptManager: Invalid eventManager.');
+	this.dialogueManager = new DialogueManager(this.eventManager);
+	this.conditionManager = new ConditionManager(this.eventManager);
+	this.currentFocusScript;
+	this.currentChunkIndex;
+	this.default_speaker;
+	this.timeoutTimers = {};
+	this.completedScripts = {
+	  main_story: [],
+	  side_stories: []
+	};
+	this.activeScripts = {
+	  main_story: {
+		prologue_tutorial: {  
+		  current_node: 'start',
+		  require_focus: true
 		}
-		
-		this.dialogueManager = new DialogueManager(this.eventManager);
-		this.conditionManager = new ConditionManager(this.eventManager);
-		this.currentScript;
-		this.default_speaker;
-		this.timeoutTimers = {};
-		this.eventManager.logic.engine.ui.uiElements.lazyloadDialogueContainer();		
-		this.dialogueManager.initiate_listeners();
-		this.initiate_listeners();
-	}
-	
-	run(startingNodeID) {
-		this.currentChunkIndex = 0;
-		this.default_speaker = this.currentScript.default_speaker;
-		const currentNode = this.currentScript.nodes[startingNodeID];
-		if (currentNode) {
-			this.execute_node(currentNode);
-		} else {
-			console.error('Node with id: ', startingNodeID, "not found!");
-		}
-	}
-	
-  execute_node(node) {
-	if (!node) {
-	  console.log("Hiiding ui.");
-	  this.eventManager.trigger('hideUI', { uiArray: ['gameUI', 'dialogue', 'dialogue'] });
-	}	
-	const pairs = Object.entries(node);
-	const key = pairs[this.currentChunkIndex][0];
-	const value = pairs[this.currentChunkIndex][1];
-		
-	switch(key) {
-	  case 'dialogue':
-		this.eventManager.trigger('showUI', {uiArray: ['gameUI', 'dialogue', 'dialogue'] });
-		this.dialogueManager.start_dialogue(value, this.default_speaker);
-		this.dialogueManager.on_dialogue_complete(() => {
-		  this.currentChunkIndex++;
-		  this.execute_node(node);
-		});
-		break;
-	  case 'event':
-		value.forEach(event => 
-		  this.eventManager.trigger(event.name, event.payload));
-		break;
-	  case 'choice': 
-		this.handle_choice(value);
-		this.dialogueManager.disableClickAdvance = true;
-		break;
-	  case 'conditions':
-		this.handle_condition(value);
-		break;
-	}
+	  },
+	  side_stories: {}
+	};
+	this.pausedScripts = {
+	  main_story: {
+		//Format should be something like:
+		//some_script: { paused_node: nodeID, continue_conditions: condition, require_focus }
+	  },
+	  side_stories: {}
+	};
+	this.eventManager.trigger('initDialogueUI', {});		
+	this.initiate_listeners();
+	this.currentNode;
   }
 	
-  handle_choice(choices) {
-	myPromise
-	.then(() => this.eventManager.trigger('showUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'] }))
-	.then(() => {
-	  const options = choices.options;
-	  if (options) this.eventManager.trigger('updateUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'], cb: (current) => {
-		options.forEach(opt => {
-		  const button = document.createElement('button');
-		  button.className = 'dialogue-choice-button';
-		  button.textContent = opt.text;
+  run(startingNodeID) {
+	this.currentChunkIndex = 0;
+	this.default_speaker = this.currentFocusScript.default_speaker || null;
+	const currentNode = this.currentFocusScript.nodes[startingNodeID];
+	console.log("This is the currentNode: ", currentNode);
+	if (currentNode) {
+	  this.currentNode = currentNode;
+	  this.execute_node();
+	} else {
+	  console.error('Node with id: ', startingNodeID, "not found!");
+	}
+  }
+  
+  check_paused_scripts() {
+	for (let [scriptType, scripts] of Object.entries(this.pausedScripts)) {
+	  for (let [scriptID, content] of Object.entries(scripts)) {
+		const result = this.engine.logic.conditionManager.check_condition(content.continue_conditions);
+		if (result) {
+		  Object.defineProperty(this.activeScripts, scriptID, {
+		    current_node: result, 
+		    require_focus: content.require_focus});
+		  delete this.pausedScripts.scriptType.scriptID;
+		}
+	  }
+	}
+  }
+  
+  start_script(scriptType, scriptID, startingNode = "start") {
+	this.activeScripts[scriptType][script_ID].current_node = startingNode;
+	this.engine.logic.eventManager.trigger('runScript', {
+	  stage: this.currentStage, 
+	  scriptType: scriptType, 
+	  scriptID: scriptID, 
+	  startingNodeID: startingNode
+	});
+  }
+  
+  run_active_scripts() {
+	let reqFocus = false;
+	for (let [scriptType, scripts] of Object.entries(this.activeScripts)) {
+	  for (let [scriptID, content] of Object.entries(scripts)) {
+		if (reqFocus && content.require_focus) continue; 
+		this.eventManager.trigger('runScript', {
+		  stage: this.currentStage, 
+		  scriptType: scriptType, 
+		  scriptID: scriptID, 
+		  startingNodeID: content.current_node
+		});
+		if (content.require_focus && reqFocus !== true) reqFocus = true;
+	  }
+	}
+  }
+  
+  update_script_progress(scriptType, scriptID, nodeID) {
+	if (this.activeScripts[scriptType][scriptID])
+	  this.activeScripts[scriptType][scriptID].node_ID = nodeID;
+  }
+	
+  execute_node() {
+	if (!this.currentNode) throw new Error('Current node is undefined!');
+	
+	const pairs = Object.entries(this.currentNode);
+	const key = pairs[this.currentChunkIndex][0];
+	const value = pairs[this.currentChunkIndex][1];	
+	if (!key || !value) 
+	{
+	  this.eventManager.trigger('reachedEndOfDialogue', {});
+	  return;
+	}
+	const currentHandler = ScriptManager.handlers[key];
+	
+	if (!currentHandler) throw new Error("Key is not recognized: ", key);
+	this[currentHandler](value);
+  }
+  
+  handle_dialogues(value) {
+	this.eventManager.trigger('startDialogue', {dialogues: value, defaultSpeaker: this.default_speaker});
+  }
+	
+  handle_choices(choices) {
+	const options = choices.options;
+	if (options) this.eventManager.trigger('updateUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'], cb: (current) => {
+	  options.forEach(opt => {
+		const button = document.createElement('button');
+		button.className = 'dialogue-choice-button';
+		button.textContent = opt.text;
 			
-		  button.onclick = () => {
-		    this.handle_choice_selection(opt);
-	      };
-		  current.appendChild(button);
-	    });
-	  }});
-	});	
+		button.onclick = () => {
+		  this.handle_choice_selection(opt);
+	    };
+		current.appendChild(button);
+	  });
+	}});
+	this.eventManager.trigger('showUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'] });
+
 	if (choices.waitTooLong) {
 	  this.curTimeoutIndex = 0;
 	  this._choice_timeout(choices.waitTooLong);			
@@ -89,13 +153,11 @@ class ScriptManager {
 	if (choice.next_node) {
 	  this.eventManager.trigger('hideUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'] });	
 	  this.run(choice.next_node);
-	  this.dialogueManager.disableClickAdvance = false;
 	  this.eventManager.trigger('updateUI', { uiArray: ['gameUI', 'dialogue', 'choice', 'container'], cb: (current) => {
 		while (current.firstChild) {
 		  current.removeChild(current.firstChild);
 	    }
 	  }});
-	  
 	}
   }
 	
@@ -103,7 +165,7 @@ class ScriptManager {
 	const choiceTimeout = waitTooLong[this.curTimeoutIndex];
 	//May make this timeout timer into an array later on...
 	this.timeoutTimer = setTimeout(() => {
-		this.dialogueManager.triggerWaitTooLong(waitTooLong);
+		//this.dialogueManager.triggerWaitTooLong(waitTooLong);
 	}, choiceTimeout);	
   }
 	
@@ -112,28 +174,43 @@ class ScriptManager {
 	const newTimeout = waitToolong
   }
 	
-  handle_condition(conditions) {
-	this.conditionManager.on_choice_complete((node) => this.run(node));
-	this.conditionManager.check_conditions(conditions);
+  handle_conditions(conditions) {
+	this.eventManager.trigger('checkConditions', { conditions: conditions });
   }
 	
   initiate_listeners() {
 	this.eventManager.on('runScript', (payload) => {
-	  const {stage, scriptType, scriptID, startingNodeID} = payload;
-	  const foundScript = allScripts.findScript(stage, scriptType, scriptID);
+	  const {scriptType, scriptID, startingNodeID} = payload;
+	  const foundScript = allScripts.findScript(scriptType, scriptID);
 	  if (!foundScript) 
 		console.error(`Stage ${stage} scriptType ${scriptType} with id ${scriptID} not found!`);
-	  if (this.currentScript !== foundScript) {
-		this.currentScript = foundScript;
+	  if (this.currentFocusScript !== foundScript) {
+		this.currentFocusScript = foundScript;
 		console.log("Running script now.");
 		this.run(startingNodeID);
 	  }
 	});
+	
+	this.eventManager.on('finishedDialogueAppending', (payload) => {
+	  console.log("Finished dialogue appending now");
+	  this.currentChunkIndex++;
+	  this.execute_node();
+	  if (payload.callback) payload.callback();
+	});
+	
+	this.eventManager.on('runNextNode', (payload) => {
+	  console.log('Running next node: ', payload.nextNode);
+	  this.run(payload.nextNode);
+	});
+	
+	
   }
 	
   pause_script(scriptID) {
+  
   }
 	
   complete_script(scriptID) {	
+  
   }
 };
