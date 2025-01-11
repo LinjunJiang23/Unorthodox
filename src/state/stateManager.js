@@ -114,6 +114,7 @@ class StateManager {
   }
 	
   init_events() {
+	this.eventManager.on('startNewGame', (payload) => this.initialize_state());
 	this.eventManager.on('collectedItem', (payload) => {
 	  const characterInventory = this.state[payload.characterID].inventory;
 	  

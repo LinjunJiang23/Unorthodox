@@ -1,0 +1,20 @@
+##This is notes for myself during development
+
+**Systems that have to rely on continuous updates & timestamp provided by game loop:
+  1. Player systems (movement, camera control, input polling)
+  2. Physics (collision detection, gravity & forces, projectile movement)
+  3. Animation (Character & object animation, ui animations)
+  4. AI (pathfinding, state evaluations)
+  5. Environmental Systems (weather effects & particles, this is more animation heavy but still need some updated calculation; day-night cycles and light, environmental movement like clouds, water waves and other ambient effects)
+  6. Timers and Counters (Cooldowns, event timers)
+  7. Combat (Projectile behavior, despawning, DOT)
+  8. Sound (likely ignore those at this stage... but some ambient sounds need smooth transitioning effects too)
+
+**System that have to rely on event triggers
+  1. Input handling
+  2. UI Systems
+  3. Dialogue & Story Progression
+  4. Inventory & Items
+  5. Combat (attack commands, enemy spawning when enter an area)
+  6. Environmental Triggers like events and interactions
+  7. Quest system 

@@ -1,26 +1,26 @@
 // src/ui/startScreenMenu.js
 
 class StartScreenMenu {
-  constructor(eventManager) {
+  constructor(eventManager, inputHandler) {
 	this.eventManager = eventManager;
+	this.inputHandler = inputHandler;
+	this.initialize_listeners();
   }
 	
   initialize_listeners() {
+	console.log("Reached here!");
 	this.setup_startgame_listeners();
-	//...
   }
 	
   setup_animation_listeners() {
-	//this.uiElements['animation'].addEventListener();
   }
 	
   setup_startgame_listeners() {
-	
-	this.uiElements['startGame'].addEventListener('click', () => this.start_game());
+	this.inputHandler.add_mouse_handler({ type: 'click', 
+	  key: 'startscreen-startgame', listener: () => this.start_game()});
   }
 	
   animation() {
-	const aElement = this.uiElements['animation'];
   }
 	
   start_game() {

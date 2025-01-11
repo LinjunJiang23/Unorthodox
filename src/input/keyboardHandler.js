@@ -9,35 +9,34 @@
  * or query key state. 
  */
 class KeyboardHandler {
-	constructor(inputHandler) {
-		this.inputHandler = inputHandler;
-		this.listeners = {
-			press: [],
-			release: []
-		};
-		this.pressedKeys = new Set();
-	}
+  constructor(inputHandler) {
+	this.inputHandler = inputHandler;
+	this.listeners = {
+	  press: [],
+	  release: []
+	};
+	this.pressedKeys = new Set();
+  }
 	
-	isKeyPressed(key) {
-		return (this.pressedKeys.has(key));
-	}
+  is_key_pressed(key) {
+	return (this.pressedKeys.has(key));
+  }
 	
-	onKeyPress(event) {
-        this.pressedKeys.add(event.code);
-        this.notifyListeners(event.code, "press");
-	}
+  on_key_press(event) {
+    this.pressedKeys.add(event.code);
+    this.notify_listeners(event.code, "press");
+  }
 	
-	onKeyRelease(event) {
-        this.pressedKeys.delete(event.code);
-        this.notifyListeners(event.code, "release");
-    }
+  on_key_release(event) {
+    this.pressedKeys.delete(event.code);
+    this.notify_listeners(event.code, "release");
+  }
 
-    addListener(type, listener) {
-        () => this.listeners[type].push(listener);
-    }
+  add_listener(type, listener) {
+    () => this.listeners[type].push(listener);
+  }
 
-    notifyListeners(key, type) {
-        this.listeners[type].forEach((listener) => listener(key));
-    }
-	
+  notify_listeners(key, type) {
+    this.listeners[type].forEach((listener) => listener(key));
+  }
 };

@@ -1,13 +1,13 @@
 // src/ui/uiManager.js
 
 class UIManager {
-  constructor(eventManager) {
-	this.eventManager = eventManager();
+  constructor(eventManager, inputHandler) {
+	this.eventManager = eventManager;
+	this.inputHandler = inputHandler;
 	this.uiElements = uiElements;
-	this.startScreenMenu = new StartScreenMenu(this);
-	//... add other ui panels here
+	this.startScreenMenu = new StartScreenMenu(this.eventManager, this.inputHandler);
 	this.textProcessor = new TextProcessor(this);
-	this.init_listeners());
+	this.init_listeners();
 	this.eventManager.trigger('initStartscreen', {});
   }
 	

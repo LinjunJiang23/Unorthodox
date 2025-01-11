@@ -20,7 +20,6 @@
 class RenderManager {
   constructor(eventManager) {
 	this.eventManager = eventManager;
-	this.assetLoader = this.engine.assetLoader;
     this.ctx = CTX;
 	this.showDebug = false;
 	this.init();

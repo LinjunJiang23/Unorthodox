@@ -1,6 +1,10 @@
 class LogicManager {
-  constructor(engine) {
-	this.engine = engine;
+  constructor(eventManager, inputHandler) {
+	this.eventManager = eventManager;
+	this.inputHandler = inputHandler;
+	this.eventManager.on('startNewGame', (payload) => {
+	  this.init();
+	});
   }
 	
   init() {
@@ -9,8 +13,8 @@ class LogicManager {
 	this.characters = new CharacterManager(this);
 	this.campaign = new CampaignManager(this);
 	this.env = new EnvManager(this);
-	this.leaderController = new LeaderController(this);
-	this.scriptManager = new ScriptManager(this.eventManager);
+	this.leaderController = new LeaderController(this.eventManager, this.inputHandler);
+	this.scriptManager = new ScriptManager(this.eventManager, this.inputHandler);
   }
 	
   update(timestamp) {

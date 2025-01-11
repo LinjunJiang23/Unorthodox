@@ -50,5 +50,4 @@ class AssetLoader {
 	}		
 	return current;
   }
-
 };
