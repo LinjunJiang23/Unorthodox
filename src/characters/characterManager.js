@@ -2,24 +2,20 @@
 
 
 class CharacterManager {
-	constructor(logic) {
-		this.logic = logic;
-		this.player = new PlayerManager(this);
-		this.specials = new SpecialCharacterManager(this.logic);
-		this.npcs = new NPCManager(this);
-	}
-	
-	update(timestamp) {
-		this.player.update(timestamp);
-		this.specials.update(timestamp);
-		this.npcs.update(timestamp);
-	}
-	
-  update_player() {
-	
+  constructor(eventManager) {
+	this.eventManager = eventManager;
+	this.player = new PlayerManager(this);
+	this.specials = new SpecialCharacterManager(this);
+	this.npcs = new NPCManager(this);
   }
 	
   find_character(targetTag, targetID) {
 	return this[targetTag].find(targetID);
+  }
+  
+  create_character(characterTag, characterID) {
+	if (characterTag === 'player' && characterID === 'player') {
+	  this.player.create_player;
+	}
   }
 };

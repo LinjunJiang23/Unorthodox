@@ -12,12 +12,15 @@ class ScriptManager {
 	conditions: 'handle_conditions'
   };
   
-  constructor(eventManager) {
+  constructor(eventManager, inputHandler) {
 	this.eventManager = eventManager;
-	if (!this.eventManager || typeof this.eventManager.on !== 'function') 
-	  throw new Error('ScriptManager: Invalid eventManager.');
-	this.dialogueManager = new DialogueManager(this.eventManager);
+	this.inputHandler = inputHandler;
+	console.log("This is the handler received: ", inputHandler);
+	this.eventManager.trigger('initDialogueUI', {});		
+	
+	this.dialogueManager = new DialogueManager(this.eventManager, this.inputHandler);
 	this.conditionManager = new ConditionManager(this.eventManager);
+	
 	this.currentFocusScript;
 	this.currentChunkIndex;
 	this.default_speaker;
@@ -42,7 +45,6 @@ class ScriptManager {
 	  },
 	  side_stories: {}
 	};
-	this.eventManager.trigger('initDialogueUI', {});		
 	this.initiate_listeners();
 	this.currentNode;
   }

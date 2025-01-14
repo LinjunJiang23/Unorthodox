@@ -16,6 +16,8 @@ class KeyboardHandler {
 	  release: []
 	};
 	this.pressedKeys = new Set();
+	window.addEventListener("keydown", (event) => this.on_key_press(event));
+	window.addEventListener("keyup", (event) => this.on_key_release(event));
   }
 	
   is_key_pressed(key) {

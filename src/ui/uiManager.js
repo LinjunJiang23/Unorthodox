@@ -99,12 +99,14 @@ class UIManager {
   textProcessor_events() {
     this.eventManager.on('processText', (payload) => {
 	  const ele = this.get_UI(payload.uiArray);
+	  if (!ele) this.eventManager.trigger('error', { type: 'nullReturn', 
+	    message: 'UI with component name is not found! ', context: { ui: ele } });
 	  this.textProcessor.processText(payload.textObject, ele);
 	});
 	this.eventManager.on('onTextTyping', (payload) => {
 	  const isTyping = this.textProcessor.isTyping;
 	  const str = this.textProcessor.str;
-	  payload.cb(isTyping, str);
+	  if (payload.cb) payload.cb(isTyping, str);
 	});
 	this.eventManager.on('finishTextTyping', (payload) => {
 	  const ele = this.get_UI(payload.uiArray);
@@ -112,7 +114,8 @@ class UIManager {
 	});
 	this.eventManager.on('clearText', (payload) => {
 	  const ele = this.get_UI(payload.uiArray);
-	  if (!ele) throw new Error('UI with component name: ', uiArray, "is not found!");
+	  if (!ele) this.eventManager.trigger('error', { type: 'nullReturn', 
+	    message: 'UI with component name is not found! ', context: { ui: ele } });
 	  if (Array.isArray(ele)) {
 	    ele.forEach(e => e.textContent = '');
 	  } else {
@@ -121,7 +124,8 @@ class UIManager {
 	});
 	this.eventManager.on('displayPlainText', (payload) => {
 	  const ele = this.get_UI(payload.uiArray);
-	  if (!ele) throw new Error('UI with component name: ', uiArray, "is not found!");
+	  if (!ele) this.eventManager.trigger('error', { type: 'nullReturn', 
+	    message: 'UI with component name is not found! ', context: { ui: ele } });
 	  if (Array.isArray(ele)) {
 	    ele.forEach(e => this.textProcessor.displayPlainText(payload.textObject, e));
 	  } else {

@@ -4,21 +4,23 @@ class AssetLoader {
   constructor(eventManager) {
 	this.eventManager = eventManager;
 	this.loadedAssets = assets;
+	this.init();
   }
   
   init() {
-	this.load_images('./img/maps/testMap.png', 'maps', 'testLayer');
+	this.load_images('./img/maps/testMap.png', ['maps', 'testLayer']);
 	this.load_images('./img/animation/characters/player/chibi/normal/baseBody/baseBody1.png', 
-	  'animation', 'characters', 'player', 'normal', 'baseBody');
-	this.load_images('./img/portraits/chenru/neutral.png', 'portraits', 'chenru', 'neutral');
+	  ['animation', 'characters', 'player', 'normal', 'baseBody']);
+	this.load_images('./img/portraits/chenru/neutral.png', ['portraits', 'chenru', 'neutral']);
 	
 	this.eventManager.on('getAssets', (payload) => {
-	  const currentAsset = this.get_assets(payload.assetArray);
-	  if (payload.cb) payload.cb(currentAsset);
+	  const { assetArray, cb } = payload;
+	  const currentAsset = this.get_assets(assetArray);
+	  if (cb) cb(currentAsset);
 	});
   }
 	
-  load_images(url, ...keys) {
+  load_images(url, keys) {
 	return new Promise((resolve, reject) => {
 	  const img = new Image();
 	  img.onload = () => {

@@ -27,22 +27,6 @@ class BaseModel {
 		}
 	}
 	
-	isInViewport() {
-		const sPosition = 
-		  this.character.logic.engine.camera.map_to_screen({x: this.physics.x, y: this.physics.y});
-		
-		
-		if (
-			sPosition.x + this.physics.width > 0  &&
-			sPosition.y + this.physics.height > 0 && 
-			sPosition.x < this.character.logic.engine.settings.graphics.resolution.viewportWidth &&
-			sPosition.y < this.character.logic.engine.settings.graphics.resolution.viewportHeight
-		) {
-			return true;
-		}
-		return false;
-	}
-	
 	
 	get_frameSheet() {
 		return this.frameSheet;

@@ -28,39 +28,24 @@ class RenderManager {
   init() {
 	myPromise
 	.then(() => this.ctx.lazyloadEnvironmentCTX?.())
-	.then(() => this.ctx.lazyloadDialogueCTX())
-	.then(() => this.renderEnv = new RenderEnv(this))
-	.then(() => this.renderTeam = new RenderTeam(this));
+	.then(() => this.ctx.lazyloadDialogueCTX());
+	this.init_events();
   }
 	
   render_sprite(ctx, spriteSheet, imageX, imageY, 
 	captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight) {
 			
-	if (!ctx) this.eventManager.trigger('error', { type: 'render', message: `Context produces error.`, context: {ctx: ctx}});
-		
+	if (!ctx || !spriteSheet || !imageX || !imageY || !captureWidth || 
+	    !captureHeight || !canvasX || !canvasY || !canvasWidth || !canvasHeight)
+		this.eventManager.trigger('error', { type: 'param', message: 'One of the property passed to render sprite is null' });	
+	
 	ctx.drawImage(spriteSheet, imageX, imageY, 
 	captureWidth, captureHeight, canvasX, canvasY, 
 	  canvasWidth, canvasHeight);
   }
 	
-  render_env(currentArea) {
-	const envData = this.renderEnv.get_data(currentArea);
-	Object.values(envData).forEach(data => this.render_data(data));
-  }
-	
-	
-	
-  render_team() {
-	const teamData = this.renderTeam.get_data();
-	const teamCTX = this.get_ctx(['environment', 'team']);
-	this.clear_sprite(teamCTX, 
-	  teamCTX.canvas.width, teamCTX.canvas.height);
-		
-	  Object.values(teamData).forEach(data => 
-	  this.render_data(data));
-  }
-	
   render_data(data) {
+	if (!data) return;
 	const { context, spriteSheet, imageX, imageY, captureWidth, 
 	  captureHeight, canvasX, canvasY, canvasWidth, canvasHeight } = data;
 	if (data !== null) this.render_sprite(context, spriteSheet, 
@@ -71,9 +56,14 @@ class RenderManager {
   clear_sprite(ctx, clearWidth, clearHeight) {
 	ctx.clearRect(0, 0, clearWidth, clearHeight);
   }
+  
+  render_character(datas) {
+    if (!datas) this.eventManager.trigger('error', { type: 'param', message: 'The PARAM in render_character of RenderManager is empty.' }); 
+  }
 	
   render_speaker_portrait(speaker) {
-	if (!speaker || !speaker.character || !speaker.portrait) this.eventManager.trigger('error', { type: 'param', message: 'The PARAM passed to render_speaker_portrait is not corret.' });
+	if (!speaker || !speaker.character || !speaker.portrait) 
+	  this.eventManager.trigger('error', { type: 'param', message: 'The PARAM passed to render_speaker_portrait is not corret.' });
 	const { character, portrait } = speaker;
 	const currentCTX = this.get_ctx(['dialogue', 'portrait']);
 	this.eventManager.trigger('getAssets', { assetArray: [character, portrait], cb: (currentAsset) => {
@@ -88,7 +78,7 @@ class RenderManager {
 	  if (current[key]) {
 		current = current[key];
 	  } else {
-		this.eventManager.trigger('error', {type: 'render', message: 'Key is not found in ctx', 
+		this.eventManager.trigger('error', {type: 'render', message: 'Key is not found in get ctx', 
 		  context: { key: key }});
 		return; // Exit if a key is invalid
 	  }
@@ -107,7 +97,21 @@ class RenderManager {
 	
   render_worldmap(areaName) {
   }
-
+  
+  init_events() {
+    this.eventManager.on('renderSprite', (payload) => {
+	  const { ctxArray, assets, imageX, imageY, captureWidth, captureHeight, 
+	  canvasX, canvasY, canvasWidth, canvasHeight } = payload;
+	  const currentCTX = this.get_ctx(ctxArray);
+	  this.render_sprite(currentCTX, assets, imageX, imageY, captureWidth, captureHeight, 
+	    canvasX, canvasY, canvasWidth, canvasHeight);
+	});
+	this.eventManager.on('getCTX', (payload) => {
+	  const { ctxArray, cb } = payload;
+	  const currentCTX = this.get_ctx(ctxArray);
+	  cb(currentCTX);
+	});
+  }
 };
 
 //This is for debug...

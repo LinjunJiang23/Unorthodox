@@ -2,65 +2,50 @@
 
 
 class RenderTeam {
-	constructor(renderManager) {
-		this.renderManager = renderManager;
-		this.engine = renderManager.engine;
-	}
+  constructor(eventManager) {
+	this.eventManager = eventManager;
+  }
 	
-	get_data() {
-		const playerData = this.get_player();
-		const companionsData = this.get_companions();
+  get_data() {
+	const playerData = this.get_player();
+	const companionsData = this.get_companions();
 		
-		const teamData = {
-			player: playerData,
-			companion: companionsData
-		};
-		
-		
-		return teamData;
-		
-	}
+	const teamData = {
+	  player: playerData,
+	  companion: companionsData
+	};	
+	return teamData;	
+  }
 	
-	get_player() {
-		const playerModel = this.engine.logic.characters.player.player.model;
-		const currentCTX = this.renderManager.ctx['environment']['team'];
+  get_player() {
+	const playerModel = this.engine.logic.characters.player.player.model;
+	const currentCTX = this.renderManager.ctx['environment']['team'];
 		
-		const imagePos = playerModel.animation.get_current_frame();
-			
-		const spriteSheets = playerModel.spriteSheets;
-		
-		const screenPos = playerModel.get_screen_position();
+	const imagePos = playerModel.animation.get_current_frame();	
+	const spriteSheets = playerModel.spriteSheets;	
+	const screenPos = playerModel.get_screen_position();
 				
-		const curCanvasX = screenPos.x - (128/2);
-		const curCanvasY = screenPos.y - (128/2);
-		
-		if (!currentCTX) {
-			console.error("Team_CTX isn't right.");
-			return;
-		}
-		
-		
-		const playerData = {
-			context: currentCTX, 
-			spriteSheet: spriteSheets,
-			imageX: imagePos.x,
-			imageY: imagePos.y,
-			captureWidth: 128,
-			captureHeight: 128,
-			canvasX: curCanvasX,
-			canvasY: curCanvasY,
-			canvasWidth: 128,
-			canvasHeight: 128
-		};
+	const curCanvasX = screenPos.x - (128/2);
+	const curCanvasY = screenPos.y - (128/2);
 
-		
-		return playerData;
-	}
+	const playerData = {
+	  context: currentCTX, 
+	  spriteSheet: spriteSheets,
+	  imageX: imagePos.x,
+	  imageY: imagePos.y,
+	  captureWidth: 128,
+	  captureHeight: 128,
+	  canvasX: curCanvasX,
+	  canvasY: curCanvasY,
+	  canvasWidth: 128,
+	  canvasHeight: 128
+	};
 	
-	get_companions() {
-		const companionsData = {
-		};
-		return null;
-	}
-
+	return playerData;
+  }
+	
+  get_companions() {
+	const companionsData = {};
+	return null;
+  }
 };

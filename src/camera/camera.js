@@ -15,7 +15,8 @@ class Camera {
 	/**
 	 * Camera's initial set up is always the top left corner of viewport
 	 */
-	constructor() {
+	constructor(eventManager) {
+		this.eventManager = eventManager;
 		this.x = 0;
 		this.y = 0;
 		this.minX = 0;
@@ -23,6 +24,14 @@ class Camera {
 		this.maxX = 256;
 		this.maxY = 144;
 		this.zoomFactor = 5;
+		this.eventManager.on('getCameraDetails', (payload) => {
+		  const { types, cb } = payload;
+		  if (!Array.isArray(types)) this.eventManager.trigger('error', { type: 'param', 
+	        message: 'Param passed to getCameraDetails is not in array format', context: { param: payload.types } });
+		   const val = {};
+		  types.forEach(type => val[type] = this[type]);
+		  if (cb) cb(val);
+		});
 	}
 	
 	map_to_screen(mapPos) {
@@ -41,8 +50,8 @@ class Camera {
 	}
 
 	center_camera_on(pos) {
-		this.x = pos.x - this.maxX / 2;
-		this.y = pos.y - this.maxY / 2;
+		this.x = pos.x - (this.maxX - this.minX) / 2;
+		this.y = pos.y - (this.maxY - this.minX) / 2;
 		this.set_camera_bounds();
 	}
 
@@ -67,7 +76,6 @@ class Camera {
 		const offsetY = 5;
 		const newX = character.model.physics.x - offsetX;
 		const newY = character.model.physics.y - offsetY;
-		console.log("New x: ", newX, "y: ", newY);
 		this.center_camera_on({
 			x: newX,
 			y: newY

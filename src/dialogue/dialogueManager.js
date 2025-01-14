@@ -7,13 +7,13 @@
  * Also receives instructions from the script manager 
  */
 class DialogueManager {
-  constructor(eventManager) {
+  constructor(eventManager, inputHandler) {
 	this.eventManager = eventManager;
+	this.inputHandler = inputHandler;
 	this.currentDialogue;
 	this.defaultSpeaker;
 	this.currentDialogueLineIndex = 0;
 	this.disableClickAdvance = true;
-	this.mouseHandler = this.eventManager.logic.engine.inputHandler.mouseHandler;
 	this.initiate_listeners();
 	this.autoOn = false;
   }
@@ -144,18 +144,20 @@ class DialogueManager {
   }
   
   initiate_listeners() {
-	this.mouseHandler.addListeners("click", 'dialogue-historybtn', 
-	  (payload) => this.eventManager.trigger('showUI', {uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container']}));
+	this.inputHandler.add_mouse_handler({ type: "click", key: 'dialogue-historybtn', 
+	  listener: (payload) => this.eventManager.trigger('showUI', 
+	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] })});
 	
-	this.mouseHandler.addListeners('click', 'dialogue-history-closebtn',
-	  (payload) => this.eventManager.trigger('hideUI', {uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container']}));
+	this.inputHandler.add_mouse_handler({ type: 'click', key: 'dialogue-history-closebtn',
+	  listener: (payload) => this.eventManager.trigger('hideUI', 
+	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] }) });
 	this.eventManager.on('renderSpeakerPortrait', (payload) => {
 	  this.eventManager.logic.engine.renderManager.render_speaker_portrait(payload);
 	});
-	this.mouseHandler.addListeners("click", 'dialogue-text', (payload) => {
+	this.inputHandler.add_mouse_handler({ type: "click", key: 'dialogue-text', listener: (payload) => {
 	  if (this.disableClickAdvance) return;
 	  this.handle_text_typing();	
-	});
+	}});
 	this.eventManager.on('reachedEndOfDialogue', (payload) => this.reached_end_of_dialogue());
 	this.eventManager.on('startDialogue', (payload) => {
 	  this.start_dialogue(payload.dialogues, payload.defaultSpeaker);

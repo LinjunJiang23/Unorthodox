@@ -8,6 +8,7 @@ class MouseHandler {
 	  hover: {},
 	  move: {}
 	};
+	window.addEventListener('click', (event) => this.on_mouse_click(event));
   }
 	
   on_mouse_click(event) {

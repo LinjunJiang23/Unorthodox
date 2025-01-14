@@ -56,7 +56,6 @@ class StateManager {
 	  env: { currentArea: 'testLayer' }
 	};
 	this.state = initialState;
-	this.eventManager = this.engine.logic.eventManager;
   }
 	
   flush_updates() {

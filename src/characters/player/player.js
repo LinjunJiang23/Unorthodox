@@ -7,21 +7,17 @@ class Player extends BaseCharacter {
 	static validStates = ['idle', 'walk', 'run', 'backup', 'jump'];
 	static validActions = ['rest', 'hold', 'lift', 'drop', 'drag'];
 	
-	constructor(logic) {
+	constructor(playerManager, eventManager) {
 		super();
-		this.logic = logic;
+		this.playerManager = playerManager;
+		this.eventManager = eventManager;
+		this.id = 'player';
 		this.tag = 'player';
 		this.lname = "左";
 		this.fname = "汶";
 		this.state = "idle";
 		this.action = "rest";
 		this.composure = 100;
-		this.intro = 
-			`Still familiar with the silhouette in mirror. How fascinating is that?
-			镜中人仍熟悉，何等精妙？`;
-    }
-	
-	init() {
 		this.stats = new Stat();
 		this.inventory = new Inventory([]);
 		this.traits = new CharacterTraitManager([
@@ -32,6 +28,14 @@ class Player extends BaseCharacter {
 		this.model = new PlayerModel(this);
 		this.actions = new ActionManager(this);
 		this.relationshipManager = new RelationshipManager();
+		this.intro = 
+			`Still familiar with the silhouette in mirror. How fascinating is that?
+			镜中人仍熟悉，何等精妙？`;
+		this.characterManager.eventManager('createCharacter', { character: this });
+    }
+	
+	init() {
+		
 	}
 	
 	update(timestamp) {
@@ -76,7 +80,6 @@ class Player extends BaseCharacter {
 			console.log('Expected format like: {lname: "左", fname: "汶"}');
 		}
 	}
-	
 
 	get_name() {
 		return {lname: this.lname, fname: this.fname};

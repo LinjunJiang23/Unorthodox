@@ -4,13 +4,6 @@ class InputHandler {
   constructor(engine) {
 	this.kbHandler = new KeyboardHandler(this);
 	this.mouseHandler = new MouseHandler(this);
-	this.init();
-  }
-  
-  init() {
-    window.addEventListener("keydown", (event) => this.handle_input(event));
-	window.addEventListener("keyup", (event) => this.handle_input(event));
-	window.addEventListener('click', (event) => this.handle_input(event));
   }
 	
   handle_input(event) {
@@ -30,5 +23,9 @@ class InputHandler {
   
   add_keyboard_handler({type, listener}) {
     this.kbHandler.add_listener(type, listener);
+  }
+  
+  is_key_pressed(key) {
+    return this.kbHandler.is_key_pressed(key);
   }
 };

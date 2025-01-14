@@ -6,21 +6,19 @@ class LogicManager {
 	  this.init();
 	});
   }
-	
+  
+  update(timestamp) {
+	this.leaderController.update(timestamp);
+	this.env.update(timestamp);
+  }
+  
   init() {
-	this.combatManager = new CombatManager(this);
-	this.world = new WorldManager(this);
-	this.characters = new CharacterManager(this);
-	this.campaign = new CampaignManager(this);
+	this.combatManager = new CombatManager(this.eventManager);
+	this.world = new WorldManager(this.eventManager);
+	this.characters = new CharacterManager(this.eventManager);
+	this.campaign = new CampaignManager(this.eventManager, this.characters);
 	this.env = new EnvManager(this);
 	this.leaderController = new LeaderController(this.eventManager, this.inputHandler);
 	this.scriptManager = new ScriptManager(this.eventManager, this.inputHandler);
   }
-	
-  update(timestamp) {
-	this.leaderController.update(timestamp);
-	this.env.update(timestamp);
-	this.campaign.update(timestamp);
-  }
-  
 };

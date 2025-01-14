@@ -1,30 +1,37 @@
 // src/setting/settingManager.js
 
 class SettingManager {
-	constructor() {
-		this.canvas = canvas;
-		this.graphics = {
-			resolution: {
-				viewportWidth: 1080, 
-				viewportHeight: 720
-			}
-		};
-	}
+  constructor(eventManager) {
+	this.eventManager = eventManager
+	this.canvas = canvas;
+	this.graphics = {
+	  resolution: {
+		viewportWidth: 1080, 
+		viewportHeight: 720
+	  }
+	};
+	this.localization = new LocalizationManager(this.eventManager);
+	this.language = this.localization.t(this.localization.currentLanguage);
+  }
 	
-	init() {
-		myPromise.then(() => this.canvas.lazyloadEnvironmentCanvas())
-		.then(() => {
-			Object.values(this.canvas.environment).forEach(ele => {
-				ele.width = this.graphics.resolution.viewportWidth;
-				ele.height = this.graphics.resolution.viewportHeight;
-			});
-		});
-	}
+  init() {
+	myPromise.then(() => this.canvas.lazyloadEnvironmentCanvas())
+	.then(() => {
+	  Object.values(this.canvas.environment).forEach(ele => {
+		ele.width = this.graphics.resolution.viewportWidth;
+		ele.height = this.graphics.resolution.viewportHeight;
+	  });
+	});
+  }
 	
-	set_size_gameEnv(width, height) {
-		this.graphics.resolution.viewportWidth = width;
-		this.graphics.resolution.viewportHeight = height;
-	}
+  set_size_gameEnv(width, height) {
+	this.graphics.resolution.viewportWidth = width;
+	this.graphics.resolution.viewportHeight = height;
+  }
+  
+  set_language(language) {
+	this.localization.loadLanguage(language);
+  }
 };
 
 //16:9 (1920x1080, 1280x720)
