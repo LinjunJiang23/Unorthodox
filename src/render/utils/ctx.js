@@ -39,5 +39,18 @@ const CTX = {
 	
 	lazyloadDebugCanvas() {
 	
+	},
+	
+	get_ctx(keys) {
+	let current = this.ctx;
+	for (let key of keys) {
+	  if (current[key]) {
+		current = current[key];
+	  } else {
+		console.error('CTX not found');
+		return; // Exit if a key is invalid
+	  }
 	}
+	return current;
+  }
 };

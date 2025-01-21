@@ -216,19 +216,3 @@ let realm_common = new Realm('人界', '凡人居住地');
 let realm_taixu = new Realm('太虚', '修仙者居住地');
 let realm_demonic = new Realm('魔域', '魔修与魔物盘踞于此');
 //WorldMap
-let worldMap = new WorldMap();
-
-location_laorange.addSubElement(point_rongcity);
-location_laorange.addSubElement(point_linghaitown);
-location_qimountain.addSubElement(point_xingtianpeak);
-location_foggyforest.addSubElement(point_stonewood);
-location_foggyforest.addSubElement(point_darkwood);
-
-realm_common.addSubElement(location_laorange);
-realm_common.addSubElement(location_lingocean);
-realm_taixu.addSubElement(location_qimountain);
-realm_taixu.addSubElement(location_foggyforest);
-
-worldMap.addRealm(realm_common);
-worldMap.addRealm(realm_taixu);
-worldMap.addRealm(realm_demonic);

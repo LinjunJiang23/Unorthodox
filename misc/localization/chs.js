@@ -1,4 +1,6 @@
-const chineseSimplied = {
+const chineseSimplified = {
+	"language-chinese-simplified": "简体中文",
+	"language-english": "英语",
     "prologue_tutorial_start_dialogue_1": "此人面相和善，披风间却刀闪寒光。",
     "prologue_tutorial_start_dialogue_2": "我则正紧紧攥着其裤脚，与其空空如也钱袋。",
     "prologue_tutorial_start_dialogue_3": "撒手太迟，狡辩太晚。",
@@ -7,10 +9,23 @@ const chineseSimplied = {
     "prologue_tutorial_start_choice_1": "挣脱",
     "prologue_tutorial_start_choice_2": "求饶",
     "prologue_tutorial_start_choice_3": "认命",
-    "prologue_tutorial_start_wait_too_long_1": "我沉默地同这人对视良久，对方不耐烦地抓着我衣领将我拎了起来。",
+    "prologue_tutorial_start_wait_too_long_1": "我同这人沉默对视，一直到衣领被不耐烦地拽起。",
     "prologue_tutorial_struggle_dialogue_1": "我奋力挣脱！",
-    "prologue_tutorial_struggle_success_dialogue_1": "我的四肢并用乱蹬乱挠很有效，对方猝不及防松开了手。",
-    "prologue_tutorial_struggle_success_dialogue_2": "脸着地带来的剧痛令我头晕目眩，两眼一翻直接昏迷",
-    "prologue_tutorial_struggle_fail_dialogue_1": "我四肢并用乱蹬乱挠的奋力致使对方抻长了胳膊。",
-    "chenru_name": "陈汝"
+    "prologue_tutorial_struggle_success_dialogue_1": "四肢并用，乱蹬乱挠，很有效果，桎梏松开了。",
+    "prologue_tutorial_struggle_success_dialogue_2": "太高了！脸着地带来的剧痛令我两眼一翻昏了过去",
+    "prologue_tutorial_struggle_fail_dialogue_1": "我四肢并用，乱蹬乱挠，全心全意，迫使对方抻长了胳膊。",
+	"prologue_tutorial_struggle_fail_dialogue_2": "…如此精妙的狗刨。",
+	"player_default_lname": "左",
+	"player_default_fname": "汶",
+	"player_default_trait_name_1": "姐姐",
+	"player_default_trait_desc_1": "陈桥的姐姐",
+	"player_default_trait_name_2": "家人",
+	"player_default_trait_desc_2": "陈汝的家人",
+	"player_default_intro": "镜中人仍熟悉，何等精妙？",
+	"chenqiao_name": "陈桥",
+	"chenqiao_default_trait_name_1": "家养丫鬟",
+	"chenqiao_default_trait_desc_1": "姐姐养大的丫鬟，随叫随到。虽然其对狗哨的召唤方式颇有不满。",
+    "chenru_name": "陈汝",
+	"chenru_defualt_trait_name_1": "游手好闲",
+	"chenru_default_trait_desc_1": "仗着身份成日不务正业使唤小孩"
 };

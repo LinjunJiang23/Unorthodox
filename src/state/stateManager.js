@@ -19,43 +19,12 @@ class StateManager {
 	}
 	this.pendingUpdates;
 	this.persistData;
-	this.state = { player: {}, env: {}, world: {}, 
-	factions: {}, companions: {}, NPCs: {}, 
-	globalFlags: {} };
+	this.state;
   }
 
-	
   initialize_state() {
-	const initialState = {
-	  stage: 'prologue',
-	  scripts: {
-		active: {
-		  main_story: {},
-		  side_stories: {}
-		},
-		paused: {},
-		completed: {}
-	  },
-	  player: {
-		name: {
-		  lname: '左',
-		  fname: '汶'
-		},
-		mode: 'normal',
-		composure: 100,
-		intro: `Still familiar with the silhouette in mirror. How fascinating is that?
-		镜中人仍熟悉，何等精妙？`,
-		stats: null,
-		inventory: null,
-		traits: null,
-		app: null,
-		model: null
-	  },
-	  specials: {},
-	  NPCs: {},
-	  env: { currentArea: 'testLayer' }
-	};
-	this.state = initialState;
+	this.state = {};
+	this.pendingUpdates = null;
   }
 	
   flush_updates() {
@@ -138,6 +107,17 @@ class StateManager {
 		id: scriptID,
 		timestamp: new Date().toISOString()
 	  });
+	});
+	this.eventManager.on('createCharacter', (payload) => {
+	  const { tag, id, state, mode, direction, relaitonships } = payload.character;
+	  this.state.characters[tag][id] = {
+	    tag: tag,
+		id: id,
+		state: state,
+		mode: mode,
+		direction: direction,
+		relationships: relationships
+	  }		  
 	});
   }
 	

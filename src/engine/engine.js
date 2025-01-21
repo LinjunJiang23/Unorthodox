@@ -6,7 +6,7 @@ class Engine {
 	Engine.instance = this;
 		
 	this.isGameRunning = false;
-	this.eventManager = new EventManager();
+	this.eventManager = new EventManager(this);
 	this.lastUpdate = performance.now();
 	this.camera = new Camera(this.eventManager);
 	this.timeManager = new TimeManager(this, this.eventManager);
@@ -32,7 +32,8 @@ class Engine {
   initialize_game() {
 	this.isGameRunning = true;
 	this.renderManager.envManager = this.logic.envManager;
-	this.renderManager.characterManager = this.logic.characterManager;
+	this.renderManager.animationSystem = this.logic.animationSystem;
+	this.renderManager.visibilityManager = this.logic.visibilityManager;
 	this.game_loop(0);
   }
 	
@@ -50,6 +51,7 @@ class Engine {
   }
 	
   pause_game() {
+	this.isGameRunning = false;
   }
 };
 

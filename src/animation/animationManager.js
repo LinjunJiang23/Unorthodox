@@ -15,6 +15,18 @@ class AnimationManager {
 	};
 	this.x = this.model.physics.x;
 	this.y = this.model.physics.y;
+	this.width = 128;
+	this.height = 128;
+	this.sceneNode = new SceneNode(this.character.id, {
+	  position: { x: this.x - (this.width/2), y: this.y - (this.height/2)},
+	  rotation: 0,
+	  spriteSheet: this.model.spriteSheet,
+	  layer: 'team',
+	  tags: ['character'],
+	  animation: {
+	    currentFrame: this.get_current_frame()
+	  }
+	});
 	this.blender = new AnimationBlender();
   }
 	
@@ -33,18 +45,6 @@ class AnimationManager {
 	  this.character.lastUpdateTime = timestamp;
 	}
   }
-  
-  is_in_view(cameraView) {
-	if (
-		this.x + this.model.physics.width > 0  &&
-		this.y + this.model.physics.height > 0 && 
-		this.x < this.character.logic.engine.settings.graphics.resolution.viewportWidth &&
-		this.y < this.character.logic.engine.settings.graphics.resolution.viewportHeight
-	) {
-	  return true;
-	}
-	return false;
-  }
 	
   change_position(x, y) {
 	if ((x !== this.x) || (y !== this.y)) {
@@ -60,5 +60,18 @@ class AnimationManager {
 	
   get_current_frame() {
 	return this.currentAnimation.frameSheet['baseBody'][this.character.currentFrame];
+  }
+  
+  get_render_data() {
+    const data = {
+	  spriteSheet: this.model.spriteSheets,
+	  imageX: this.get_current_frame().x,
+	  imageY: this.get_current_frame().y,
+	  captureWidth: this.width,
+	  captureHeight: this.height,
+	  canvasX: this.x - (this.width/2),
+	  canvasY: this.y - (this.height/2)
+	};
+	return data;
   }
 };

@@ -1,50 +1,65 @@
 // src/animation/animationSystem.js
 
-
+/** 
+ */
 class AnimationSystem {
   constructor(eventManager) {
-    this.eventManager = eventManager;
-	this.characterAnimations = {};
-	this.itemAnimations = {};
-	this.eventManager.on('createCharacter', (payload) => {
-	  const { tag, id, model} = payload;
-	  this.add_character_animation(tag, id, model.animation);
-	});
-	this.eventManager.on('destroyCharacter', (payload) => {
-	  const { tag, id } = payload;
-	  this.remove_character_animation(tag, id);
-	});
+	this.eventManager = eventManager;
+	this.animations = {};
+	this.init_events();
   }
   
-  update(timestamp) {
-	this.update_characters_animation(timestamp);
-	this.update_item_animation(timestamp);
-  }
-  
-  update_characters_animation(stamp) {
-	const keys = Object.values(this.characterAnimations);
-	for (let key of keys) {
-	  for (let [character, animation] of Object.entries(this.characterAnimations[key])) {
-	    animation.update(timestamp);
+  update(timestamp, animationIds) {
+	for (let key of animationIds) {
+	  const current = this.animations[key];
+	  if (current) {
+		current.update(timestamp);
+	  } else {
+		console.log(`Animation with id: ${id} does not exist or isn't stored yet.`);
 	  }
 	}
   }
   
-  add_character_animation(characterTag, characterID, animation) {
+  get_animations(ids) {
+    const founds = [];
+	for (let key of animationIds) {
+	  const current = this.animations[key];
+	  if (current) founds.push(current);
+	}
+  }
+  
+  add_animation(id, animation) {
     if (animation instanceof AnimationManager) {
-	  this.characterAnimations[characterTag][characterID] = animation;
+	  this.animations[id] = animation;
 	} else {
 	  this.eventManager.trigger('error', { type: 'param', 
-	    message: "Param of animation passed to add_character_animation in animation system is not correct." });
+	    message: "Param of animation passed to add_animation in animation system is not correct." });
 	}
   }
   
-  remove_character_animation(characterTag, characterID) {
-	if (this.characterAnimations[characterTag][characterID]) {
-	  delete this.characterAnimations[characterTag][characterID];
+  remove_animation(id) {
+	if (this.animations[id]) {
+	  delete this.animations[id];
 	} else {
-	  console.log(`${characterTag} Character id ${characterID} does not have animation store inside the animation system.`);
+	  console.log(`${id} does not have animation store inside the animation system.`);
 	}
   }
   
+  init_events() {
+    this.eventManager.on('createCharacter', (payload) => {
+	  const { id, model} = payload;
+	  this.add_animation(id, model.animation);
+	});
+	this.eventManager.on('destroyCharacter', (payload) => {
+	  const { id } = payload;
+	  this.remove_animation(id);
+	});
+	this.eventManager.on('changeCharacterState', (payload) => {
+	  const { mode, state, direction, id } = payload.character;
+	  this[id].change_current_animation(mode, state, direction);
+	});
+	this.eventManager.on('updateVisibility', (payload) => {
+	  this.update(0, payload.id);
+	});
+  }
 };

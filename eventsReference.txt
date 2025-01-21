@@ -1,0 +1,30 @@
+##All Event Types Now
+
+**UI:
+  1. showUI - uiArray: shows ui(s)
+  2. hideUI - uiArray: hides ui(s)
+  3. updateUI - uiArray, cb: gets ui using the ui array, then pass the ui elements to the callback
+  4. processText - uiArray, textObject: process the textObject and display it in the ui using ui array.
+  5. onTextTyping - cb: get the current isTyping status and string from textProcess, pass those 2 params to the callback.
+  6. finishTextTyping - uiArray: finishes the current typing effect in the ui using uiArray
+  7. clearText - uiArray - clear text contents inside the ui(s)
+  8. displayPlainText - uiArray, textObject: display plain text inside ui
+  9. initStartscreen - calls lazyload start screen elements
+  10. initGameUI - calls lazyload on game uis
+  11. initDialogueUi - calls lazyload Dialogue Container
+  12. startNewGame - hide start screen, shows game uis.
+engine: 
+  1. startNewGame
+
+RenderManager:
+  1. renderSprite - ctxArray, assets, imageX, imageY, captureWidth, captureHeight, canvasX, canvas, canvasWidth, canvasHeight
+  2. getCTX - ctxArray, cb
+
+AssetLoader:
+  1. getAssets - assetArray, cb: pass the asset found using asset array to the callback
+
+EnvManager: 
+  1. getEnvDetails - types, cb: pass the details defined by type in the current env to the callback. 
+
+Camera: 
+  1. getCameraDetails - types, cb

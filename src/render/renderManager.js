@@ -18,11 +18,14 @@
  * @property {class} renderNPCs
  */
 class RenderManager {
-  constructor(eventManager) {
+  constructor(eventManager, camera) {
 	this.eventManager = eventManager;
     this.ctx = CTX;
 	this.showDebug = false;
 	this.init();
+	this.visibilityManager;
+	this.envManager;
+	this.animationSystem;
   }
 	
   init() {
@@ -30,10 +33,39 @@ class RenderManager {
 	.then(() => this.ctx.lazyloadEnvironmentCTX?.())
 	.then(() => this.ctx.lazyloadDialogueCTX());
 	this.init_events();
+	this.envRenderer = new EnvRenderer(this);
+  }
+  
+  render() {
+    this.render_env();	
+	this.render_entities();
+  }
+  
+  render_entities() {
+    const visibleAnimations = 
+	  this.animationSystem.get_animations(this.visibilityManager.visibleEntities);
   }
 	
-  render_sprite(ctx, spriteSheet, imageX, imageY, 
-	captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight) {
+  render_interactables() {
+	return null;
+  }
+  
+  render_team(datas) {
+    const currentCTX = this.ctx.get_ctx(['environment', 'team']);
+    
+	datas.forEach(data => {
+	  const rd = data.get_render_data();
+	  rd['context'] = currentCTX;
+	  this.eventManager.trigger('getCentralState', { keys: ['setting', 'viewportSize'], cb: (data) => {
+	    rd['canvasWidth'] = data.width;
+	    rd['canvasHeight'] = data.height;
+	  }});
+	  this.render_sprite(rd);
+	});
+  }
+	
+  render_sprite({ context, spriteSheet, imageX, imageY, 
+	captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight }) {
 			
 	if (!ctx || !spriteSheet || !imageX || !imageY || !captureWidth || 
 	    !captureHeight || !canvasX || !canvasY || !canvasWidth || !canvasHeight)
@@ -41,15 +73,6 @@ class RenderManager {
 	
 	ctx.drawImage(spriteSheet, imageX, imageY, 
 	captureWidth, captureHeight, canvasX, canvasY, 
-	  canvasWidth, canvasHeight);
-  }
-	
-  render_data(data) {
-	if (!data) return;
-	const { context, spriteSheet, imageX, imageY, captureWidth, 
-	  captureHeight, canvasX, canvasY, canvasWidth, canvasHeight } = data;
-	if (data !== null) this.render_sprite(context, spriteSheet, 
-	  imageX, imageY, captureWidth, captureHeight, canvasX, canvasY,
 	  canvasWidth, canvasHeight);
   }
 	
@@ -72,20 +95,6 @@ class RenderManager {
 	}});
   }
 	
-  get_ctx(keys) {
-	let current = this.ctx;
-	for (let key of keys) {
-	  if (current[key]) {
-		current = current[key];
-	  } else {
-		this.eventManager.trigger('error', {type: 'render', message: 'Key is not found in get ctx', 
-		  context: { key: key }});
-		return; // Exit if a key is invalid
-	  }
-	}
-	return current;
-  }
-	
   render_NPCs() {
   }
 	
@@ -106,32 +115,5 @@ class RenderManager {
 	  this.render_sprite(currentCTX, assets, imageX, imageY, captureWidth, captureHeight, 
 	    canvasX, canvasY, canvasWidth, canvasHeight);
 	});
-	this.eventManager.on('getCTX', (payload) => {
-	  const { ctxArray, cb } = payload;
-	  const currentCTX = this.get_ctx(ctxArray);
-	  cb(currentCTX);
-	});
   }
 };
-
-//This is for debug...
-			
-		// const tempX = Math.floor(this.engine.player.model.physics.x / 16);
-		// const tempY = Math.floor(this.engine.player.model.physics.y / 16);
-		// currentCTX.fillText(`Tile index currently at: (${tempX}, ${tempY})`, 10, 90);
-		
-		// currentCTX.fillStyle = "white";
-		// currentCTX.font = "12px Arial";
-		// currentCTX.fillText(`Camera position: (${cameraX.toFixed(2)}, ${cameraY.toFixed(2)})`, 10, 70);
-		//ctx.strokeStyle = "red";
-		// ctx.strokeRect(
-		// landedPosition.x - (targetWidth / 2),
-		// landedPosition.y - (targetHeight / 2),
-		// targetWidth,
-		// targetHeight
-		// );
-
-		// ctx.fillStyle = "white";
-		// ctx.font = "12px Arial";
-		// ctx.fillText(`Player Position on Screen: (${landedPosition.x.toFixed(2)}, ${landedPosition.y.toFixed(2)})`, 10, 20);
-		// ctx.fillText(`Player Position on map: (${player.model.physics.x.toFixed(2)}, ${player.model.physics.y.toFixed(2)})`, 10, 50);

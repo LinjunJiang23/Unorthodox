@@ -6,8 +6,8 @@
  * @property {Object} listeners
  */
 class EventManager {
-  constructor(logic) {
-	this.logic = logic;
+  constructor(engine) {
+	this.engine = engine;
 	this.listeners = {};
   }
 	

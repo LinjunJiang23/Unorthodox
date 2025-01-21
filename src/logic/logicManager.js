@@ -10,6 +10,7 @@ class LogicManager {
   update(timestamp) {
 	this.leaderController.update(timestamp);
 	this.env.update(timestamp);
+	this.animationSystem.update(this.visibilityManager.visibleEntities);
   }
   
   init() {
@@ -20,5 +21,7 @@ class LogicManager {
 	this.env = new EnvManager(this);
 	this.leaderController = new LeaderController(this.eventManager, this.inputHandler);
 	this.scriptManager = new ScriptManager(this.eventManager, this.inputHandler);
+	this.animationSystem = new AnimationSystem(this.eventManager);
+	this.visibilityManager = new VisibilityManager(this.eventManager);
   }
 };

@@ -14,8 +14,11 @@ class CharacterManager {
   }
   
   create_character(characterTag, characterID) {
-	if (characterTag === 'player' && characterID === 'player') {
-	  this.player.create_player;
-	}
+	if (characterTag === 'player' && characterID === 'player') 
+	  this.player.create_player(characterID);
+	if (characterTag === "specials") 
+	  this.specials.create_specials(characterID);
+	if (characterTag === "NPC") 
+	  this.npcs.create_npc(characterID);
   }
 };
