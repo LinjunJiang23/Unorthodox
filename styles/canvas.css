@@ -9,8 +9,6 @@ canvas {
     display: block;
 }
 
-
-
 #canvas-env-weather {
 	position: absolute;
   	z-index: 19;

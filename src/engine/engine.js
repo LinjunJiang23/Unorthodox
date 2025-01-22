@@ -17,9 +17,9 @@ class Engine {
 	this.settings = new SettingManager(this.eventManager);
 	this.logic = new LogicManager(this.eventManager, this.inputHandler);
 	this.stateManager = new StateManager(this.eventManager);
-	//this.saveSystem = new SaveSystem();
-		
+	//this.saveSystem = new SaveSystem();	
 	this.ui = new UIManager(this.eventManager, this.inputHandler);
+	this.sceneGraph = new SceneGraph(this.eventManager);
 	this.renderManager = new RenderManager(this.eventManager);
 		
 	this.audioManager;
@@ -31,9 +31,6 @@ class Engine {
 	
   initialize_game() {
 	this.isGameRunning = true;
-	this.renderManager.envManager = this.logic.envManager;
-	this.renderManager.animationSystem = this.logic.animationSystem;
-	this.renderManager.visibilityManager = this.logic.visibilityManager;
 	this.game_loop(0);
   }
 	
@@ -41,9 +38,14 @@ class Engine {
 	if (!this.isGameRunning) {
 	  return;
 	}
+	this.render_game();
 	this.update_game(timestamp);
 	this.timeManager.update(timestamp);
 	requestAnimationFrame(this.game_loop.bind(this));
+  }
+	
+  render_game() {
+    this.renderManager.render();
   }
 	
   update_game(timestamp) {

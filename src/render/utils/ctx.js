@@ -42,9 +42,10 @@ const CTX = {
 	},
 	
 	get_ctx(keys) {
-	let current = this.ctx;
+	let current = this[keys[0]];
+	keys.shift();
 	for (let key of keys) {
-	  if (current[key]) {
+	  if (current) {
 		current = current[key];
 	  } else {
 		console.error('CTX not found');

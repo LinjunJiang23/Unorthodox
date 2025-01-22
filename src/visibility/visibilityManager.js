@@ -9,6 +9,7 @@ class VisibilityManager {
 	this.camera = camera;
 	this.eventManager = eventManager;
 	this.visibleEntities = new Set();
+	this.init_events();
   }
 	
   get_triggers(triggers) {
@@ -32,14 +33,12 @@ class VisibilityManager {
 	if (result) {
 	  if (!this.visibleEntities.has(id)) { 
 	    this.visibleEntities.add(id);
-		this.eventManager.trigger('updateVisibility', { id: id });
+		this.eventManager.trigger('updateVisibility', { id: id, visible: true });
 	  }
 	} else {
 	  if (this.visibleEntities.has(id)) {
 		this.visibleEntities.delete(id);
-		this.eventManager.trigger('updateVisibility', { id: id, cb: (entity) => {
-		  
-		}			});
+		this.eventManager.trigger('updateVisibility', { id: id, visible: false });
 	  }
 	}
   }
@@ -57,7 +56,7 @@ class VisibilityManager {
 	this.eventManager.on('createCharacter', (payload) => {
 	  const { bounds, id } = payload.entity;
 	  if (bounds) {
-	    this.update_visibility({ x: bounds.x, y: bounds.y}, 
+	    this.update_visibility({ x: bounds.x, y: bounds.y }, 
 		  { width: bounds.width, height: bounds.height }, id);		
 	  }
 	});

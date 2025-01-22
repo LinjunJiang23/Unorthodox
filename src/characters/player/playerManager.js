@@ -4,10 +4,11 @@
 class PlayerManager {
   constructor(characterManager) {
 	this.characterManager = characterManager;
+	this.create_player();
   }
   
   create_player() {
-	this.player = new Player(this, this.characterManager.eventManager);
+	this.player = new Player(this.characterManager.eventManager);
   }
   
   save_player_data() {

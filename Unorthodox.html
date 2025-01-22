@@ -178,9 +178,11 @@ async function loadScripts(scripts) {
     //UI Management
     await loadScripts(['./src/ui/uiElements.js', './src/ui/uiManager.js', './src/ui/startScreenMenu.js']);
     
+    //Scene Graph
+    await loadScripts(['./src/sceneGraph/sceneGraph.js']);
+    
     //Render Management
-    await loadScripts(['./src/render/utils/renderHelpers.js', './src/render/utils/ctx.js', './src/render/renderManager.js', './src/render/renderEnv.js',
-                       './src/render/renderTeam.js']);
+    await loadScripts(['./src/render/utils/renderHelpers.js', './src/render/utils/ctx.js', './src/render/envRenderer.js', './src/render/renderManager.js',]);
     
     //Condition Management
     await loadScripts(['./src/condition/condition.js', './src/condition/conditionManager.js']);
@@ -779,15 +781,15 @@ $(this).prev().css(&#39;background-color&#39;, &#39;black&#39;);&quot; data-sele
 	&lt;canvas id=&quot;canvas-ui&quot;&gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
 &lt;div id=&quot;game-environment&quot; style=&quot;display: none;&quot;&gt;\
-    &lt;canvas id=&quot;canvas-env-weather&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-lighting&quot;&gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-specialized&quot; &gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-particle&quot; &gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-team&quot; &gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-NPC&quot; &gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-interactables&quot; &gt;&lt;/canvas&gt;\
-    &lt;canvas id=&quot;canvas-env-terrain&quot; &gt;&lt;/canvas&gt;\
-	&lt;canvas id=&quot;canvas-env-background&quot; &gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-weather&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-lighting&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-specialized&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-particle&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-team&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-NPC&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-interactables&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+    &lt;canvas id=&quot;canvas-env-terrain&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
+	&lt;canvas id=&quot;canvas-env-background&quot;  width=&quot;1080&quot; height=&quot;720&quot;&gt;&lt;/canvas&gt;\
 &lt;/div&gt;\
 &lt;&lt;/widget&gt;&gt;\</tw-passagedata><tw-passagedata pid="9" name="start-screen" tags="widget" position="300,500" size="100,100">&lt;&lt;widget &quot;startscreen&quot;&gt;&gt;\
 &lt;div id=&quot;startscreen&quot;&gt;\

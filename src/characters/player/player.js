@@ -7,9 +7,8 @@ class Player extends BaseCharacter {
   static validStates = ['idle', 'walk', 'run', 'backup', 'jump'];
   static validActions = ['rest', 'hold', 'lift', 'drop', 'drag'];
 	
-  constructor(characterManager, eventManager) {
+  constructor(eventManager) {
 	super();
-	this.characterManager = characterManager;
 	this.eventManager = eventManager;
 	this.id = 'player';
 	this.tag = 'player';
@@ -22,8 +21,16 @@ class Player extends BaseCharacter {
 	this.model = new PlayerModel(this);
 	this.actions = new ActionManager(this);
 	this.relationshipManager = new RelationshipManager();
-	this.eventManager.trigger('createCharacter', { character: this });
 	this.init();
+	this.eventManager.trigger('createCharacter', 
+	  { character: this, entity: { bounds: 
+		{ 
+		  x: this.model.animation.x,
+		  y: this.model.animation.y,
+		  width: this.model.animation.width,
+		  height: this.model.animation.height
+		},
+		id: this.id } });
   }
 	
   init() {
@@ -45,10 +52,6 @@ class Player extends BaseCharacter {
 	  delete this.traitDesc1;
 	  delete this.traitName2;
 	  delete this.traitDesc2;
-  }
-	
-  update(timestamp) {
-	this.model.update(timestamp);
   }
 	
   set_mode(mode) {

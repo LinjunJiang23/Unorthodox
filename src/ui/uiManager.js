@@ -91,6 +91,7 @@ class UIManager {
 	this.eventManager.on('initGameUI', (payload) => this.uiElements.lazyloadGameUI());
     this.eventManager.on('initDialogueUI', (payload) => this.uiElements.lazyloadDialogueContainer());
 	this.eventManager.on('startNewGame', (payload) => {
+	  this.uiElements.lazyloadGameUI();
 	  this.hide_UI(['startscreen']);
 	  this.show_UI(['gameUI', 'gameEnv']);
 	});

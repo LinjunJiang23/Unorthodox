@@ -15,17 +15,18 @@ class AnimationSystem {
 	  if (current) {
 		current.update(timestamp);
 	  } else {
-		console.log(`Animation with id: ${id} does not exist or isn't stored yet.`);
+		console.log(`Animation with id: ${key} does not exist or isn't stored yet.`);
 	  }
 	}
   }
   
   get_animations(ids) {
     const founds = [];
-	for (let key of animationIds) {
+	for (let key of ids) {
 	  const current = this.animations[key];
 	  if (current) founds.push(current);
 	}
+	return founds;
   }
   
   add_animation(id, animation) {
@@ -47,9 +48,11 @@ class AnimationSystem {
   
   init_events() {
     this.eventManager.on('createCharacter', (payload) => {
-	  const { id, model} = payload;
+	  const { id, model } = payload.character;
+	  console.log(payload.character);
 	  this.add_animation(id, model.animation);
 	});
+	
 	this.eventManager.on('destroyCharacter', (payload) => {
 	  const { id } = payload;
 	  this.remove_animation(id);
@@ -59,7 +62,16 @@ class AnimationSystem {
 	  this[id].change_current_animation(mode, state, direction);
 	});
 	this.eventManager.on('updateVisibility', (payload) => {
-	  this.update(0, payload.id);
+	  const { id, visible } = payload;
+	  const a = this.get_animations([id]);
+	  if (!a) return console.log("No animation is found with id: ", id);
+	  if (visible) {
+		this.update(0, [id]);
+		console.log(a[0].sceneNode);
+	    this.eventManager.trigger('addSceneNode', { node: a[0].sceneNode });
+	  } else {
+	    this.eventManager.trigger('removeSceneNode', { node: a.sceneNode });
+	  }
 	});
   }
 };

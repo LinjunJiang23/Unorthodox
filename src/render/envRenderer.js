@@ -6,15 +6,9 @@ class EnvRenderer {
   }
   
   render() {
-	this.render_background();
-	this.render_terrain();
 	this.render_particle();
 	this.render_lighting();
 	this.render_weather();
-  }
-  
-  render_background() {
-	
   }
 	
   render_terrain() {

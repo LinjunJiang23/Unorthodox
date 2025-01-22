@@ -2,7 +2,7 @@
 
 
 class SceneNode {
-  constructor(id, data) {
+  constructor(id, data = {}) {
 	this.id = id;
 	this.parent = null;
 	this.children = [];
@@ -12,14 +12,15 @@ class SceneNode {
 	  spriteSheet: data.spriteSheet || null,
 	  imageX: data.imageX || 0,
 	  imageY: data.imageY || 0,
-	  captureWidth: data.width || 0,
-	  captureHeight: data.height || 0,
+	  captureWidth: data.captureWidth || 0,
+	  captureHeight: data.captureHeight || 0,
 	  canvasX: data.canvasX || 0,
 	  canvasY: data.canvasY || 0,
 	  layer: data.layer || null,
 	  tags: data.tags || [],
-	  animation: data.animation || null
-	}
+	  canvasWidth: data.canvasWidth || null,
+	  canvasHeight: data.canvasHeight || null
+	};
   }
   
   add_child(node) {
@@ -34,7 +35,8 @@ class SceneNode {
   
   get_world_transform() {
 	if (!this.parent) {
-	  return { ...rotation: this.data.rotation, scale: this.data.scale, canvasX: this.data.canvasX, canvasY: this.data.canvasY };
+	  return { rotation: this.data.rotation, scale: this.data.scale, 
+	    canvasX: this.data.canvasX, canvasY: this.data.canvasY };
 	}
 	
 	const parentTransform = this.parent.get_world_transform();
@@ -47,22 +49,41 @@ class SceneNode {
 		y: parentTransform.scale.y * this.data.scale.y
 	  }
 	};
-	
   }
+  
+  reset_node() {
+	this.data = {
+	  rotation: 0,
+	  scale: {x: 1, y: 1},
+	  spriteSheet: null,
+	  imageX: 0,
+	  imageY: 0,
+	  captureWidth: 0,
+	  captureHeight: 0,
+	  canvasX: 0,
+	  canvasY: 0,
+	  layer: null,
+	  tags: []
+	};
+	this.children = [];
+  }
+  
 };
 
 class SceneGraph {
-  constructor() {
+  constructor(eventManager) {
+	this.eventManager = eventManager;
 	this.root = new SceneNode("Root");
+	this.init_events();
   }
   
-  addNode(node, parent = this.root) {
-	parent.addChild(node);
+  add_node(node, parent = this.root) {
+	parent.add_child(node);
   }
   
-  removeNode(node) {
+  remove_node(node) {
     if (node.parent) {
-	  node.parent.removeChild(node);
+	  node.parent.remove_child(node);
 	}
   }
   
@@ -74,14 +95,27 @@ class SceneGraph {
 	visit(this.root);
   }
   
-  get_renderable_nodes {
+  get_renderable_nodes() {
     const renderables = [];
 	this.traverse(node => {
-	  if (node.data.visible) {
-		renderables.push(node);
-	  }
+	  renderables.push(node);
 	});
 	return renderables;
+  }
+  
+  init_events() {
+	this.eventManager.on('addSceneNode', (payload) => {
+	  const { node, parent } = payload;
+	  this.add_node(node, parent);
+	});
+	this.eventManager.on('removeSceneNode', (payload) => {
+	  const { node } = payload;
+	  this.remove_node(node);
+	});
+  }
+  
+  clear_scene_graph() {
+	this.root.reset_node();
   }
   
 };

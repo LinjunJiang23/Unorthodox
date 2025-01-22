@@ -18,7 +18,6 @@ class InputHandler {
   
   add_mouse_handler({ type, key, listener }) {
 	this.mouseHandler.add_listener(type, key, listener);
-	console.log(`This type ${type} key ${key} has listener ${listener} registered`);
   }
   
   add_keyboard_handler({type, listener}) {

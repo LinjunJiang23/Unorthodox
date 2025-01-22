@@ -18,20 +18,16 @@ class AnimationManager {
 	this.width = 128;
 	this.height = 128;
 	this.sceneNode = new SceneNode(this.character.id, {
-	  position: { x: this.x - (this.width/2), y: this.y - (this.height/2)},
+	  canvasX: this.x - (this.width/2), 
+	  canvasY: this.y - (this.height/2),
 	  rotation: 0,
-	  spriteSheet: this.model.spriteSheet,
+	  spriteSheet: this.model.spriteSheets,
 	  layer: 'team',
 	  tags: ['character'],
-	  animation: {
-	    currentFrame: this.get_current_frame()
-	  }
+	  canvasWidth: this.width,
+	  canvasHeight: this.height
 	});
 	this.blender = new AnimationBlender();
-  }
-	
-  change_current_animation(mode, state, direction) {
-	this.currentAnimation = this.allAnimations[mode][state][direction];
   }
 	
   update(timestamp) {
@@ -41,9 +37,15 @@ class AnimationManager {
 	  const currentFrame = (this.character.currentFrame + 1) % this.currentAnimation.frameNum;
 	  if (currentFrame !== this.character.currentFrame) {
 	    this.character.currentFrame = currentFrame;
+		this.update_scene_node();
+		this.character.lastUpdateTime = timestamp;
 	  }
-	  this.character.lastUpdateTime = timestamp;
 	}
+  }	
+
+  change_current_animation(mode, state, direction) {
+	this.currentAnimation = this.allAnimations[mode][state][direction];
+	this.update_scene_node();
   }
 	
   change_position(x, y) {
@@ -62,16 +64,12 @@ class AnimationManager {
 	return this.currentAnimation.frameSheet['baseBody'][this.character.currentFrame];
   }
   
-  get_render_data() {
-    const data = {
-	  spriteSheet: this.model.spriteSheets,
-	  imageX: this.get_current_frame().x,
-	  imageY: this.get_current_frame().y,
-	  captureWidth: this.width,
-	  captureHeight: this.height,
-	  canvasX: this.x - (this.width/2),
-	  canvasY: this.y - (this.height/2)
-	};
-	return data;
+  update_scene_node() {
+	this.sceneNode.data['imageX'] = this.get_current_frame().x;
+	this.sceneNode.data['imageY'] = this.get_current_frame().y;
+	this.sceneNode.data['captureWidth'] = this.width;
+	this.sceneNode.data['captureHeight'] = this.height;
+	this.sceneNode.data['canvasX'] = this.x - (this.width/2);
+	this.sceneNode.data['canvasY'] = this.y - (this.height/2);
   }
 };
