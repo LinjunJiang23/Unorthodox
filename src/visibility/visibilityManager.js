@@ -47,9 +47,11 @@ class VisibilityManager {
   }
 	
   highlight_objects(objects) {
+	
   }
 	
   handle_culling(objects) {
+	
   }
   
   init_events() {
@@ -61,9 +63,9 @@ class VisibilityManager {
 	  }
 	});
 	this.eventManager.on('characterMoved', (payload) => {
-	  const { bounds, id } = payload.entity;
+	  const { bounds, id } = payload;
 	  if (bounds) {
-		this.update_visibility({ x: bounds.x, y: bounds.y}, 
+		this.update_visibility({ x: bounds.x, y: bounds.y }, 
 		  { width: bounds.width, height: bounds.height }, id);
 	  }
 	});

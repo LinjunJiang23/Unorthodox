@@ -44,6 +44,7 @@ class MovementController {
   }
   
   handle_press_input(key) {
+	
   }
   
   handle_release_input(key) {
@@ -52,6 +53,7 @@ class MovementController {
   
   halt_movement() {
 	this.isHalted = true;
+	this.leaderController.leader.set_state('idle');
   }
   
   handle_movement(deltaTime) {
@@ -81,9 +83,7 @@ class MovementController {
 	  this.update_position(newX, newY, direction, 'walk');
 	} else {
 	  /** @todo Add collision reaction*/
-	  leader.set_direction(direction);
-	  leader.set_state('idle');
-	  leader.model.animation.change_current_animation(leader.mode, 'idle', direction);
+	  
 	}
   }
 	
@@ -122,10 +122,20 @@ class MovementController {
 	const leader = this.leaderController.leader;
 	leader.set_direction(direction);
 	leader.set_state(type);
-	leader.model.physics.x = newX;
-	leader.model.physics.y = newY;
-	leader.model.animation.change_current_animation(leader.mode, type, direction);
-	const newScreenPos = this.leaderController.logic.engine.camera.map_to_screen({x: newX, y: newY});
+	this.eventManager.trigger('characterMoved', { 
+	  bounds: {
+		x: newX,
+		y: newY,
+		width: leader.model.physics.width,
+		height: leader.model.physics.height
+	  }, 
+	  id: leader.id, 
+	  tag: leader.tag });
+	leader.change_physical_position(newX, newY);
+	this.eventManager.trigger('mapToScreen', { newX: newX, newY: newY, cb: (convertedPos) => {
+	  
+	}});
+	const newScreenPos = this.leaderController.logic.engine.camera.map_to_screen({ x: newX, y: newY });
 	leader.model.animation.change_position(newScreenPos.x, newScreenPos.y);
 	this.leaderController.logic.engine.camera.follow_character(leader);	
   }
@@ -134,9 +144,6 @@ class MovementController {
 	/** @todo Should have collision reaction to running
 	 * WHEN RUNNING INTO CERTAIN COLLISION LIKE WALL take 1 HP damage
 	 */
-	leader.set_direction(direction);
-	leader.set_state('idle');
+	this.halt_movement();
   }
-  
- 
 };	

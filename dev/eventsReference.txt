@@ -1,4 +1,10 @@
-##All Event Types Now
+##All Event Types
+
+** 
+showUI(uiArray) - shows ui(s)
+hideUI(uiArray) - hides ui(s)
+updateUI(uiArray, cb) - gets ui(s) then pass the ui elements to callback
+processText(uiArray, textObject) - process the textObject and display it in the found ui(s)   
 
 **UI:
   1. showUI - uiArray: shows ui(s)
@@ -13,8 +19,9 @@
   10. initGameUI - calls lazyload on game uis
   11. initDialogueUi - calls lazyload Dialogue Container
   12. startNewGame - hide start screen, shows game uis.
+
 engine: 
-  1. startNewGame
+  1. startNewGame - calls initialize 
 
 RenderManager:
   1. renderSprite - ctxArray, assets, imageX, imageY, captureWidth, captureHeight, canvasX, canvas, canvasWidth, canvasHeight

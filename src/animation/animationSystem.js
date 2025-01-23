@@ -52,14 +52,14 @@ class AnimationSystem {
 	  console.log(payload.character);
 	  this.add_animation(id, model.animation);
 	});
-	
 	this.eventManager.on('destroyCharacter', (payload) => {
 	  const { id } = payload;
 	  this.remove_animation(id);
 	});
-	this.eventManager.on('changeCharacterState', (payload) => {
-	  const { mode, state, direction, id } = payload.character;
-	  this[id].change_current_animation(mode, state, direction);
+	this.eventManager.on('characterMoved', (payload) => {
+	  const { id } = payload;
+	  const animation = this.animations[id];
+	  if (animation) animation.change_position();
 	});
 	this.eventManager.on('updateVisibility', (payload) => {
 	  const { id, visible } = payload;
@@ -73,5 +73,6 @@ class AnimationSystem {
 	    this.eventManager.trigger('removeSceneNode', { node: a.sceneNode });
 	  }
 	});
+	
   }
 };

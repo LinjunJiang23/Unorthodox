@@ -21,4 +21,11 @@ class CharacterManager {
 	if (characterTag === "NPC") 
 	  this.npcs.create_npc(characterID);
   }
+  
+  init_events() {
+    this.eventManager.on('characterMoved', (payload) => {
+	  const { bounds, tag, id } = payload;
+	  this[tag].move_character(id, bounds.y, bounds.x);
+	});
+  }
 };

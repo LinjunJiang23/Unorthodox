@@ -4,7 +4,6 @@
  * 
  */
 class Player extends BaseCharacter {
-  static validStates = ['idle', 'walk', 'run', 'backup', 'jump'];
   static validActions = ['rest', 'hold', 'lift', 'drop', 'drag'];
 	
   constructor(eventManager) {
@@ -12,8 +11,6 @@ class Player extends BaseCharacter {
 	this.eventManager = eventManager;
 	this.id = 'player';
 	this.tag = 'player';
-	this.state = "idle";
-	this.action = "rest";
 	this.composure = 100;
 	this.stats = new Stat();
 	this.inventory = new Inventory([]);
@@ -95,6 +92,11 @@ class Player extends BaseCharacter {
 	  console.log('Player Name Input Format is not correct, the current format is: ', name);
 	  console.log('Expected format like: {lname: "左", fname: "汶"}');
 	}
+  }
+  
+  move(newX, newY) {
+	this.model.physics.x = newX;
+	this.model.physics.y = newY;
   }
 	
   get_position() {

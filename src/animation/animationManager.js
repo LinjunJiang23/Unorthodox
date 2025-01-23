@@ -42,11 +42,6 @@ class AnimationManager {
 	  }
 	}
   }	
-
-  change_current_animation(mode, state, direction) {
-	this.currentAnimation = this.allAnimations[mode][state][direction];
-	this.update_scene_node();
-  }
 	
   change_position(x, y) {
 	if ((x !== this.x) || (y !== this.y)) {
