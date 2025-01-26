@@ -144,20 +144,20 @@ class DialogueManager {
   }
   
   initiate_listeners() {
-	this.inputHandler.add_mouse_handler({ type: "click", key: 'dialogue-historybtn', 
-	  listener: (payload) => this.eventManager.trigger('showUI', 
-	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] })});
+	this.inputHandler.add_mouse_handler("click", 'dialogue-historybtn', 
+	  (payload) => this.eventManager.trigger('showUI', 
+	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] }));
 	
-	this.inputHandler.add_mouse_handler({ type: 'click', key: 'dialogue-history-closebtn',
-	  listener: (payload) => this.eventManager.trigger('hideUI', 
-	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] }) });
+	this.inputHandler.add_mouse_handler('click', 'dialogue-history-closebtn',
+	  (payload) => this.eventManager.trigger('hideUI', 
+	  { uiArray: ['gameUI', 'dialogue', 'dialogueHistory', 'container'] }));
 	this.eventManager.on('renderSpeakerPortrait', (payload) => {
 	  this.eventManager.logic.engine.renderManager.render_speaker_portrait(payload);
 	});
-	this.inputHandler.add_mouse_handler({ type: "click", key: 'dialogue-text', listener: (payload) => {
+	this.inputHandler.add_mouse_handler( "click", 'dialogue-text', (payload) => {
 	  if (this.disableClickAdvance) return;
 	  this.handle_text_typing();	
-	}});
+	});
 	this.eventManager.on('reachedEndOfDialogue', (payload) => this.reached_end_of_dialogue());
 	this.eventManager.on('startDialogue', (payload) => {
 	  this.start_dialogue(payload.dialogues, payload.defaultSpeaker);

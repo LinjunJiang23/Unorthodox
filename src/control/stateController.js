@@ -2,17 +2,17 @@
 
 
 class StateController {
-	constructor(leaderController) {
-		this.leaderController = leaderController;
-	}
+  constructor(leaderController) {
+	this.leaderController = leaderController;
+  }
 	
-	control_state(timestamp) {
-	}
+  control_state(timestamp) {
+  }
 	
-	control_idle(deltaTime) {
-		const leader = this.leaderController.leader;
-		if (leader.state === 'idle') {
-			leader.idleTime += deltaTime;
-		}
+  control_idle(deltaTime) {
+	const leader = this.leaderController.leader;
+	if (leader.state === 'idle') {
+	  leader.idleTime += deltaTime;
 	}
+  }
 };

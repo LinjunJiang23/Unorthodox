@@ -35,7 +35,9 @@ class KeyboardHandler {
   }
 
   add_listener(type, listener) {
-    () => this.listeners[type].push(listener);
+	console.log('The type being registered', type);
+	console.log("Adding kb listeners: ", listener);
+    this.listeners[type].push(listener);
   }
 
   notify_listeners(key, type) {

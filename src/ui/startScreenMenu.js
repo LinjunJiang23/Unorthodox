@@ -16,8 +16,7 @@ class StartScreenMenu {
   }
 	
   setup_startgame_listeners() {
-	this.inputHandler.add_mouse_handler({ type: 'click', 
-	  key: 'startscreen-startgame', listener: () => this.start_game()});
+	this.inputHandler.add_mouse_handler('click', 'startscreen-startgame', () => this.start_game());
   }
 	
   animation() {

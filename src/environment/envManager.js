@@ -6,32 +6,37 @@
 class EnvManager {
   constructor(logic, camera) {
 	this.eventManager = logic.eventManager;
-	
+	this.camera = camera;
 	this.currentRegion = 'testLayer';
 	this.eventManager.trigger('getAssets', {assetArray: ['maps', this.currentRegion], cb: (asset) => {
 	  this.env = asset;
 	}});
-	this.x = 0;
-	this.y = 0;
+	Object.defineProperties(this, {
+	  x: { get: () => this.camera.x },
+	  y: { get: () => this.camera.y }
+	});
 	this.bg = {
-	  spriteSheet: this.env || null,
-	  imageX: this.x,
-	  imageY: this.y,
-	  captureWidth: (camera.maxX - camera.minX),
-	  captureHeight: (camera.maxY - camera.minY),
 	  canvasX: 0,
 	  canvasY: 0
 	};
+	Object.defineProperties(this.bg, {
+	  spriteSheet: {
+		get: () => this.env
+	  },
+	  imageX: {
+		get: () => this.x  
+	  },
+	  imageY: {
+	    get: () => this.y
+	  },
+	  captureWidth: {
+		get: () => this.camera.maxX
+	  },
+	  captureHeight: {
+		get: () => this.camera.maxY
+	  }
+	});
 	this.eventManager.trigger('renderBackground', { data: this.bg });
-
-  }
-
-  update_position(cameraPosition) {
-	if (this.x !== cameraPosition.x || this.y !== cameraPosition.y) {
-	  this.x = cameraPosition.x;
-	  this.y = cameraPosition.y;
-	  this.eventManager.trigger('renderBackground', { data: this.bg });
-	}
   }
 	
 };

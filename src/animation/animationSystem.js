@@ -34,7 +34,7 @@ class AnimationSystem {
 	  this.animations[id] = animation;
 	} else {
 	  this.eventManager.trigger('error', { type: 'param', 
-	    message: "Param of animation passed to add_animation in animation system is not correct." });
+		message: "Param of animation passed to add_animation in animation system is not correct." });
 	}
   }
   
@@ -49,7 +49,6 @@ class AnimationSystem {
   init_events() {
     this.eventManager.on('createCharacter', (payload) => {
 	  const { id, model } = payload.character;
-	  console.log(payload.character);
 	  this.add_animation(id, model.animation);
 	});
 	this.eventManager.on('destroyCharacter', (payload) => {
@@ -59,7 +58,6 @@ class AnimationSystem {
 	this.eventManager.on('characterMoved', (payload) => {
 	  const { id } = payload;
 	  const animation = this.animations[id];
-	  if (animation) animation.change_position();
 	});
 	this.eventManager.on('updateVisibility', (payload) => {
 	  const { id, visible } = payload;
@@ -68,11 +66,10 @@ class AnimationSystem {
 	  if (visible) {
 		this.update(0, [id]);
 		console.log(a[0].sceneNode);
-	    this.eventManager.trigger('addSceneNode', { node: a[0].sceneNode });
+		this.eventManager.trigger('addSceneNode', { node: a[0].sceneNode });
 	  } else {
 	    this.eventManager.trigger('removeSceneNode', { node: a.sceneNode });
 	  }
 	});
-	
   }
 };

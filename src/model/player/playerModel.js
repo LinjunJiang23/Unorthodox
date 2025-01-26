@@ -14,11 +14,7 @@ class PlayerModel extends BaseModel {
 	  this.physics = new PhysicsCollider(0, 0, 32, 32);
 	  this.animation = new AnimationManager(this);
 	  this.animation.allAnimations = playerAnimations;
-	  this.animation.currentAnimation = this.animation.allAnimations.normal.idle.down;
+	  this.animation.init();
 	}
-  }
-	
-  update(timestamp) {
-	super.update(timestamp);
   }
 };

@@ -2,25 +2,30 @@
 
 
 class SceneNode {
-  constructor(id, data = {}) {
-	this.id = id;
+  constructor(id, data) {
+	Object.defineProperty(this, 'id', {
+	  get: id
+	});
 	this.parent = null;
 	this.children = [];
-	this.data = {
-	  rotation: data.rotation || 0,
-	  scale: data.scale || {x: 1, y: 1},
-	  spriteSheet: data.spriteSheet || null,
-	  imageX: data.imageX || 0,
-	  imageY: data.imageY || 0,
-	  captureWidth: data.captureWidth || 0,
-	  captureHeight: data.captureHeight || 0,
-	  canvasX: data.canvasX || 0,
-	  canvasY: data.canvasY || 0,
-	  layer: data.layer || null,
-	  tags: data.tags || [],
-	  canvasWidth: data.canvasWidth || null,
-	  canvasHeight: data.canvasHeight || null
-	};
+	this.data = {};
+	if (data) {
+	  Object.defineProperties(this.data, {
+		rotation: { get: data.rotation },
+		scale: { get: data.scale },
+		spriteSheet: { get: data.spriteSheet },
+		imageX: { get: data.imageX },
+		imageY: { get: data.imageY },
+		captureWidth: { get: data.captureWidth },
+		captureHeight: { get: data.captureHeight },
+		canvasX: { get: data.canvasX },
+		canvasY: { get: data.canvasY },
+		canvasWidth: { get: data.canvasWidth },
+		canvasHeight: { get: data.canvasHeight }
+	  });
+	  this.data.layer = data.layer;
+	  this.data.tags = data.tags;
+	}
   }
   
   add_child(node) {
@@ -73,7 +78,7 @@ class SceneNode {
 class SceneGraph {
   constructor(eventManager) {
 	this.eventManager = eventManager;
-	this.root = new SceneNode("Root");
+	this.root = new SceneNode(() => "Root");
 	this.init_events();
   }
   

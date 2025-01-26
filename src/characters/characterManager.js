@@ -1,6 +1,5 @@
 // src/characters/characterManager.js
 
-
 class CharacterManager {
   constructor(eventManager) {
 	this.eventManager = eventManager;
@@ -9,23 +8,34 @@ class CharacterManager {
 	this.npcs = new NPCManager(this);
   }
 	
-  find_character(targetTag, targetID) {
-	return this[targetTag].find(targetID);
+  find_character(target) {
+	const { tag, id } = target;
+	return this[targetTag].find_character(targetID);
   }
   
-  create_character(characterTag, characterID) {
-	if (characterTag === 'player' && characterID === 'player') 
-	  this.player.create_player(characterID);
-	if (characterTag === "specials") 
-	  this.specials.create_specials(characterID);
-	if (characterTag === "NPC") 
-	  this.npcs.create_npc(characterID);
+  create_character(character) {
+	this[characterTag].create_character(characterID);
+  }
+  
+  destroy_character(characterTag, characterID) {
+	this[characterTag].destroy_character(characterID);
   }
   
   init_events() {
     this.eventManager.on('characterMoved', (payload) => {
-	  const { bounds, tag, id } = payload;
-	  this[tag].move_character(id, bounds.y, bounds.x);
+	  const { bounds } = payload;
+	  this[bounds.tag].move_character(bounds.id, bounds.y, bounds.x);
 	});
   }
+  
+  find_relationship(character, target) {
+	const { tag, id } = character;
+	return this[tag].find_relationship(id, target);
+  }
+  
+  find_stat(character) {
+    const { tag, id } = character;
+	return this[tag].find_stat(id);
+  }
+  
 };

@@ -2,81 +2,43 @@
 
 /** 
  * 
+ * @property {Object} eventManager
+ * @property 
  */
 class Player extends BaseCharacter {
-  static validActions = ['rest', 'hold', 'lift', 'drop', 'drag'];
-	
   constructor(eventManager) {
 	super();
 	this.eventManager = eventManager;
 	this.id = 'player';
 	this.tag = 'player';
-	this.composure = 100;
+	this.init();
+  }
+  
+  init() {
+	const varsNeedInit = ['lname', 'fname', 'traitName1', 'traitDesc1', 'traitName2', 'traitDesc2', 'intro'];
+	const _translations = {}; 
+	this.eventManager.trigger('translate', { 
+	  keys: ['player_default_lname', 'player_default_fname', 'player_default_trait_name_1', 
+	    'player_default_trait_desc_1', 'player_default_trait_name_2', 'player_default_trait_desc_2', 'player_default_intro'], 
+	  cb: (translatedTexts) => {
+		for (let i = 0; i < translatedTexts.length; i++) {
+		  const k = varsNeedInit[i];
+		  _translations[k] = translatedTexts[i];
+	}}});
+	this.traits = new CharacterTraitManager([
+	  new Trait(_translations['traitName1'], _translations['traitDesc1'], true, 'relationship', 100),
+	  new Trait(_translations['traitName2'], _translations['traitDesc2'], true, 'relationship', 100)
+	]);
 	this.stats = new Stat();
 	this.inventory = new Inventory([]);
 	this.app = new PlayerAppManager(this);
 	this.model = new PlayerModel(this);
+	this.relationships = new RelationshipManager();
 	this.actions = new ActionManager(this);
-	this.relationshipManager = new RelationshipManager();
-	this.init();
-	this.eventManager.trigger('createCharacter', 
-	  { character: this, entity: { bounds: 
-		{ 
-		  x: this.model.animation.x,
-		  y: this.model.animation.y,
-		  width: this.model.animation.width,
-		  height: this.model.animation.height
-		},
-		id: this.id } });
-  }
-	
-  init() {
-	const varsNeedInit = ['lname', 'fname', 'traitName1', 'traitDesc1', 'traitName2', 'traitDesc2', 'intro'];
-	this.eventManager.trigger('translate', 
-	  { keys: ['player_default_lname', 'player_default_fname', 'player_default_trait_name_1', 
-	  'player_default_trait_desc_1', 'player_default_trait_name_2', 'player_default_trait_desc_2', 'player_default_intro'], 
-	  cb: (translatedTexts) => {
-		for (let i = 0; i < translatedTexts.length; i++) {
-		  const k = varsNeedInit[i];
-		  this[k] = translatedTexts[i];
-		}
-	  }});
-	  this.traits = new CharacterTraitManager([
-	    new Trait(this.traitName1, this.traitDesc1, true, 'relationship', 100),
-		new Trait(this.traitName2, this.traitDesc2, true, 'relationship', 100)
-	  ]);
-	  delete this.traitName1;
-	  delete this.traitDesc1;
-	  delete this.traitName2;
-	  delete this.traitDesc2;
-  }
-	
-  set_mode(mode) {
-	if (Player.validModes.includes(mode)) {
-	  if (this.mode !== mode) this.mode = mode;
-	  this.eventManager.trigger('changeCharacterState', { character: this, entity: { 
-	    bounds: this.model.physics
-	  } });
-	} else {
-	  this.eventManager.trigger('error', { type: 'param', 
-		message: "Unrecognized or empty param of state in set_state of player class." });
-	}
-  }
-	
-  set_state(state) {
-	if (Player.validStates.includes(state)) {			
-	  if (this.state !== state) this.state = state;
-	} else {
-	  	
-	}
-  }
-	
-  set_action(action) {
-	if (Player.validActions.includes(action)) {
-	  if (this.action !== action) this.action = action;
-	} else {
-	  this.eventManager.trigger('error', { type: 'param', 
-		message: "Unrecognized or empty param of action in set_action of player class." });	}
+	this.actions.register_action('hold');
+	this.actions.register_action('lift');
+	this.actions.register_action('drop');
+	this.actions.register_action('drag');
   }
 
   /** 
@@ -90,13 +52,12 @@ class Player extends BaseCharacter {
 	  this.fname = name.fname;
 	} else {
 	  console.log('Player Name Input Format is not correct, the current format is: ', name);
-	  console.log('Expected format like: {lname: "左", fname: "汶"}');
+	  console.log('Expected format like: { lname: "", fname: "" }');
 	}
   }
   
   move(newX, newY) {
-	this.model.physics.x = newX;
-	this.model.physics.y = newY;
+	this.model.change_physical_position({ x: newX, y: newY });
   }
 	
   get_position() {

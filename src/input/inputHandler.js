@@ -16,11 +16,11 @@ class InputHandler {
 	}
   }
   
-  add_mouse_handler({ type, key, listener }) {
+  add_mouse_handler(type, key, listener) {
 	this.mouseHandler.add_listener(type, key, listener);
   }
   
-  add_keyboard_handler({type, listener}) {
+  add_keyboard_handler(type, listener) {
     this.kbHandler.add_listener(type, listener);
   }
   

@@ -1,10 +1,14 @@
 // src/engine/campaign/campaignManager.js
 
 class CampaignManager {
-  constructor(eventManager, characterManager) {
+  constructor(eventManager) {
 	this.eventManager = eventManager;
-	this.members = [characterManager.player.player];
-	this.team = new TeamManager(this);
+	this.members = [];
+	this.eventManager.on('addCampaignMember', (payload) => {
+	  const { character } = payload;
+	  this.add_member(character);
+	  this.team = new TeamManager(this);
+	});
   }
 	
   update(timestamp) {

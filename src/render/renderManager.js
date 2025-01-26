@@ -31,6 +31,8 @@ class RenderManager {
   
   render() {
 	this.render_scene_graph();
+	const data = this.envManager.bg;
+	this.render_background(data);
   }
   
   render_scene_graph() {
@@ -39,6 +41,7 @@ class RenderManager {
 	  const currentCTX = this.ctx.get_ctx(['environment', node.data.layer]);
 	  if (currentCTX) {
 		this.clear_sprite(currentCTX, currentCTX.canvas.width, currentCTX.canvas.height);
+		
 		this.render_sprite({
 	      context: currentCTX,
 		  spriteSheet: node.data.spriteSheet,
@@ -54,10 +57,26 @@ class RenderManager {
 	  }
 	});
   }
+  
+  render_background(data) {
+	const currentCTX = this.ctx.get_ctx(['environment', 'background']);
+	if (data)
+	  this.render_sprite({
+		context: currentCTX,
+		spriteSheet: data.spriteSheet,
+		imageX: data.imageX,
+		imageY: data.imageY,
+		captureWidth: data.captureWidth,
+		captureHeight: data.captureHeight,
+		canvasX: data.canvasX,
+		canvasY: data.canvasY,
+		canvasWidth: currentCTX.canvas.width,
+		canvasHeight: currentCTX.canvas.height
+	  });
+  }
 	
   render_sprite({ context, spriteSheet, imageX, imageY, 
 	captureWidth, captureHeight, canvasX, canvasY, canvasWidth, canvasHeight }) {
-			
 	if (!context || !spriteSheet || !imageX || !imageY || !captureWidth || 
 	    !captureHeight || !canvasX || !canvasY || !canvasWidth || !canvasHeight)
 		this.eventManager.trigger('error', { type: 'param', message: 'One of the property passed to render sprite is null' });	
@@ -83,20 +102,7 @@ class RenderManager {
   init_events() {
 	this.eventManager.on('renderBackground', (payload) => {
 	  const { data } = payload;
-	  if (data) {
-		const currentCTX = this.ctx.get_ctx(['environment', 'background']);
-		this.render_sprite({
-		  context: currentCTX,
-		  spriteSheet: data.spriteSheet,
-		  imageX: data.imageX,
-		  imageY: data.imageY,
-		  captureWidth: data.captureWidth,
-		  captureHeight: data.captureHeight,
-		  canvasX: data.canvasX,
-		  canvasY: data.canvasY,
-		  canvasWidth: currentCTX.canvas.width,
-		  canvasHeight: currentCTX.canvas.height});
-	  }
+	  this.render_background(data);
 	});
   }
 };

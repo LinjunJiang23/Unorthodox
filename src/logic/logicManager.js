@@ -8,7 +8,7 @@ class LogicManager {
   }
   
   update(timestamp) {
-	this.leaderController.update(timestamp);
+	this.leaderController.update(this.eventManager.engine.lastUpdate, timestamp);
 	this.animationSystem.update(timestamp, this.visibilityManager.visibleEntities);
   }
   
@@ -19,8 +19,9 @@ class LogicManager {
 	this.combatManager = new CombatManager(this.eventManager);
 	this.world = new WorldManager(this.eventManager);
 	this.env = new EnvManager(this, this.eventManager.engine.camera);
+	this.eventManager.engine.renderManager.envManager = this.env;
+	this.leaderController = new LeaderController(this.eventManager, this.inputHandler, this.eventManager.engine.camera);
 	this.characters = new CharacterManager(this.eventManager);
 	this.campaign = new CampaignManager(this.eventManager, this.characters);
-	this.leaderController = new LeaderController(this.eventManager, this.inputHandler);
   }
 };

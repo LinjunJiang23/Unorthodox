@@ -19,10 +19,23 @@ class BaseCharacter {
 	this.mode = 'normal';
 	this.direction = 'down';
 	this.state = "idle";
-	this.action = "rest";
 	this.idleTime = 0;
 	this.lastUpdateTime = 0;
-	this.relationshipManager;
+	this.relationships;
+	this.movementSpeed = {
+	  normal: {
+	    walk: 10,
+		run: 35
+	  },
+	  stealth: {
+		walk: 3,
+		run: 20
+	  },
+	  combat: {
+		walk: 5,
+		run: 30
+	  }
+	}
   }
 	
   set_intro(intro) {
@@ -38,7 +51,7 @@ class BaseCharacter {
   }
   
   set_direction(direction) {
-	if (baseCharacter.validDirections.includes(direction)) 
+	if (BaseCharacter.validDirections.includes(direction)) 
 	  this.direction = direction;
   }
   
@@ -49,13 +62,17 @@ class BaseCharacter {
   }
   
   set_mode(mode) {
-    if (this.validModes.includes(mode)) {
+	if (this.validModes.includes(mode)) {
 	  this.mode = mode;
 	}
   }
   
   change_physical_position(newX, newY) {
 	this.model.physics.change_position(newX, newY);
+  }
+  
+  halt() {
+	this.set_state('idle');
   }
   
 };
